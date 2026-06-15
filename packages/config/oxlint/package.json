@@ -1,0 +1,16 @@
+{
+  "name": "@michelin_hackaton/oxlint",
+  "version": "1.2.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "scripts": {
+    "lint": "pnpm exec oxlint -c .oxlintrc.json . --no-error-on-unmatched-pattern",
+    "check-types": "echo \"No TypeScript files to check in @michelin_hackaton/oxlint\""
+  },
+  "devDependencies": {
+    "oxlint": "catalog:",
+    "oxlint-tailwindcss": "catalog:"
+  }
+}

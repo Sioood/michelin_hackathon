@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "./node_modules/@michelin_hackaton/oxlint/base.oxlintrc.json",
+    "./node_modules/@michelin_hackaton/oxlint/vue.oxlintrc.json",
+    "./node_modules/@michelin_hackaton/oxlint/tailwind.oxlintrc.json"
+  ],
+  "settings": {
+    "tailwindcss": {
+      "entryPoint": "../../packages/ui/app/assets/css/main.css"
+    }
+  }
+}

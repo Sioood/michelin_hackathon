@@ -1,0 +1,14 @@
+{
+  "name": "@michelin_hackaton/typescript",
+  "version": "1.2.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "files": [
+    "base.json"
+  ],
+  "scripts": {
+    "check-types": "echo \"No TypeScript source files to type-check in @michelin_hackaton/typescript\""
+  }
+}
