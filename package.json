@@ -90,7 +90,8 @@
           "docs",
           "nuxt-essentials",
           "ui",
-          "web"
+          "web",
+          "api"
         ]
       ],
       "type-enum": [
