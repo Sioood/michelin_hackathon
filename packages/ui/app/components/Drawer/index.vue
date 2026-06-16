@@ -11,7 +11,6 @@ import { useLayerZIndexRef } from '~/composables/useLayerZIndexRef'
 
 import type { ClassValue } from 'vue'
 
-
 defineOptions({ inheritAttrs: false })
 
 export type DrawerIntent = 'neutral' | 'primary' | 'secondary' | 'accent'
@@ -103,7 +102,7 @@ const drawerContentRootCVA = cva(
  */
 const drawerBodyCVA = cva(
   [
-    'relative flex size-full min-h-0 min-w-0 shadow-xl',
+    'relative flex size-full min-h-0 min-w-0 rounded-md shadow-xl',
     'group-data-[dragging]:[animation-play-state:paused]',
   ],
   {

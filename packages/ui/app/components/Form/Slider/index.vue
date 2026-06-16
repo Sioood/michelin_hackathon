@@ -81,7 +81,7 @@ const sliderControlCVA = cva('relative flex touch-none select-none', {
   },
 })
 
-const sliderTrackCVA = cva('relative overflow-hidden', {
+const sliderTrackCVA = cva('relative overflow-hidden rounded-full', {
   variants: {
     intent: {
       accent: 'bg-accent-fill-subtle-hover',
@@ -101,7 +101,7 @@ const sliderTrackCVA = cva('relative overflow-hidden', {
   },
 })
 
-const sliderRangeCVA = cva('', {
+const sliderRangeCVA = cva('rounded-full', {
   variants: {
     intent: {
       accent: 'bg-accent-fill-default',
@@ -117,7 +117,7 @@ const sliderRangeCVA = cva('', {
 })
 
 const sliderThumbCVA = cva(
-  ['not-data-[disabled]:cursor-pointer data-[disabled]:cursor-not-allowed'],
+  ['rounded-full not-data-[disabled]:cursor-pointer data-[disabled]:cursor-not-allowed'],
   {
     variants: {
       intent: {
@@ -139,21 +139,24 @@ const sliderThumbCVA = cva(
   },
 )
 
-const sliderDraggingIndicatorCVA = cva(['absolute', 'z-50', 'tabular-nums', 'font-mono'], {
-  variants: {
-    intent: {
-      accent: 'bg-accent-surface-default text-accent-text-default',
-      neutral: 'bg-neutral-surface-default text-neutral-text-default',
-      primary: 'bg-primary-surface-default text-primary-text-default',
-      secondary: 'bg-secondary-surface-default text-secondary-text-default',
-    } satisfies Record<FormSliderIntent, string>,
-    size: {
-      lg: 'txt-base left-1/2 h-fit w-fit px-3 py-1.5 data-[orientation="horizontal"]:-top-[200%] data-[orientation="vertical"]:-left-[225%]',
-      md: 'txt-caption left-1/2 h-fit w-fit px-2 py-1 data-[orientation="horizontal"]:-top-[225%] data-[orientation="vertical"]:-left-[275%]',
-      sm: 'txt-small left-1/2 h-fit w-fit px-1 py-0.5 data-[orientation="horizontal"]:-top-[225%] data-[orientation="vertical"]:-left-[275%]',
-    } satisfies Record<FormSliderSize, string>,
+const sliderDraggingIndicatorCVA = cva(
+  ['absolute', 'z-50', 'rounded-md shadow-md', 'tabular-nums', 'font-mono'],
+  {
+    variants: {
+      intent: {
+        accent: 'bg-accent-surface-default text-accent-text-default',
+        neutral: 'bg-neutral-surface-default text-neutral-text-default',
+        primary: 'bg-primary-surface-default text-primary-text-default',
+        secondary: 'bg-secondary-surface-default text-secondary-text-default',
+      } satisfies Record<FormSliderIntent, string>,
+      size: {
+        lg: 'txt-base left-1/2 h-fit w-fit px-3 py-1.5 data-[orientation="horizontal"]:-top-[200%] data-[orientation="vertical"]:-left-[225%]',
+        md: 'txt-caption left-1/2 h-fit w-fit px-2 py-1 data-[orientation="horizontal"]:-top-[225%] data-[orientation="vertical"]:-left-[275%]',
+        sm: 'txt-small left-1/2 h-fit w-fit px-1 py-0.5 data-[orientation="horizontal"]:-top-[225%] data-[orientation="vertical"]:-left-[275%]',
+      } satisfies Record<FormSliderSize, string>,
+    },
   },
-})
+)
 
 const sliderDraggingIndicatorArrowCVA = cva('absolute border-transparent', {
   variants: {

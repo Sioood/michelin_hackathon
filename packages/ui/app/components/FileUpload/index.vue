@@ -53,7 +53,7 @@ const fileUploadLabelCVA = cva('', {
 
 const fileUploadDropzoneCVA = cva(
   [
-    'relative flex flex-col items-center justify-center gap-2 border border-dashed p-8 transition-colors duration-200',
+    'relative flex flex-col items-center justify-center gap-2 rounded-md border border-dashed p-8 transition-colors duration-200',
     'not-data-[disabled]:cursor-pointer data-[disabled]:cursor-not-allowed',
     'data-[dragging]:border-primary-border-strong data-[dragging]:bg-primary-fill-subtle/20',
   ],
@@ -82,31 +82,34 @@ const fileUploadDropzoneCVA = cva(
   },
 )
 
-const fileUploadItemCVA = cva('flex items-center gap-3 border p-3 transition-colors duration-200', {
-  defaultVariants: {
-    intent: 'neutral',
-    size: 'md',
+const fileUploadItemCVA = cva(
+  'flex items-center gap-3 rounded-md border p-3 transition-colors duration-200',
+  {
+    defaultVariants: {
+      intent: 'neutral',
+      size: 'md',
+    },
+    variants: {
+      intent: {
+        accent:
+          'border-accent-border-default bg-accent-surface-default text-accent-text-default data-[disabled]:border-accent-border-default-disabled data-[disabled]:bg-accent-fill-subtle-disabled',
+        error:
+          'border-error-border-default bg-error-surface-default text-error-text-default data-[disabled]:border-error-border-default-disabled data-[disabled]:bg-error-fill-subtle-disabled',
+        neutral:
+          'border-neutral-border-default bg-neutral-surface-default text-neutral-text-default data-[disabled]:border-neutral-border-default-disabled data-[disabled]:bg-neutral-fill-subtle-disabled',
+        primary:
+          'border-primary-border-default bg-primary-surface-default text-primary-text-default data-[disabled]:border-primary-border-default-disabled data-[disabled]:bg-primary-fill-subtle-disabled',
+        secondary:
+          'border-secondary-border-default bg-secondary-surface-default text-secondary-text-default data-[disabled]:border-secondary-border-default-disabled data-[disabled]:bg-secondary-fill-subtle-disabled',
+      } satisfies Record<FileUploadIntent | 'error', string>,
+      size: {
+        lg: 'txt-h6',
+        md: 'txt-label',
+        sm: 'txt-caption',
+      } satisfies Record<FileUploadSize, string>,
+    },
   },
-  variants: {
-    intent: {
-      accent:
-        'border-accent-border-default bg-accent-surface-default text-accent-text-default data-[disabled]:border-accent-border-default-disabled data-[disabled]:bg-accent-fill-subtle-disabled',
-      error:
-        'border-error-border-default bg-error-surface-default text-error-text-default data-[disabled]:border-error-border-default-disabled data-[disabled]:bg-error-fill-subtle-disabled',
-      neutral:
-        'border-neutral-border-default bg-neutral-surface-default text-neutral-text-default data-[disabled]:border-neutral-border-default-disabled data-[disabled]:bg-neutral-fill-subtle-disabled',
-      primary:
-        'border-primary-border-default bg-primary-surface-default text-primary-text-default data-[disabled]:border-primary-border-default-disabled data-[disabled]:bg-primary-fill-subtle-disabled',
-      secondary:
-        'border-secondary-border-default bg-secondary-surface-default text-secondary-text-default data-[disabled]:border-secondary-border-default-disabled data-[disabled]:bg-secondary-fill-subtle-disabled',
-    } satisfies Record<FileUploadIntent | 'error', string>,
-    size: {
-      lg: 'txt-h6',
-      md: 'txt-label',
-      sm: 'txt-caption',
-    } satisfies Record<FileUploadSize, string>,
-  },
-})
+)
 
 const fileUploadItemNameCVA = cva('flex-1 truncate', {
   variants: {

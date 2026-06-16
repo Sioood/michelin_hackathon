@@ -85,7 +85,7 @@ function buildLegendPlacementVariants(
 const chartRootPlacementVariants = buildLegendPlacementVariants(chartRootPlacementClass)
 const chartLegendPlacementVariants = buildLegendPlacementVariants(chartLegendPlacementClass)
 
-const chartTooltipCVA = cva('[--vis-tooltip-border-radius:0]', {
+const chartTooltipCVA = cva('[--vis-tooltip-border-radius:8px]', {
   variants: {
     intent: {
       accent:

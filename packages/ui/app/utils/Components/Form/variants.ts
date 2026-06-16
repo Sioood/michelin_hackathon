@@ -6,81 +6,84 @@ import type { FormFieldIntent, FormFieldSize } from './context'
  * Visual shell wrapping the actual input element.
  * Provides border, focus ring, background, and disabled/invalid styling.
  */
-export const controlShellCVA = cva('flex w-full min-w-0 items-center gap-0.5', {
-  compoundVariants: [
-    {
-      class:
-        'border-neutral-border-default bg-neutral-fill-subtle text-neutral-text-default focus-within:border-neutral-border-strong focus-within:focus-ring',
-      disabled: false,
-      intent: 'neutral',
+export const controlShellCVA = cva(
+  'flex w-full min-w-0 items-center gap-0.5 rounded-md bg-neutral-surface-default',
+  {
+    compoundVariants: [
+      {
+        class:
+          'border-neutral-border-default bg-neutral-surface-default text-neutral-text-default focus-within:border-primary-border-default focus-within:focus-ring',
+        disabled: false,
+        intent: 'neutral',
+      },
+      {
+        class:
+          'border-neutral-border-default-disabled bg-neutral-fill-subtle-disabled text-neutral-text-default-disabled',
+        disabled: true,
+        intent: 'neutral',
+      },
+      {
+        class:
+          'border-primary-border-default bg-primary-fill-subtle text-primary-text-default focus-within:border-primary-border-strong focus-within:focus-ring',
+        disabled: false,
+        intent: 'primary',
+      },
+      {
+        class:
+          'border-primary-border-default-disabled bg-primary-fill-subtle-disabled text-primary-text-default-disabled',
+        disabled: true,
+        intent: 'primary',
+      },
+      {
+        class:
+          'border-secondary-border-default bg-secondary-fill-subtle text-secondary-text-default focus-within:border-secondary-border-strong focus-within:focus-ring',
+        disabled: false,
+        intent: 'secondary',
+      },
+      {
+        class:
+          'border-secondary-border-default-disabled bg-secondary-fill-subtle-disabled text-secondary-text-default-disabled',
+        disabled: true,
+        intent: 'secondary',
+      },
+      {
+        class:
+          'border-accent-border-default bg-accent-fill-subtle text-accent-text-default focus-within:border-accent-border-strong focus-within:focus-ring',
+        disabled: false,
+        intent: 'accent',
+      },
+      {
+        class:
+          'border-accent-border-default-disabled bg-accent-fill-subtle-disabled text-accent-text-default-disabled',
+        disabled: true,
+        intent: 'accent',
+      },
+    ],
+    variants: {
+      disabled: {
+        true: 'cursor-not-allowed',
+      },
+      intent: {
+        accent: '',
+        error: '',
+        info: '',
+        neutral: '',
+        primary: '',
+        secondary: '',
+        success: '',
+        warning: '',
+      } satisfies Record<FormFieldIntent, string>,
+      invalid: {
+        true: 'border-error-border-default!',
+      },
+      size: {
+        lg: 'border',
+        md: 'border',
+        sm: 'border',
+      } satisfies Record<FormFieldSize, string>,
     },
-    {
-      class:
-        'border-neutral-border-default-disabled bg-neutral-fill-subtle-disabled text-neutral-text-default-disabled',
-      disabled: true,
-      intent: 'neutral',
-    },
-    {
-      class:
-        'border-primary-border-default bg-primary-fill-subtle text-primary-text-default focus-within:border-primary-border-strong focus-within:focus-ring',
-      disabled: false,
-      intent: 'primary',
-    },
-    {
-      class:
-        'border-primary-border-default-disabled bg-primary-fill-subtle-disabled text-primary-text-default-disabled',
-      disabled: true,
-      intent: 'primary',
-    },
-    {
-      class:
-        'border-secondary-border-default bg-secondary-fill-subtle text-secondary-text-default focus-within:border-secondary-border-strong focus-within:focus-ring',
-      disabled: false,
-      intent: 'secondary',
-    },
-    {
-      class:
-        'border-secondary-border-default-disabled bg-secondary-fill-subtle-disabled text-secondary-text-default-disabled',
-      disabled: true,
-      intent: 'secondary',
-    },
-    {
-      class:
-        'border-accent-border-default bg-accent-fill-subtle text-accent-text-default focus-within:border-accent-border-strong focus-within:focus-ring',
-      disabled: false,
-      intent: 'accent',
-    },
-    {
-      class:
-        'border-accent-border-default-disabled bg-accent-fill-subtle-disabled text-accent-text-default-disabled',
-      disabled: true,
-      intent: 'accent',
-    },
-  ],
-  variants: {
-    disabled: {
-      true: 'cursor-not-allowed',
-    },
-    intent: {
-      accent: '',
-      error: '',
-      info: '',
-      neutral: '',
-      primary: '',
-      secondary: '',
-      success: '',
-      warning: '',
-    } satisfies Record<FormFieldIntent, string>,
-    invalid: {
-      true: 'border-error-border-default!',
-    },
-    size: {
-      lg: 'border',
-      md: 'border',
-      sm: 'border',
-    } satisfies Record<FormFieldSize, string>,
   },
-})
+)
 
 /**
  * Pin slot geometry — fixed square, centered monospace text.
@@ -192,7 +195,7 @@ export const fieldInputCVA = cva('txt-base min-w-0 flex-1 read-only:cursor-defau
     } satisfies Record<FormFieldSize, string>,
     standalone: {
       false: 'border-0',
-      true: 'border',
+      true: 'rounded-md border',
     },
   },
 })

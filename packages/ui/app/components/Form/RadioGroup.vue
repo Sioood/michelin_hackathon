@@ -54,7 +54,7 @@ const radioItemCVA = cva(
   },
 )
 
-const radioControlCVA = cva('relative', {
+const radioControlCVA = cva('relative rounded-full', {
   variants: {
     intent: {
       accent: '',

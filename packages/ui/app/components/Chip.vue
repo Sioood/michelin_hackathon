@@ -23,7 +23,7 @@ type ChipIntent =
   | 'gray'
 type ChipSize = 'sm' | 'md' | 'lg'
 
-const chipCVA = cva(['flex items-center justify-center', 'group'], {
+const chipCVA = cva(['flex items-center justify-center rounded-full', 'group'], {
   compoundVariants: [
     {
       class: 'cursor-pointer active:scale-97',

@@ -8,7 +8,7 @@ import type {
   UICardBaseSlots,
 } from '~/utils/Components/Card/context'
 
-const cardCVA = cva('', {
+const cardCVA = cva('rounded-md shadow-md', {
   compoundVariants: [
     /** default */
     {

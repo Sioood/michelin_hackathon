@@ -4,7 +4,7 @@ import type { FormFieldIntent, FormFieldSize } from './context'
 
 export const checkboxControlCVA = cva(
   [
-    'size-4 shrink-0 border',
+    'size-4 shrink-0 rounded-sm border',
     'border-primary-border-default data-hover:border-primary-border-default-hover data-[disabled]:border-primary-border-subtle data-[invalid]:border-error-border-default',
   ],
   {
@@ -40,8 +40,8 @@ export const checkboxIndicatorCVA = cva(
   [
     'flex size-full items-center justify-center',
     'bg-primary-fill-subtle text-primary-text-default',
-    'group-data-[state=checked]:bg-primary-fill-default group-data-[state=checked]:text-primary-fill-inverse',
-    'group-data-[state=indeterminate]:bg-primary-fill-default group-data-[state=indeterminate]:text-primary-fill-inverse',
+    'group-data-[state=checked]:bg-primary-fill-default group-data-[state=checked]:text-primary-text-inverse',
+    'group-data-[state=indeterminate]:bg-primary-fill-default group-data-[state=indeterminate]:text-primary-text-inverse',
   ],
   {
     variants: {
@@ -78,8 +78,8 @@ export const treeNodeCheckboxCVA = cva(
     'inline-flex size-4 shrink-0 items-center justify-center border',
     'border-primary-border-default bg-primary-fill-subtle text-primary-text-default',
     'data-hover:border-primary-border-default-hover',
-    'data-[state=checked]:border-primary-fill-default data-[state=checked]:bg-primary-fill-default data-[state=checked]:text-primary-fill-inverse',
-    'data-[state=indeterminate]:border-primary-fill-default data-[state=indeterminate]:bg-primary-fill-default data-[state=indeterminate]:text-primary-fill-inverse',
+    'data-[state=checked]:border-primary-fill-default data-[state=checked]:bg-primary-fill-default data-[state=checked]:text-primary-text-inverse',
+    'data-[state=indeterminate]:border-primary-fill-default data-[state=indeterminate]:bg-primary-fill-default data-[state=indeterminate]:text-primary-text-inverse',
     'data-[disabled]:cursor-not-allowed data-[disabled]:border-primary-border-subtle',
   ],
   {

@@ -7,7 +7,7 @@ import type { MenuIntent } from '~/utils/Components/Menu/context'
 import type { MenuSubmenuEntry } from '~/utils/Components/Menu/entries'
 
 const menuSubmenuTriggerCVA = cva(
-  'flex cursor-pointer items-center justify-between gap-2 outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
+  'flex cursor-pointer items-center justify-between gap-2 rounded-md outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
   {
     variants: {
       intent: {
@@ -35,7 +35,7 @@ const menuSubmenuContentCVA = cva('', {
       secondary: 'border-secondary-border-subtle bg-secondary-fill-subtle',
     },
     size: {
-      md: 'txt-label border p-1',
+      md: 'txt-label rounded-md border p-1 shadow-md',
     },
   },
 })

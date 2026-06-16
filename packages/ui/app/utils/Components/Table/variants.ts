@@ -65,19 +65,22 @@ const expandedRowBackground: Record<TableIntent, string> = {
   secondary: 'bg-secondary-fill-subtle/40',
 }
 
-export const tableRootCVA = cva('relative overflow-auto', {
-  defaultVariants: {
-    sticky: false,
+export const tableRootCVA = cva(
+  'relative overflow-auto rounded-md border border-neutral-border-subtle shadow-sm',
+  {
+    defaultVariants: {
+      sticky: false,
+    },
+    variants: {
+      sticky: {
+        false: '',
+        footer: '',
+        header: '',
+        true: '',
+      } satisfies Record<string, string>,
+    },
   },
-  variants: {
-    sticky: {
-      false: '',
-      footer: '',
-      header: '',
-      true: '',
-    } satisfies Record<string, string>,
-  },
-})
+)
 
 export const tableBaseCVA = cva('w-full caption-bottom border-separate border-spacing-0', {
   defaultVariants: {

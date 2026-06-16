@@ -12,13 +12,13 @@ const alertRootCVA = cva(['alertRoot', 'relative'], {
   variants: {
     intent: {
       error: 'border-error-border-default bg-error-surface-subtle',
-      info: 'border-info-border-default bg-info-surface-subtle',
+      info: 'border-primary-border-default bg-primary-fill-default',
       neutral: 'border-neutral-border-default bg-neutral-surface-subtle',
       success: 'border-success-border-default bg-success-surface-subtle',
       warning: 'border-warning-border-default bg-warning-surface-subtle',
     } satisfies Record<AlertIntent, string>,
     size: {
-      md: 'flex justify-between gap-8 border p-4',
+      md: 'flex justify-between gap-8 rounded-md border p-4',
     } satisfies Record<AlertSize, string>,
   },
 })
@@ -29,7 +29,7 @@ const alertContentCVA = cva(['alertContent', 'group/alertContent'], {
   variants: {
     intent: {
       error: 'text-error-text-default',
-      info: 'text-info-text-default',
+      info: 'text-primary-text-inverse',
       neutral: 'text-neutral-text-default',
       success: 'text-success-text-default',
       warning: 'text-warning-text-default',
@@ -52,7 +52,7 @@ const alertTitleCVA = cva(['alertTitle'], {
   variants: {
     intent: {
       error: 'text-error-text-default',
-      info: 'text-info-text-default',
+      info: 'text-primary-text-inverse',
       neutral: 'text-neutral-text-default',
       success: 'text-success-text-default',
       warning: 'text-warning-text-default',
@@ -67,7 +67,7 @@ const alertDescriptionCVA = cva(['alertDescription'], {
   variants: {
     intent: {
       error: 'text-error-text-subtle',
-      info: 'text-info-text-subtle',
+      info: 'text-primary-text-inverse/80',
       neutral: 'text-neutral-text-subtle',
       success: 'text-success-text-subtle',
       warning: 'text-warning-text-subtle',

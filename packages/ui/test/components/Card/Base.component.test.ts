@@ -4,6 +4,9 @@ import { describe, expect, it } from 'vitest'
 import CardBase from '../../../app/components/Card/Base.vue'
 
 describe('Card/Base', () => {
+  const cardBody = (wrapper: { findAll: (selector: string) => { classes: () => string[] }[] }) =>
+    wrapper.findAll('.join-item').at(-1) ?? wrapper.findAll('div').at(1)
+
   it('renders default slot content', async () => {
     const wrapper = await mountSuspended(CardBase, {
       slots: { default: 'Card inner' },
@@ -13,16 +16,18 @@ describe('Card/Base', () => {
 
   it('applies default variant and primary intent surface classes', async () => {
     const wrapper = await mountSuspended(CardBase)
-    const classes = wrapper.find('div').classes().join(' ')
+    const classes = cardBody(wrapper)!.classes().join(' ')
     expect(classes).toMatch(/bg-primary-surface-default/)
     expect(classes).toMatch(/border-primary-border-default/)
+    expect(classes).toMatch(/rounded-md/)
+    expect(classes).toMatch(/shadow-md/)
   })
 
   it('applies subtle neutral compound classes', async () => {
     const wrapper = await mountSuspended(CardBase, {
       props: { intent: 'neutral', variant: 'subtle' },
     })
-    const classes = wrapper.find('div').classes().join(' ')
+    const classes = cardBody(wrapper)!.classes().join(' ')
     expect(classes).toMatch(/bg-neutral-surface-subtle/)
     expect(classes).toMatch(/border-neutral-border-subtle/)
   })
@@ -31,7 +36,7 @@ describe('Card/Base', () => {
     const wrapper = await mountSuspended(CardBase, {
       props: { size: 'lg' },
     })
-    expect(wrapper.find('div').classes().join(' ')).toMatch(/p-4/)
+    expect(cardBody(wrapper)!.classes().join(' ')).toMatch(/p-4/)
   })
 
   it('merges custom class', async () => {

@@ -8,7 +8,7 @@ import type { ClassValue } from 'vue'
 import type { MenuCheckboxEntry } from '~/utils/Components/Menu/entries'
 
 const menuItemCVA = cva(
-  'flex cursor-pointer items-center justify-between outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
+  'flex cursor-pointer items-center justify-between rounded-md outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
   {
     variants: {
       intent: {

@@ -38,7 +38,7 @@ const progressLabelCVA = cva('', {
   },
 })
 
-const progressTrackCVA = cva('overflow-hidden', {
+const progressTrackCVA = cva('overflow-hidden rounded-full', {
   variants: {
     intent: {
       accent: 'bg-accent-fill-subtle',
@@ -58,7 +58,7 @@ const progressTrackCVA = cva('overflow-hidden', {
   },
 })
 
-const progressRangeCVA = cva('', {
+const progressRangeCVA = cva('rounded-full', {
   variants: {
     intent: {
       accent: 'bg-accent-fill-default',

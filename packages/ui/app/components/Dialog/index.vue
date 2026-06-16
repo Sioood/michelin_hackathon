@@ -41,7 +41,7 @@ const dialogPositionerCVA = cva('fixed inset-0 flex justify-center', {
 
 const dialogContentCVA = cva(
   [
-    'relative mx-auto flex w-full flex-col',
+    'relative mx-auto flex w-full flex-col rounded-md',
     'shadow-lg',
     'data-[state=open]:animate-in data-[state=closed]:animate-out',
     'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',

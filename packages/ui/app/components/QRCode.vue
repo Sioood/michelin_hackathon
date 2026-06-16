@@ -32,7 +32,7 @@ const qrCodeRootCVA = cva(['flex size-full flex-col items-center justify-center'
 
 type QrCodeRootCVAProps = VariantProps<typeof qrCodeRootCVA>
 
-const qrCodeFrameCVA = cva('size-full', {
+const qrCodeFrameCVA = cva('size-full rounded-md', {
   variants: {
     intent: {
       accent: 'bg-accent-fill-subtle fill-accent-fill-strong',

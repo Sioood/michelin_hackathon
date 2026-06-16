@@ -30,7 +30,7 @@ export const selectPositionerCVA = cva('origin-(--transform-origin)')
 
 export const selectContentCVA = cva(
   [
-    'overflow-y-auto border',
+    'overflow-y-auto rounded-md border shadow-md',
     'data-[state=open]:animate-in data-[state=closed]:animate-out',
     'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
     'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',
@@ -40,11 +40,13 @@ export const selectContentCVA = cva(
   {
     variants: {
       intent: {
-        accent: 'border-accent-border-subtle bg-accent-fill-subtle text-accent-text-default',
-        neutral: 'border-neutral-border-subtle bg-neutral-fill-subtle text-neutral-text-default',
-        primary: 'border-primary-border-subtle bg-primary-fill-subtle text-primary-text-default',
+        accent: 'border-accent-border-subtle bg-neutral-surface-default text-accent-text-default',
+        neutral:
+          'border-neutral-border-subtle bg-neutral-surface-default text-neutral-text-default',
+        primary:
+          'border-primary-border-subtle bg-neutral-surface-default text-primary-text-default',
         secondary:
-          'border-secondary-border-subtle bg-secondary-fill-subtle text-secondary-text-default',
+          'border-secondary-border-subtle bg-neutral-surface-default text-secondary-text-default',
       } satisfies Record<SelectIntent, string>,
       size: {
         lg: 'txt-base p-1',
