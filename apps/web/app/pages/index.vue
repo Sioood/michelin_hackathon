@@ -83,6 +83,26 @@ const categoryOrder: Array<ProductCategory | 'all'> = [
   'inner-tubes',
 ]
 
+type CatalogueIntent =
+  | 'blue'
+  | 'gray'
+  | 'green'
+  | 'neutral'
+  | 'primary'
+  | 'secondary'
+  | 'warning'
+  | 'yellow'
+
+const categoryIntents: Record<ProductCategory, CatalogueIntent> = {
+  'commuting-tour': 'blue',
+  'e-bike': 'green',
+  gravel: 'warning',
+  'inner-tubes': 'gray',
+  kids: 'yellow',
+  mtb: 'secondary',
+  road: 'primary',
+}
+
 const products = computed(() => data.value ?? [])
 
 const useOptions = computed(() => {
@@ -218,18 +238,22 @@ function selectCategory(category: ProductCategory | 'all') {
 function loadMore() {
   resultLimit.value += 24
 }
+
+function getCategoryIntent(category: ProductCategory | 'all'): CatalogueIntent {
+  return category === 'all' ? 'neutral' : categoryIntents[category]
+}
 </script>
 
 <template>
-  <main class="min-h-svh bg-[#f7f7f4] text-[#121212]">
-    <header class="sticky top-0 z-20 border-b border-white/10 bg-[#07142f] text-white">
+  <main class="min-h-svh bg-[#f6f5ef] text-[#111827]">
+    <header class="sticky top-0 z-30 border-b border-white/10 bg-[#06163a] text-white">
       <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
         <div class="flex items-center gap-3">
-          <div class="grid h-11 w-11 place-items-center bg-[#ffe500] font-black text-[#07142f]">
+          <div class="grid h-11 w-11 place-items-center bg-[#ffe500] font-black text-[#06163a]">
             M
           </div>
           <div>
-            <p class="text-sm font-black tracking-[0.22em] uppercase">Michelin</p>
+            <p class="text-sm font-black uppercase">Michelin</p>
             <p class="text-xs text-white/70">Bicycle catalogue 2026</p>
           </div>
         </div>
@@ -248,17 +272,21 @@ function loadMore() {
         class="absolute inset-0 h-full w-full object-cover opacity-55"
       />
       <div
-        class="absolute inset-0 bg-[linear-gradient(90deg,#07142f_0%,rgba(7,20,47,0.92)_34%,rgba(7,20,47,0.34)_100%)]"
+        class="absolute inset-0 bg-[linear-gradient(90deg,#06163a_0%,rgba(6,22,58,0.94)_35%,rgba(6,22,58,0.3)_100%)]"
       />
       <div
         class="relative mx-auto grid min-h-[620px] max-w-7xl content-end px-4 py-10 sm:px-6 lg:grid-cols-[0.96fr_1fr] lg:py-16"
       >
         <div class="pb-10">
-          <p
-            class="mb-4 inline-flex bg-[#ffe500] px-3 py-1 text-xs font-black tracking-[0.18em] text-[#07142f] uppercase"
-          >
-            Vélo route, gravel, VTT, ville et e-bike
-          </p>
+          <UIBadge
+            label="Vélo route, gravel, VTT, ville et e-bike"
+            intent="yellow"
+            size="lg"
+            :ui="{
+              root: 'mb-4 border-none bg-[#ffe500] px-3 py-1',
+              label: 'text-xs font-black uppercase text-[#06163a]',
+            }"
+          />
           <h1
             class="max-w-3xl text-5xl leading-[0.96] font-black tracking-normal sm:text-6xl lg:text-7xl"
           >
@@ -268,17 +296,21 @@ function loadMore() {
             Une expérience catalogue inspirée du site Michelin Bicycle, enrichie avec les références
             du fichier produit 2026.
           </p>
-          <div
-            class="mt-8 grid max-w-2xl grid-cols-3 border border-white/18 bg-white/10 backdrop-blur"
-          >
-            <div
+          <div class="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+            <UICard
               v-for="stat in heroStats"
               :key="stat.label"
-              class="border-r border-white/14 p-4 last:border-r-0"
+              intent="neutral"
+              variant="inverse"
+              size="sm"
+              :card-base-ui="{
+                root: 'bg-white/10 backdrop-blur',
+                body: 'border-white/18 bg-white/10 p-4',
+              }"
             >
               <p class="text-3xl font-black text-[#ffe500]">{{ stat.value }}</p>
               <p class="mt-1 text-xs font-semibold text-white/72 uppercase">{{ stat.label }}</p>
-            </div>
+            </UICard>
           </div>
         </div>
       </div>
@@ -287,21 +319,26 @@ function loadMore() {
     <section id="categories" class="border-b border-[#d9d9d2] bg-white">
       <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6">
         <div class="flex gap-2 overflow-x-auto pb-1">
-          <button
+          <UIButton
             v-for="item in categoryStats"
             :key="item.category"
             type="button"
-            class="shrink-0 border px-4 py-3 text-left transition"
-            :class="
-              selectedCategory === item.category
-                ? 'border-[#07142f] bg-[#07142f] text-white'
-                : 'border-[#d9d9d2] bg-white text-[#07142f] hover:border-[#07142f]'
-            "
+            intent="neutral"
+            variant="default"
+            size="lg"
+            :ui="{
+              root:
+                selectedCategory === item.category
+                  ? 'shrink-0 justify-start border-[#06163a] bg-[#06163a] px-4 py-3 text-left text-white hover:bg-[#06163a]'
+                  : 'shrink-0 justify-start border-[#d9d9d2] bg-white px-4 py-3 text-left text-[#06163a] hover:border-[#06163a] hover:bg-white',
+            }"
             @click="selectCategory(item.category)"
           >
-            <span class="block text-sm font-black">{{ item.label }}</span>
-            <span class="text-xs opacity-70">{{ item.count }} références</span>
-          </button>
+            <span class="flex flex-col items-start">
+              <span class="text-sm font-black">{{ item.label }}</span>
+              <span class="text-xs opacity-70">{{ item.count }} références</span>
+            </span>
+          </UIButton>
         </div>
       </div>
     </section>
@@ -310,64 +347,86 @@ function loadMore() {
       id="catalogue"
       class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[320px_1fr]"
     >
-      <aside class="h-fit border border-[#d9d9d2] bg-white p-5 lg:sticky lg:top-24">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xl font-black">Recherche</h2>
-          <button type="button" class="text-sm font-bold text-[#244f9e]" @click="resetFilters">
-            Réinitialiser
-          </button>
-        </div>
+      <aside class="h-fit lg:sticky lg:top-24">
+        <UICard
+          title="Recherche"
+          subtitle="Filtres"
+          intent="neutral"
+          variant="default"
+          size="md"
+          leading-icon="tabler:adjustments-horizontal"
+          :card-base-ui="{ root: 'border-[#d9d9d2] bg-white', body: 'p-5' }"
+          :ui="{
+            bodyTitle: 'text-xl font-black text-[#111827]',
+            content: 'gap-5',
+          }"
+        >
+          <template #header>
+            <div class="flex items-center justify-between p-4">
+              <span class="text-xs font-black text-[#5d625c] uppercase">Catalogue</span>
+              <UIButton
+                type="button"
+                text="Réinitialiser"
+                variant="ghost"
+                intent="primary"
+                size="sm"
+                :ui="{ root: 'text-[#244f9e]' }"
+                @click="resetFilters"
+              />
+            </div>
+          </template>
 
-        <label class="mt-5 block">
-          <span class="text-xs font-black tracking-[0.14em] text-[#5d625c] uppercase">Mot clé</span>
-          <input
-            v-model="search"
-            type="search"
-            placeholder="Power Cup, gravel, 700..."
-            class="mt-2 w-full border border-[#c9c9c0] px-3 py-3 text-sm outline-none focus:border-[#07142f]"
-          />
-        </label>
+          <label class="block">
+            <span class="text-xs font-black text-[#5d625c] uppercase">Mot clé</span>
+            <UIFormSearchInput
+              v-model="search"
+              :debounce="100"
+              placeholder="Power Cup, gravel, 700..."
+              size="md"
+              intent="primary"
+              :ui="{ root: 'mt-2 min-w-0 w-full' }"
+            />
+          </label>
 
-        <label class="mt-4 block">
-          <span class="text-xs font-black tracking-[0.14em] text-[#5d625c] uppercase">Usage</span>
-          <select
-            v-model="selectedUse"
-            class="mt-2 w-full border border-[#c9c9c0] bg-white px-3 py-3 text-sm outline-none focus:border-[#07142f]"
-          >
-            <option value="all">Tous les usages</option>
-            <option v-for="useCase in useOptions" :key="useCase" :value="useCase">
-              {{ useCase }}
-            </option>
-          </select>
-        </label>
+          <label class="block">
+            <span class="text-xs font-black text-[#5d625c] uppercase">Usage</span>
+            <select
+              v-model="selectedUse"
+              class="mt-2 w-full border border-[#c9c9c0] bg-white px-3 py-3 text-sm outline-none focus:border-[#06163a]"
+            >
+              <option value="all">Tous les usages</option>
+              <option v-for="useCase in useOptions" :key="useCase" :value="useCase">
+                {{ useCase }}
+              </option>
+            </select>
+          </label>
 
-        <label class="mt-4 block">
-          <span class="text-xs font-black tracking-[0.14em] text-[#5d625c] uppercase"
-            >Diamètre</span
-          >
-          <select
-            v-model="selectedDiameter"
-            class="mt-2 w-full border border-[#c9c9c0] bg-white px-3 py-3 text-sm outline-none focus:border-[#07142f]"
-          >
-            <option value="all">Tous les diamètres</option>
-            <option v-for="diameter in diameterOptions" :key="diameter" :value="diameter">
-              {{ diameter }}
-            </option>
-          </select>
-        </label>
+          <label class="block">
+            <span class="text-xs font-black text-[#5d625c] uppercase">Diamètre</span>
+            <select
+              v-model="selectedDiameter"
+              class="mt-2 w-full border border-[#c9c9c0] bg-white px-3 py-3 text-sm outline-none focus:border-[#06163a]"
+            >
+              <option value="all">Tous les diamètres</option>
+              <option v-for="diameter in diameterOptions" :key="diameter" :value="diameter">
+                {{ diameter }}
+              </option>
+            </select>
+          </label>
 
-        <div class="mt-6 border-t border-[#e5e5df] pt-5">
-          <p class="text-4xl font-black">{{ filteredProducts.length }}</p>
-          <p class="text-sm text-[#666]">références correspondent aux filtres actifs</p>
-        </div>
+          <UIDivider intent="neutral" size="sm" :ui="{ root: 'bg-[#e5e5df]' }" />
+
+          <div>
+            <p class="text-4xl font-black">{{ filteredProducts.length }}</p>
+            <p class="text-sm text-[#666]">références correspondent aux filtres actifs</p>
+          </div>
+        </UICard>
       </aside>
 
       <div>
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <p class="font-black tracking-[0.18em] text-[#244f9e] uppercase">
-              Gammes mises en avant
-            </p>
+            <p class="font-black text-[#244f9e] uppercase">Gammes mises en avant</p>
             <h2 class="mt-2 text-3xl font-black sm:text-4xl">Explorer par famille de pneus</h2>
           </div>
           <p v-if="pending" class="text-sm font-semibold text-[#666]">Chargement du catalogue...</p>
@@ -377,37 +436,50 @@ function loadMore() {
         </div>
 
         <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <article
+          <UICard
             v-for="range in featuredRanges"
             :key="range.rangeName"
-            class="group border border-[#d9d9d2] bg-white p-5 transition hover:-translate-y-1 hover:border-[#07142f] hover:shadow-xl"
+            :tag="`${range.count} variantes`"
+            :subtitle="categoryLabels[range.category]"
+            :title="range.rangeName"
+            :description="range.headline"
+            :element-intent="getCategoryIntent(range.category)"
+            intent="neutral"
+            variant="default"
+            size="md"
+            :card-base-ui="{
+              root: 'group bg-white transition hover:-translate-y-1 hover:shadow-xl',
+              body: 'border-[#d9d9d2] p-5 group-hover:border-[#06163a]',
+            }"
+            :ui="{
+              bodyTitle: 'text-xl font-black text-[#111827]',
+              bodyDescription: 'text-sm leading-6 text-[#555]',
+            }"
           >
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <p class="text-xs font-black tracking-[0.14em] text-[#244f9e] uppercase">
-                  {{ categoryLabels[range.category] }}
-                </p>
-                <h3 class="mt-2 text-xl font-black">{{ range.rangeName }}</h3>
+            <template #header>
+              <div class="flex justify-end p-4">
+                <div class="tire-mark" :data-category="range.category" aria-hidden="true" />
               </div>
-              <div class="tire-mark" :data-category="range.category" aria-hidden="true" />
-            </div>
-            <p class="mt-4 text-sm leading-6 text-[#555]">{{ range.headline }}</p>
-            <div class="mt-4 flex flex-wrap gap-2">
-              <span
+            </template>
+            <div class="flex flex-wrap gap-2">
+              <UIChip
                 v-for="technology in range.technologies"
                 :key="technology"
-                class="bg-[#f2f2ec] px-2 py-1 text-xs font-bold text-[#333]"
-              >
-                {{ technology }}
-              </span>
+                :label="technology"
+                intent="neutral"
+                size="sm"
+                :ui="{
+                  root: 'border-[#e2e2dc] bg-[#f2f2ec]',
+                  label: 'text-xs font-bold text-[#333]',
+                }"
+              />
             </div>
-            <p class="mt-5 text-sm font-black">{{ range.count }} variantes disponibles</p>
-          </article>
+          </UICard>
         </div>
 
         <div class="mt-12 flex items-end justify-between gap-6">
           <div>
-            <p class="font-black tracking-[0.18em] text-[#244f9e] uppercase">Produits</p>
+            <p class="font-black text-[#244f9e] uppercase">Produits</p>
             <h2 class="mt-2 text-3xl font-black sm:text-4xl">Catalogue détaillé</h2>
           </div>
           <p class="hidden text-sm text-[#666] sm:block">
@@ -416,10 +488,16 @@ function loadMore() {
         </div>
 
         <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <article
+          <UICard
             v-for="product in visibleProducts"
             :key="product.slug"
-            class="flex min-h-[430px] flex-col border border-[#d9d9d2] bg-white"
+            intent="neutral"
+            variant="default"
+            size="md"
+            :card-base-ui="{
+              root: 'bg-white',
+              body: 'flex min-h-[430px] flex-col border-[#d9d9d2] p-0',
+            }"
           >
             <div
               class="product-visual grid min-h-44 place-items-center"
@@ -432,14 +510,23 @@ function loadMore() {
             <div class="flex flex-1 flex-col p-5">
               <div class="flex items-start justify-between gap-3">
                 <div>
-                  <p class="text-xs font-black tracking-[0.14em] text-[#244f9e] uppercase">
-                    {{ categoryLabels[product.category] }}
-                  </p>
+                  <UIBadge
+                    :label="categoryLabels[product.category]"
+                    :intent="getCategoryIntent(product.category)"
+                    size="sm"
+                    :ui="{ label: 'text-xs font-black uppercase' }"
+                  />
                   <h3 class="mt-2 text-lg leading-6 font-black">{{ product.rangeName }}</h3>
                 </div>
-                <span class="bg-[#ffe500] px-2 py-1 text-xs font-black text-[#07142f]">
-                  {{ product.productType }}
-                </span>
+                <UIBadge
+                  :label="product.productType"
+                  intent="yellow"
+                  size="sm"
+                  :ui="{
+                    root: 'border-none bg-[#ffe500]',
+                    label: 'text-xs font-black text-[#06163a]',
+                  }"
+                />
               </div>
 
               <p class="mt-3 line-clamp-2 text-sm leading-6 text-[#555]">
@@ -476,24 +563,36 @@ function loadMore() {
               </dl>
 
               <div class="mt-5 flex flex-wrap gap-2">
-                <span
+                <UIChip
                   v-if="product.tubelessReady"
-                  class="border border-[#07142f] px-2 py-1 text-xs font-bold"
-                >
-                  Tubeless
-                </span>
-                <span
+                  label="Tubeless"
+                  intent="primary"
+                  size="sm"
+                  :ui="{
+                    root: 'border-[#06163a] bg-white',
+                    label: 'text-xs font-bold text-[#06163a]',
+                  }"
+                />
+                <UIChip
                   v-if="product.eBikeReady"
-                  class="border border-[#07142f] px-2 py-1 text-xs font-bold"
-                >
-                  E-bike
-                </span>
-                <span
+                  label="E-bike"
+                  intent="green"
+                  size="sm"
+                  :ui="{
+                    root: 'border-[#06163a] bg-white',
+                    label: 'text-xs font-bold text-[#06163a]',
+                  }"
+                />
+                <UIChip
                   v-if="product.reflectiveStrip"
-                  class="border border-[#07142f] px-2 py-1 text-xs font-bold"
-                >
-                  Réfléchissant
-                </span>
+                  label="Réfléchissant"
+                  intent="yellow"
+                  size="sm"
+                  :ui="{
+                    root: 'border-[#06163a] bg-white',
+                    label: 'text-xs font-bold text-[#06163a]',
+                  }"
+                />
               </div>
 
               <div class="mt-auto pt-5">
@@ -502,36 +601,49 @@ function loadMore() {
                 </p>
               </div>
             </div>
-          </article>
+          </UICard>
         </div>
 
         <div v-if="visibleProducts.length < filteredProducts.length" class="mt-8 text-center">
-          <button
+          <UIButton
             type="button"
-            class="bg-[#07142f] px-6 py-4 text-sm font-black text-white transition hover:bg-[#244f9e]"
+            text="Afficher plus de références"
+            intent="primary"
+            size="lg"
+            :ui="{
+              root: 'bg-[#06163a] px-6 py-4 text-sm font-black text-white hover:bg-[#244f9e]',
+            }"
             @click="loadMore"
-          >
-            Afficher plus de références
-          </button>
+          />
         </div>
       </div>
     </section>
 
-    <section id="technologies" class="bg-[#07142f] py-14 text-white">
+    <section id="technologies" class="bg-[#06163a] py-14 text-white">
       <div class="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p class="font-black tracking-[0.18em] text-[#ffe500] uppercase">Technologies</p>
+          <p class="font-black text-[#ffe500] uppercase">Technologies</p>
           <h2 class="mt-2 text-4xl font-black">Des filtres pensés pour choisir vite</h2>
         </div>
         <div class="grid gap-3 sm:grid-cols-2">
-          <div class="border border-white/16 p-5">
+          <UICard
+            intent="neutral"
+            variant="inverse"
+            size="sm"
+            :card-base-ui="{ body: 'border-white/16 bg-white/8 p-5' }"
+          >
             <p class="text-2xl font-black">{{ useOptions.length }}</p>
             <p class="mt-1 text-sm text-white/70">usages issus du catalogue</p>
-          </div>
-          <div class="border border-white/16 p-5">
+          </UICard>
+          <UICard
+            intent="neutral"
+            variant="inverse"
+            size="sm"
+            :card-base-ui="{ body: 'border-white/16 bg-white/8 p-5' }"
+          >
             <p class="text-2xl font-black">{{ diameterOptions.length }}</p>
             <p class="mt-1 text-sm text-white/70">diamètres disponibles</p>
-          </div>
+          </UICard>
         </div>
       </div>
     </section>
