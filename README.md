@@ -61,6 +61,21 @@ cd michelin_hackaton
 pnpm install
 ```
 
+## Development
+
+```bash
+# Start web + API with Docker Compose
+pnpm dev
+
+# Or start all dev servers locally through Turborepo
+pnpm dev:local
+```
+
+Default local ports:
+
+- Web: `http://localhost:3000`
+- API: `http://localhost:3001`
+
 ## Available Scripts
 
 ### Root (Turborepo orchestrated)

@@ -7,6 +7,7 @@
   "author": "",
   "scripts": {
     "build": "nest build",
+    "dev": "pnpm run start:dev",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -28,8 +29,13 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/sequelize": "catalog:",
+    "pg": "catalog:",
+    "pg-hstore": "catalog:",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "sequelize": "catalog:",
+    "sequelize-typescript": "catalog:"
   },
   "devDependencies": {
     "@michelin_hackaton/eslint": "workspace:^",
@@ -69,7 +75,12 @@
     "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.spec.json"
+        }
+      ]
     }
   }
 }
