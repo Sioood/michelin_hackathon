@@ -1,3 +1,4 @@
+/* oxlint-disable sort-keys */
 import type { ProductSeed } from './product.model'
 
 export const seedProducts = [
