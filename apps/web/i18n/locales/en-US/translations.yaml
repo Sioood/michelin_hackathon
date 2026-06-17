@@ -12,6 +12,7 @@ catalogue:
     tyres: 'Bike tyres'
     catalogue: 'Catalogue'
     technologies: 'Technologies'
+    garage: 'Garage'
   hero:
     badge: 'Road, gravel, MTB, city and e-bike'
     title: 'Find the bike tyre that fits your ride'

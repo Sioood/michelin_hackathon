@@ -6,6 +6,7 @@ const navItems = [
   { href: '/#categories', labelKey: 'catalogue.nav.tyres' },
   { href: '/#catalogue', labelKey: 'catalogue.nav.catalogue' },
   { href: '/#technologies', labelKey: 'catalogue.nav.technologies' },
+  { href: '/garage', labelKey: 'catalogue.nav.garage' },
 ] as const
 
 onMounted(() => {
