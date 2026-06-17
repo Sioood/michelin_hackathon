@@ -6,21 +6,32 @@ export const selectRootCVA = cva('flex w-full flex-col gap-1')
 
 export const selectControlCVA = cva('flex items-center gap-1')
 
-export const selectTriggerCVA = cva('w-full justify-between active:scale-100', {
-  variants: {
-    intent: {
-      accent: '',
-      neutral: '',
-      primary: '',
-      secondary: '',
-    } satisfies Record<SelectIntent, string>,
-    size: {
-      lg: '',
-      md: '',
-      sm: '',
-    } satisfies Record<SelectSize, string>,
+export const selectTriggerCVA = cva(
+  [
+    'inline-flex w-full cursor-pointer items-center justify-between gap-2',
+    'rounded-md border-0 bg-transparent shadow-none outline-none',
+    'hover:bg-transparent active:scale-100',
+  ],
+  {
+    variants: {
+      disabled: {
+        false: '',
+        true: 'cursor-not-allowed',
+      },
+      intent: {
+        accent: 'text-accent-text-default',
+        neutral: 'text-neutral-text-default',
+        primary: 'text-primary-text-default',
+        secondary: 'text-secondary-text-default',
+      } satisfies Record<SelectIntent, string>,
+      size: {
+        lg: 'txt-h6 min-h-12 px-3',
+        md: 'txt-base min-h-10 px-2',
+        sm: 'txt-caption min-h-9 px-1.5',
+      } satisfies Record<SelectSize, string>,
+    },
   },
-})
+)
 
 export const selectClearTriggerCVA = cva(
   'cursor-pointer hover:text-error-text-default-hover data-[disabled=true]:cursor-not-allowed [hidden]:hidden',
@@ -30,7 +41,7 @@ export const selectPositionerCVA = cva('origin-(--transform-origin)')
 
 export const selectContentCVA = cva(
   [
-    'overflow-y-auto border',
+    'overflow-y-auto rounded-md border shadow-md',
     'data-[state=open]:animate-in data-[state=closed]:animate-out',
     'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
     'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',
@@ -40,11 +51,13 @@ export const selectContentCVA = cva(
   {
     variants: {
       intent: {
-        accent: 'border-accent-border-subtle bg-accent-fill-subtle text-accent-text-default',
-        neutral: 'border-neutral-border-subtle bg-neutral-fill-subtle text-neutral-text-default',
-        primary: 'border-primary-border-subtle bg-primary-fill-subtle text-primary-text-default',
+        accent: 'border-accent-border-subtle bg-neutral-surface-default text-accent-text-default',
+        neutral:
+          'border-neutral-border-subtle bg-neutral-surface-default text-neutral-text-default',
+        primary:
+          'border-primary-border-subtle bg-neutral-surface-default text-primary-text-default',
         secondary:
-          'border-secondary-border-subtle bg-secondary-fill-subtle text-secondary-text-default',
+          'border-secondary-border-subtle bg-neutral-surface-default text-secondary-text-default',
       } satisfies Record<SelectIntent, string>,
       size: {
         lg: 'txt-base p-1',
@@ -56,7 +69,7 @@ export const selectContentCVA = cva(
 )
 
 export const selectItemCVA = cva(
-  'flex cursor-pointer items-center outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
+  'flex cursor-pointer items-center rounded-sm outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
   {
     variants: {
       intent: {

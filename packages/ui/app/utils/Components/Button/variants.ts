@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 
 import type { ButtonIntent, ButtonSize, ButtonVariant } from '~/utils/Components/Button/context'
 
-export const buttonCVA = cva('inline-flex h-full items-center justify-center', {
+export const buttonCVA = cva('inline-flex h-full items-center justify-center rounded-full', {
   compoundVariants: [
     {
       class:
@@ -165,9 +165,9 @@ export const buttonCVA = cva('inline-flex h-full items-center justify-center', {
       warning: '',
     } satisfies Record<ButtonIntent, string>,
     size: {
-      lg: 'txt-h6 gap-4 px-5 py-3',
-      md: 'txt-base gap-3 px-4 py-2',
-      sm: 'txt-caption gap-1.5 px-2 py-1',
+      lg: 'txt-h6 h-12 gap-4 px-6',
+      md: 'txt-base h-10 gap-3 px-5',
+      sm: 'txt-caption h-9 gap-1.5 px-4',
     } satisfies Record<ButtonSize, string>,
     variant: {
       default: 'border',

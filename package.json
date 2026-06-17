@@ -8,6 +8,10 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "dev": "docker compose -f docker-compose.dev.yaml up --build",
+    "dev:docker": "docker compose -f docker-compose.dev.yaml up --build",
+    "dev:down": "docker compose -f docker-compose.dev.yaml down",
+    "dev:local": "turbo run dev",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "lint:oxlint": "turbo run lint:oxlint",
@@ -90,7 +94,8 @@
           "docs",
           "nuxt-essentials",
           "ui",
-          "web"
+          "web",
+          "api"
         ]
       ],
       "type-enum": [

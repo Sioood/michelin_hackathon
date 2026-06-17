@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * Michelin charter mapping (semantic):
+ * - primary → bleu #27509B
+ * - secondary → jaune #FCE500
+ * - accent → gris #53565A
+ */
 import { cva, type VariantProps } from 'class-variance-authority'
 
 type BaseColors = 'primary' | 'secondary' | 'accent'

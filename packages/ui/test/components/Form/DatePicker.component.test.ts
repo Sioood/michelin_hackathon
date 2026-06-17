@@ -244,7 +244,7 @@ describe('UIFormDatePicker (assembled)', () => {
       'border-primary-border-subtle',
     )
     expect(wrapper.find('[data-part="content"]').classes().join(' ')).toContain(
-      'bg-primary-fill-subtle',
+      'bg-neutral-surface-default',
     )
   })
 
@@ -268,7 +268,7 @@ describe('UIFormDatePicker (assembled)', () => {
       'border-secondary-border-subtle',
     )
     expect(wrapper.find('[data-part="content"]').classes().join(' ')).toContain(
-      'bg-secondary-fill-subtle',
+      'bg-neutral-surface-default',
     )
   })
 

@@ -10,7 +10,6 @@ import { cva } from 'class-variance-authority'
 import { useLayerZIndexRef } from '~/composables/useLayerZIndexRef'
 import { resolveActionVariant } from '~ui/app/utils/Components/Tour/variants'
 
-
 import type { ClassValue } from 'vue'
 
 defineOptions({ inheritAttrs: false })
@@ -64,7 +63,7 @@ const tourPositionerCVA = cva('fixed', {
 })
 
 const tourContentCVA = cva(
-  'relative flex flex-col gap-1 border bg-neutral-surface-default p-5 text-neutral-text-default shadow-lg outline-none',
+  'relative flex flex-col gap-1 rounded-md border bg-neutral-surface-default p-5 text-neutral-text-default shadow-lg outline-none',
   {
     defaultVariants: {
       intent: 'neutral',
@@ -167,7 +166,7 @@ const tourProgressTextCVA = cva('txt-caption text-neutral-text-subtle opacity-80
 const tourControlCVA = cva('mt-3 flex items-center gap-2')
 
 const tourActionTriggerCVA = cva(
-  'txt-caption inline-flex cursor-pointer items-center justify-center gap-1.5 border bg-transparent px-3.5 py-1.5 font-medium whitespace-nowrap text-neutral-text-default transition-colors select-none hover:bg-neutral-fill-subtle',
+  'txt-caption inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border bg-transparent px-3.5 py-1.5 font-medium whitespace-nowrap text-neutral-text-default transition-colors select-none hover:bg-neutral-fill-subtle',
   {
     defaultVariants: {
       intent: 'neutral',

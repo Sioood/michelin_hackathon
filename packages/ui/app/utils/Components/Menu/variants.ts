@@ -12,18 +12,20 @@ export const menuUnstyledTriggerCVA = cva(
 export const menuPositionerCVA = cva('origin-(--transform-origin)')
 export const menuContentCVA = cva(
   [
-    'border',
+    'rounded-md border shadow-md',
     'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
     'min-w-48 p-1',
   ],
   {
     variants: {
       intent: {
-        accent: 'border-accent-border-subtle bg-accent-fill-subtle text-accent-text-default',
-        neutral: 'border-neutral-border-subtle bg-neutral-fill-subtle text-neutral-text-default',
-        primary: 'border-primary-border-subtle bg-primary-fill-subtle text-primary-text-default',
+        accent: 'border-accent-border-subtle bg-neutral-surface-default text-accent-text-default',
+        neutral:
+          'border-neutral-border-subtle bg-neutral-surface-default text-neutral-text-default',
+        primary:
+          'border-primary-border-subtle bg-neutral-surface-default text-primary-text-default',
         secondary:
-          'border-secondary-border-subtle bg-secondary-fill-subtle text-secondary-text-default',
+          'border-secondary-border-subtle bg-neutral-surface-default text-secondary-text-default',
       } satisfies Record<MenuIntent, string>,
       size: {
         md: 'txt-label',

@@ -17,6 +17,10 @@
       "path": "../packages/ui",
     },
     {
+      "name": "api",
+      "path": "../apps/api",
+    },
+    {
       "name": "web",
       "path": "../apps/web",
     },
@@ -33,7 +37,7 @@
       "apps/": true,
       "packages/": true,
     },
-    "conventionalCommits.scopes": ["global", "config", "docs", "nuxt-essentials", "ui", "web"],
+    "conventionalCommits.scopes": ["global", "config", "docs", "nuxt-essentials", "ui", "web", "api"],
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
     "editor.defaultFormatter": "oxc.oxc-vscode",

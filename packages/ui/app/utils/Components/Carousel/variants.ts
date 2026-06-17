@@ -122,7 +122,7 @@ export const carouselIndicatorGroupCVA = cva('flex items-center justify-center',
 })
 
 export const carouselDotIndicatorCVA = cva(
-  'size-2.5 shrink-0 cursor-pointer border-0 p-0 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-border-default disabled:cursor-not-allowed disabled:opacity-50 data-[current]:ring',
+  'size-2.5 shrink-0 cursor-pointer rounded-full border-0 p-0 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-border-default disabled:cursor-not-allowed disabled:opacity-50 data-[current]:ring',
   {
     defaultVariants: {
       intent: 'primary',
@@ -143,7 +143,7 @@ export const carouselDotIndicatorCVA = cva(
 )
 
 export const carouselThumbnailIndicatorCVA = cva(
-  'block shrink-0 cursor-pointer overflow-hidden border-2 border-transparent p-0 opacity-60 transition-[opacity,border-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-border-default disabled:cursor-not-allowed disabled:opacity-50 data-[current]:opacity-100 data-[current]:ring',
+  'block shrink-0 cursor-pointer overflow-hidden rounded-md border-2 border-transparent p-0 opacity-60 transition-[opacity,border-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-border-default disabled:cursor-not-allowed disabled:opacity-50 data-[current]:opacity-100 data-[current]:ring',
   {
     defaultVariants: {
       intent: 'primary',

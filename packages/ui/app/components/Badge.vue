@@ -24,7 +24,7 @@ type BadgeIntent =
 type BadgeSize = 'sm' | 'md' | 'lg'
 type BadgeVariant = 'default' | 'subtle'
 
-const badgeCVA = cva('flex w-fit items-center justify-center', {
+const badgeCVA = cva('flex w-fit items-center justify-center rounded-full', {
   variants: {
     intent: {
       accent: 'border-accent-border-default bg-accent-surface-default',

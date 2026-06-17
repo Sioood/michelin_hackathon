@@ -1,4 +1,21 @@
 services:
+  database:
+    image: postgres:17-alpine
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-michelin_hackathon}
+      POSTGRES_USER: ${POSTGRES_USER:-michelin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-michelin}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
   web:
     build:
       context: .
@@ -10,8 +27,36 @@ services:
       NODE_ENV: production
       HOST: ${HOST:-0.0.0.0}
       PORT: ${PORT:-3000}
+      NUXT_PUBLIC_API_BASE_URL: ${NUXT_PUBLIC_API_BASE_URL:-http://localhost:3001}
       NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-http://localhost:3000}
     env_file:
       - path: apps/web/.env
         required: false
     restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: runner
+    ports:
+      - '${API_PORT:-3001}:3000'
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-michelin_hackathon}
+      DB_USER: ${POSTGRES_USER:-michelin}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-michelin}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+    env_file:
+      - path: apps/api/.env
+        required: false
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data: {}

@@ -1,13 +1,13 @@
 <div align="center">
-  <h1><b>Ställning</b></h1>
-  <span><i>[ˈstɛlː.nɪŋ]</i>: meaning "scaffold" in swedish</span>
+  <h1><b>Michelin</b></h1>
+  <span>Michelin e-commerce hackathon</span>
 
-  <img alt="image" src="https://github.com/user-attachments/assets/8331cc84-2fcc-48f4-93ce-a35b7dead2ea" style="width: 100%" />
+  <img alt="image" src="https://github.com/user-attachments/assets/7f99bef2-a167-41c1-812c-085f0d7c3abe" tyle="width: 100%" />
 </div>
 
 ## About the Project
 
-A production-ready Nuxt 4 monorepo boilerplate with best-in-class DX, testing, security, and code quality tooling. Use it as a foundation for building scalable applications.
+A production-ready Nuxt 4 monorepo for Michelin hackathon app.
 
 ## Tech Stack
 
@@ -60,6 +60,21 @@ git clone <repo-url>
 cd michelin_hackaton
 pnpm install
 ```
+
+## Development
+
+```bash
+# Start web + API with Docker Compose
+pnpm dev
+
+# Or start all dev servers locally through Turborepo
+pnpm dev:local
+```
+
+Default local ports:
+
+- Web: `http://localhost:3000`
+- API: `http://localhost:3001`
 
 ## Available Scripts
 

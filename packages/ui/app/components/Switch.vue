@@ -24,7 +24,7 @@ interface UISwitchSlots {
 
 const switchControlCVA = cva(
   [
-    'relative inline-flex shrink-0 items-center transition-colors duration-200',
+    'relative inline-flex shrink-0 items-center rounded-full transition-colors duration-200',
     'not-data-[disabled]:cursor-pointer data-[disabled]:cursor-not-allowed',
     'data-[invalid]:outline data-[invalid]:outline-error-border-default',
   ],
@@ -54,7 +54,7 @@ const switchControlCVA = cva(
 )
 
 const switchThumbCVA = cva(
-  'pointer-events-none block transition-transform duration-150 ease-in-out data-[state=checked]:rotate-90',
+  'pointer-events-none block rounded-full transition-transform duration-150 ease-in-out data-[state=checked]:rotate-90',
   {
     defaultVariants: {
       size: 'md',

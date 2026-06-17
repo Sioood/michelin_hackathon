@@ -7,7 +7,7 @@ import type { MenuIntent } from '~/utils/Components/Menu/context'
 import type { MenuRadioGroupEntry } from '~/utils/Components/Menu/entries'
 
 const menuItemCVA = cva(
-  'flex cursor-pointer items-center justify-between outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
+  'flex cursor-pointer items-center justify-between rounded-md outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
   {
     variants: {
       intent: {

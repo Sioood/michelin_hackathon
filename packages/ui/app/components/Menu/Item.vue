@@ -8,7 +8,7 @@ import type { ClassValue } from 'vue'
 import type { MenuItemEntry } from '~/utils/Components/Menu/entries'
 
 const menuItemCVA = cva(
-  'flex w-full cursor-pointer items-center gap-2 outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
+  'flex w-full cursor-pointer items-center gap-2 rounded-md outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-70',
   {
     variants: {
       intent: {

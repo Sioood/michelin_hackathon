@@ -14,19 +14,19 @@ cd apps/web && pnpm dev
 
 ## Docker
 
-Build and run from the **monorepo root** (`context: .`, `dockerfile: apps/web/Dockerfile`).
+Build and run from the **monorepo root**. The development compose file starts both the Nuxt web app and the Nest API.
 
 ```bash
-# Production (Nitro node server on port 3000)
+# Production (web on port 3000, API on port 3001)
 docker compose build
 docker compose up
 
-# Development with bind-mount and HMR (first start runs pnpm install in-container)
-docker compose -f docker-compose.dev.yaml up --build
+# Development with bind-mount and HMR/watch mode
+pnpm dev
 
 # If native bindings fail after an earlier attempt, reset dev volumes:
 docker compose -f docker-compose.dev.yaml down -v
-docker compose -f docker-compose.dev.yaml up --build
+pnpm dev
 ```
 
 Copy [`apps/web/.env.example`](.env.example) to `apps/web/.env` for runtime variables (`NUXT_PUBLIC_SITE_URL`, etc.). Production secrets are injected at runtime via `env_file` / host environment, not baked into the image.

@@ -17,15 +17,19 @@ describe('buttonVariants', () => {
   it('applies size classes', () => {
     const sm = button({ size: 'sm' })
     expect(sm).toContain('txt-caption')
-    expect(sm).toContain('px-2')
+    expect(sm).toContain('h-9')
+    expect(sm).toContain('px-4')
+    expect(sm).toContain('rounded-full')
 
     const md = button({ size: 'md' })
     expect(md).toContain('txt-base')
-    expect(md).toContain('px-4')
+    expect(md).toContain('h-10')
+    expect(md).toContain('px-5')
 
     const lg = button({ size: 'lg' })
     expect(lg).toContain('txt-h6')
-    expect(lg).toContain('px-5')
+    expect(lg).toContain('h-12')
+    expect(lg).toContain('px-6')
   })
 
   it('applies disabled state classes', () => {

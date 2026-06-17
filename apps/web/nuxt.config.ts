@@ -44,6 +44,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      apiBaseUrl: 'http://localhost:3001',
       siteUrl: 'https://web.com',
     },
   },

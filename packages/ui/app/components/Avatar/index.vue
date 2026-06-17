@@ -23,7 +23,7 @@ type AvatarSize = 'sm' | 'md' | 'lg'
 
 const avatarRootCVA = cva(
   [
-    'relative inline-flex shrink-0 items-center justify-center overflow-hidden font-medium select-none',
+    'relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-medium select-none',
   ],
   {
     defaultVariants: {

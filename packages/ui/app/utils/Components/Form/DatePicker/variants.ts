@@ -89,7 +89,7 @@ export const datePickerPositionerCVA = cva('origin-(--transform-origin)')
 
 export const datePickerContentCVA = cva(
   [
-    'flex flex-col gap-3 border p-3 shadow-md outline-none',
+    'flex flex-col gap-3 rounded-md border p-3 shadow-md outline-none',
     'data-[state=open]:animate-in data-[state=closed]:animate-out',
     'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
     'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',
@@ -98,11 +98,13 @@ export const datePickerContentCVA = cva(
   {
     variants: {
       intent: {
-        accent: 'border-accent-border-subtle bg-accent-fill-subtle text-accent-text-default',
-        neutral: 'border-neutral-border-subtle bg-neutral-fill-subtle text-neutral-text-default',
-        primary: 'border-primary-border-subtle bg-primary-fill-subtle text-primary-text-default',
+        accent: 'border-accent-border-subtle bg-neutral-surface-default text-accent-text-default',
+        neutral:
+          'border-neutral-border-subtle bg-neutral-surface-default text-neutral-text-default',
+        primary:
+          'border-primary-border-subtle bg-neutral-surface-default text-primary-text-default',
         secondary:
-          'border-secondary-border-subtle bg-secondary-fill-subtle text-secondary-text-default',
+          'border-secondary-border-subtle bg-neutral-surface-default text-secondary-text-default',
       } satisfies Record<DatePickerIntent, string>,
     },
   },
