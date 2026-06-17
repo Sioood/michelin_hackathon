@@ -8,6 +8,7 @@ import { CartModule } from './cart/cart.module'
 import { OrdersModule } from './orders/orders.module'
 import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
+import { SearchModule } from './search/search.module'
 import { UsersModule } from './users/users.module'
 
 @Module({
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module'
     CartModule,
     OrdersModule,
     PaymentsModule,
+    SearchModule,
   ],
   providers: [AppService],
 })

@@ -1,1 +1,42 @@
 hell: 'World (wide web)'
+catalogue:
+  loading: 'Loading catalogue...'
+  apiError:
+    title: 'API unavailable'
+    description: 'Check that `pnpm dev` is running for both the API and web app.'
+  header:
+    subtitle: 'Bicycle catalogue 2026'
+    findTyre: 'Find the right tyre'
+    login: 'Sign in'
+  nav:
+    tyres: 'Bike tyres'
+    catalogue: 'Catalogue'
+    technologies: 'Technologies'
+  hero:
+    badge: 'Road, gravel, MTB, city and e-bike'
+    title: 'Find the bike tyre that fits your ride'
+    description: 'A catalogue experience inspired by Michelin Bicycle, enriched with the 2026 product references.'
+  stats:
+    references: 'Catalogue references'
+    ranges: 'Web ranges'
+    categories: 'Bike worlds'
+  ranges:
+    eyebrow: 'Featured ranges'
+    title: 'Explore by tyre family'
+  products:
+    eyebrow: 'Products'
+    title: 'Detailed catalogue'
+    count: '{visible} shown out of {total}'
+    loadMore: 'Show more references'
+  filters:
+    title: 'Search'
+    subtitle: 'Filters'
+    catalogue: 'Catalogue'
+    reset: 'Reset'
+    keyword: 'Keyword'
+    keywordPlaceholder: 'Power Cup, gravel, 700...'
+    use: 'Use'
+    diameter: 'Diameter'
+    allUses: 'All uses'
+    allDiameters: 'All diameters'
+    matching: 'references match the active filters'

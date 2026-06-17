@@ -18,8 +18,8 @@ const emit = defineEmits<{
 
 <template>
   <UICard
-    title="Recherche"
-    subtitle="Filtres"
+    :title="$t('catalogue.filters.title')"
+    :subtitle="$t('catalogue.filters.subtitle')"
     intent="neutral"
     variant="default"
     size="md"
@@ -35,10 +35,12 @@ const emit = defineEmits<{
   >
     <template #header>
       <div class="flex items-center justify-between p-4">
-        <span class="txt-caption font-black text-neutral-text-subtle uppercase">Catalogue</span>
+        <span class="txt-caption font-black text-neutral-text-subtle uppercase">
+          {{ $t('catalogue.filters.catalogue') }}
+        </span>
         <UIButton
           type="button"
-          text="Réinitialiser"
+          :text="$t('catalogue.filters.reset')"
           variant="ghost"
           intent="primary"
           size="sm"
@@ -47,11 +49,11 @@ const emit = defineEmits<{
       </div>
     </template>
 
-    <UIFormField label="Mot clé" size="md">
+    <UIFormField :label="$t('catalogue.filters.keyword')" size="md">
       <UIFormSearchInput
         v-model="search"
         :debounce="100"
-        placeholder="Power Cup, gravel, 700..."
+        :placeholder="$t('catalogue.filters.keywordPlaceholder')"
         size="md"
         intent="primary"
       />
@@ -59,7 +61,7 @@ const emit = defineEmits<{
 
     <UIFormSelect
       v-model="selectedUse"
-      label="Usage"
+      :label="$t('catalogue.filters.use')"
       :items="useItems"
       size="md"
       intent="primary"
@@ -68,7 +70,7 @@ const emit = defineEmits<{
 
     <UIFormSelect
       v-model="selectedDiameter"
-      label="Diamètre"
+      :label="$t('catalogue.filters.diameter')"
       :items="diameterItems"
       size="md"
       intent="primary"
@@ -79,7 +81,7 @@ const emit = defineEmits<{
 
     <div>
       <p class="txt-h3 font-black">{{ filteredCount }}</p>
-      <p class="txt-base text-neutral-text-subtle">références correspondent aux filtres actifs</p>
+      <p class="txt-base text-neutral-text-subtle">{{ $t('catalogue.filters.matching') }}</p>
     </div>
   </UICard>
 </template>
