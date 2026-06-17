@@ -16,7 +16,7 @@ export default withNuxt(
   }),
   {
     rules: {
-      'import-x/no-unresolved': ['error', { ignore: ['^~ui/', '^~nuxt-essentials/'] }],
+      'import-x/no-unresolved': ['error', { ignore: ['^~ui/', '^~nuxt-essentials/', '^~/'] }],
     },
   },
 )
