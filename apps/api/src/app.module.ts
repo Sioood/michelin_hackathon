@@ -3,7 +3,12 @@ import { SequelizeModule } from '@nestjs/sequelize'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { AuthModule } from './auth/auth.module'
+import { CartModule } from './cart/cart.module'
+import { OrdersModule } from './orders/orders.module'
+import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
+import { UsersModule } from './users/users.module'
 
 @Module({
   controllers: [AppController],
@@ -20,7 +25,12 @@ import { ProductsModule } from './products/products.module'
       synchronize: true,
       username: process.env.DB_USER ?? 'michelin',
     }),
+    UsersModule,
+    AuthModule,
     ProductsModule,
+    CartModule,
+    OrdersModule,
+    PaymentsModule,
   ],
   providers: [AppService],
 })

@@ -11,7 +11,7 @@
 
 | Phase | Description                        | Points | Statut |
 | ----- | ---------------------------------- | ------ | ------ |
-| P0    | Fondations backend (NestJS)        | ~47    | ⬜     |
+| P0    | Fondations backend (NestJS)        | ~47    | ✅     |
 | P1    | E-commerce frontend (Nuxt)         | ~43    | ⬜     |
 | P2    | Recherche IA + questionnaire       | ~43    | ⬜     |
 | P3    | Garage virtuel                     | ~43    | ⬜     |
@@ -372,43 +372,43 @@ gantt
 > Objectif : schéma DB, auth, prix produits, panier, commandes, Stripe.
 > App : **NestJS uniquement** — aucun changement Nuxt.
 
-- [ ] **P0-01** · API · 3 pts — Migration `Product` : `priceCents`, `stock`, `currency`, `proStats` JSONB
+- [x] **P0-01** · API · 3 pts — Migration `Product` : `priceCents`, `stock`, `currency`, `proStats` JSONB
   - Fichiers : `apps/api/src/products/product.model.ts`, `apps/api/src/products/seed-prices.ts`
 
-- [ ] **P0-02** · API · 5 pts — Module `Users` : modèle Sequelize, register, login, hash bcrypt
+- [x] **P0-02** · API · 5 pts — Module `Users` : modèle Sequelize, register, login, hash bcrypt
   - Fichiers : `apps/api/src/users/`
 
-- [ ] **P0-03** · API · 5 pts — Module `Auth` : JWT strategy, guards, decorator `@CurrentUser()`
+- [x] **P0-03** · API · 5 pts — Module `Auth` : JWT strategy, guards, decorator `@CurrentUser()`
   - Fichiers : `apps/api/src/auth/`, `apps/api/src/common/guards/`, `apps/api/src/common/decorators/`
 
-- [ ] **P0-04** · API · 3 pts — DTOs + validation (`class-validator` pipe global)
+- [x] **P0-04** · API · 3 pts — DTOs + validation (`class-validator` pipe global)
   - Fichiers : `apps/api/src/common/pipes/`, DTOs par module
 
-- [ ] **P0-05** · API · 2 pts — `GET /products/:slug` — fiche produit détaillée
+- [x] **P0-05** · API · 2 pts — `GET /products/:slug` — fiche produit détaillée
   - Fichiers : `apps/api/src/products/products.controller.ts`, `products.service.ts`
 
-- [ ] **P0-06** · API · 3 pts — Filtres API : `GET /products?category=&terrain=&diameter=&search=`
+- [x] **P0-06** · API · 3 pts — Filtres API : `GET /products?category=&terrain=&diameter=&search=`
   - Fichiers : `apps/api/src/products/products.service.ts`
 
-- [ ] **P0-07** · API · 5 pts — Module `Cart` : session user/guest, CRUD lignes panier
+- [x] **P0-07** · API · 5 pts — Module `Cart` : session user/guest, CRUD lignes panier
   - Fichiers : `apps/api/src/cart/`
 
-- [ ] **P0-08** · API · 5 pts — Module `Orders` : modèle, statuts `pending` / `paid` / `shipped`
+- [x] **P0-08** · API · 5 pts — Module `Orders` : modèle, statuts `pending` / `paid` / `shipped`
   - Fichiers : `apps/api/src/orders/`
 
-- [ ] **P0-09** · API · 8 pts — Stripe Checkout : `POST /checkout/session`
+- [x] **P0-09** · API · 8 pts — Stripe Checkout : `POST /checkout/session`
   - Fichiers : `apps/api/src/payments/`
 
-- [ ] **P0-10** · API · 5 pts — Webhook Stripe `checkout.session.completed` → commande + vider panier
+- [x] **P0-10** · API · 5 pts — Webhook Stripe `checkout.session.completed` → commande + vider panier
   - Fichiers : `apps/api/src/payments/webhook.controller.ts`
 
-- [ ] **P0-11** · API · 2 pts — Seed `proStats` + script `seedPrices.ts` (prix fictifs par catégorie)
+- [x] **P0-11** · API · 2 pts — Seed `proStats` + script `seedPrices.ts` (prix fictifs par catégorie)
   - Fichiers : `apps/api/src/products/`
 
-- [ ] **P0-12** · API · 1 pt — Enregistrer tous les modules dans `app.module.ts`
+- [x] **P0-12** · API · 1 pt — Enregistrer tous les modules dans `app.module.ts`
   - Fichiers : `apps/api/src/app.module.ts`
 
-**Phase 0 complète** : [ ]
+**Phase 0 complète** : [x]
 
 ---
 

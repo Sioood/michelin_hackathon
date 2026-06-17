@@ -67,12 +67,27 @@ export interface ProductAttributes {
   headline: string
   description: string
   imageKey: string
+  priceCents: number
+  stock: number
+  currency: 'EUR'
+  proStats: ProductProStats
   rawData: ProductRawData
   createdAt?: Date
   updatedAt?: Date
 }
 
-export type ProductSeed = Omit<ProductAttributes, 'createdAt' | 'id' | 'updatedAt'>
+export interface ProductProStats {
+  victories: number
+  podiums: number
+  proTeams: string[]
+  highlight: string
+}
+
+export type ProductSeed = Omit<
+  ProductAttributes,
+  'createdAt' | 'currency' | 'id' | 'priceCents' | 'proStats' | 'stock' | 'updatedAt'
+> &
+  Partial<Pick<ProductAttributes, 'currency' | 'priceCents' | 'proStats' | 'stock'>>
 
 @Table({
   tableName: 'products',
@@ -320,6 +335,39 @@ export class Product extends Model<ProductAttributes, ProductSeed> implements Pr
     type: DataType.STRING(40),
   })
   declare imageKey: string
+
+  @Column({
+    allowNull: false,
+    defaultValue: 0,
+    type: DataType.INTEGER,
+  })
+  declare priceCents: number
+
+  @Column({
+    allowNull: false,
+    defaultValue: 0,
+    type: DataType.INTEGER,
+  })
+  declare stock: number
+
+  @Column({
+    allowNull: false,
+    defaultValue: 'EUR',
+    type: DataType.STRING(3),
+  })
+  declare currency: 'EUR'
+
+  @Column({
+    allowNull: false,
+    defaultValue: {
+      highlight: 'Catalogue Michelin',
+      podiums: 0,
+      proTeams: [],
+      victories: 0,
+    },
+    type: DataType.JSONB,
+  })
+  declare proStats: ProductProStats
 
   @Column({
     allowNull: false,
