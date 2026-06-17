@@ -24,13 +24,14 @@
     "@michelin_hackaton/ui": "workspace:^",
     "nuxt": "catalog:",
     "vue": "catalog:",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@nuxt/kit": "catalog:",
-    "@playwright/test": "catalog:",
     "@michelin_hackaton/eslint": "workspace:^",
     "@michelin_hackaton/oxlint": "workspace:^",
+    "@nuxt/kit": "catalog:",
+    "@playwright/test": "catalog:",
     "eslint": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:"

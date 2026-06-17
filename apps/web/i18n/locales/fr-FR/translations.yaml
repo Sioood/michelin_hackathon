@@ -1,1 +1,42 @@
 hell: 'Monde (web)'
+catalogue:
+  loading: 'Chargement du catalogue...'
+  apiError:
+    title: 'API indisponible'
+    description: "Vérifie que `pnpm dev` est lancé pour l'API et le front."
+  header:
+    subtitle: 'Bicycle catalogue 2026'
+    findTyre: 'Choisir le bon pneu'
+    login: 'Connexion'
+  nav:
+    tyres: 'Pneus vélo'
+    catalogue: 'Catalogue'
+    technologies: 'Technologies'
+  hero:
+    badge: 'Vélo route, gravel, VTT, ville et e-bike'
+    title: 'Trouvez le pneu vélo adapté à votre pratique'
+    description: 'Une expérience catalogue inspirée du site Michelin Bicycle, enrichie avec les références du fichier produit 2026.'
+  stats:
+    references: 'Références catalogue'
+    ranges: 'Gammes web'
+    categories: 'Univers vélo'
+  ranges:
+    eyebrow: 'Gammes mises en avant'
+    title: 'Explorer par famille de pneus'
+  products:
+    eyebrow: 'Produits'
+    title: 'Catalogue détaillé'
+    count: '{visible} affichés sur {total}'
+    loadMore: 'Afficher plus de références'
+  filters:
+    title: 'Recherche'
+    subtitle: 'Filtres'
+    catalogue: 'Catalogue'
+    reset: 'Réinitialiser'
+    keyword: 'Mot clé'
+    keywordPlaceholder: 'Power Cup, gravel, 700...'
+    use: 'Usage'
+    diameter: 'Diamètre'
+    allUses: 'Tous les usages'
+    allDiameters: 'Tous les diamètres'
+    matching: 'références correspondent aux filtres actifs'

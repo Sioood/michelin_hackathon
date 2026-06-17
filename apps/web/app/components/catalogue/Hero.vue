@@ -22,7 +22,7 @@ defineProps<{
     >
       <div class="pb-10">
         <UIBadge
-          label="Vélo route, gravel, VTT, ville et e-bike"
+          :label="$t('catalogue.hero.badge')"
           intent="secondary"
           size="lg"
           :ui="{
@@ -33,12 +33,14 @@ defineProps<{
         <h1
           class="txt-title max-w-3xl leading-[0.96] font-black tracking-normal sm:text-6xl lg:text-7xl"
         >
-          Trouvez le pneu vélo adapté à votre pratique
+          {{ $t('catalogue.hero.title') }}
         </h1>
         <p class="txt-base mt-6 max-w-2xl leading-8 text-primary-text-inverse/84">
-          Une expérience catalogue inspirée du site Michelin Bicycle, enrichie avec les références
-          du fichier produit 2026.
+          {{ $t('catalogue.hero.description') }}
         </p>
+        <div class="mt-8">
+          <SearchAiSearchBar redirect-on-search />
+        </div>
         <div class="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
           <UICard
             v-for="stat in stats"

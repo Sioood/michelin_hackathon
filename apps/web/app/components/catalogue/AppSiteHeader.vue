@@ -1,9 +1,16 @@
 <script setup lang="ts">
+const auth = useAuthStore()
+const cart = useCartStore()
+
 const navItems = [
-  { href: '#categories', label: 'Pneus vélo' },
-  { href: '#catalogue', label: 'Catalogue' },
-  { href: '#technologies', label: 'Technologies' },
+  { href: '/#categories', labelKey: 'catalogue.nav.tyres' },
+  { href: '/#catalogue', labelKey: 'catalogue.nav.catalogue' },
+  { href: '/#technologies', labelKey: 'catalogue.nav.technologies' },
 ] as const
+
+onMounted(() => {
+  void cart.load()
+})
 </script>
 
 <template>
@@ -19,7 +26,9 @@ const navItems = [
         </div>
         <div>
           <p class="txt-label font-black uppercase">Michelin</p>
-          <p class="txt-caption text-primary-text-inverse/70">Bicycle catalogue 2026</p>
+          <p class="txt-caption text-primary-text-inverse/70">
+            {{ $t('catalogue.header.subtitle') }}
+          </p>
         </div>
       </div>
 
@@ -34,26 +43,58 @@ const navItems = [
             root: 'txt-label font-semibold text-primary-text-inverse/80 hover:text-primary-text-inverse',
           }"
         >
-          {{ item.label }}
+          {{ $t(item.labelKey) }}
         </UILink>
       </nav>
 
+      <SearchAiSearchBar compact class="hidden xl:flex" />
+
       <div class="flex items-center gap-2">
         <UIButton
-          text="Choisir le bon pneu"
+          :text="$t('catalogue.header.findTyre')"
           intent="secondary"
           size="sm"
           leading-icon="tabler:circle-filled"
+          to="/trouver-mon-pneu"
           class="hidden sm:inline-flex"
         />
         <UIButton
-          text="Revendeur"
+          v-if="auth.isAuthenticated"
+          :text="auth.displayName"
           intent="primary"
           variant="ghost"
           size="sm"
-          leading-icon="tabler:map-pin"
+          leading-icon="tabler:user"
+          to="/account/orders"
           class="hidden lg:inline-flex"
         />
+        <UIButton
+          v-else
+          :text="$t('catalogue.header.login')"
+          intent="primary"
+          variant="ghost"
+          size="sm"
+          leading-icon="tabler:user"
+          to="/login"
+          class="hidden lg:inline-flex"
+        />
+        <div class="relative">
+          <UIButton
+            type="button"
+            icon="tabler:shopping-cart"
+            aria-label="Ouvrir le panier"
+            intent="secondary"
+            variant="subtle"
+            size="sm"
+            @click="cart.openDrawer"
+          />
+          <span
+            v-if="cart.itemCount > 0"
+            class="txt-caption absolute -top-2 -right-2 grid min-w-5 place-items-center rounded-full bg-accent-fill-default px-1 font-black text-accent-text-inverse"
+          >
+            {{ cart.itemCount }}
+          </span>
+        </div>
       </div>
     </div>
   </header>

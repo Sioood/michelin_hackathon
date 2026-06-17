@@ -12,8 +12,8 @@
 | Phase | Description                        | Points | Statut |
 | ----- | ---------------------------------- | ------ | ------ |
 | P0    | Fondations backend (NestJS)        | ~47    | ✅     |
-| P1    | E-commerce frontend (Nuxt)         | ~43    | ⬜     |
-| P2    | Recherche IA + questionnaire       | ~43    | ⬜     |
+| P1    | E-commerce frontend (Nuxt)         | ~43    | ✅     |
+| P2    | Recherche IA + questionnaire       | ~43    | ✅     |
 | P3    | Garage virtuel                     | ~43    | ⬜     |
 | P4    | Fidélité, cross-sell, gamification | ~58    | ⬜     |
 | P5    | Contenu produit enrichi            | ~32    | ⬜     |
@@ -417,46 +417,46 @@ gantt
 > Objectif : parcours d'achat complet B2C.
 > App : **Nuxt uniquement** — dépend de Phase 0.
 
-- [ ] **P1-01** · WEB · 2 pts — Types TS (`Product`, `User`, `Cart`, `Order`)
+- [x] **P1-01** · WEB · 2 pts — Types TS (`Product`, `User`, `Cart`, `Order`)
   - Fichiers : `apps/web/app/types/`
 
-- [ ] **P1-02** · WEB · 2 pts — Composable `useApi` — `$fetch` + header `Authorization: Bearer`
+- [x] **P1-02** · WEB · 2 pts — Composable `useApi` — `$fetch` + header `Authorization: Bearer`
   - Fichiers : `apps/web/app/composables/useApi.ts`
 
-- [ ] **P1-03** · WEB · 3 pts — Store Pinia `useAuthStore` (login, register, logout, token)
+- [x] **P1-03** · WEB · 3 pts — Store Pinia `useAuthStore` (login, register, logout, token)
   - Fichiers : `apps/web/app/stores/auth.ts`
 
-- [ ] **P1-04** · WEB · 3 pts — Pages `/login` et `/register` avec `UIForm` + Zod
+- [x] **P1-04** · WEB · 3 pts — Pages `/login` et `/register` avec `UIForm` + Zod
   - Fichiers : `apps/web/app/pages/login.vue`, `register.vue`
 
-- [ ] **P1-05** · WEB · 5 pts — Page `/products/[slug]` — fiche produit (specs, pression, technologies)
+- [x] **P1-05** · WEB · 5 pts — Page `/products/[slug]` — fiche produit (specs, pression, technologies)
   - Fichiers : `apps/web/app/pages/products/[slug].vue`
 
-- [ ] **P1-06** · WEB · 5 pts — Store `useCartStore` + `UIDrawer` panier latéral
+- [x] **P1-06** · WEB · 5 pts — Store `useCartStore` + `UIDrawer` panier latéral
   - Fichiers : `apps/web/app/stores/cart.ts`, `apps/web/app/components/commerce/CartDrawer.vue`
 
-- [ ] **P1-07** · WEB · 5 pts — Page `/checkout` avec `UISteps` (Panier → Livraison → Paiement)
+- [x] **P1-07** · WEB · 5 pts — Page `/checkout` avec `UISteps` (Panier → Livraison → Paiement)
   - Fichiers : `apps/web/app/pages/checkout/index.vue`
 
-- [ ] **P1-08** · WEB · 3 pts — Redirection Stripe Checkout + page `/checkout/success`
+- [x] **P1-08** · WEB · 3 pts — Redirection Stripe Checkout + page `/checkout/success`
   - Fichiers : `apps/web/app/pages/checkout/success.vue`
 
-- [ ] **P1-09** · WEB · 3 pts — Page `/account/orders` — historique commandes
+- [x] **P1-09** · WEB · 3 pts — Page `/account/orders` — historique commandes
   - Fichiers : `apps/web/app/pages/account/orders.vue`
 
-- [ ] **P1-10** · WEB · 2 pts — Header : état connecté, icône panier, badge quantité
+- [x] **P1-10** · WEB · 2 pts — Header : état connecté, icône panier, badge quantité
   - Fichiers : `apps/web/app/components/catalogue/AppSiteHeader.vue`
 
-- [ ] **P1-11** · WEB · 2 pts — `ProductCard` → lien `/products/[slug]` + bouton ajouter au panier
+- [x] **P1-11** · WEB · 2 pts — `ProductCard` → lien `/products/[slug]` + bouton ajouter au panier
   - Fichiers : `apps/web/app/components/catalogue/ProductCard.vue`
 
-- [ ] **P1-12** · WEB · 3 pts — i18n : externaliser les textes catalogue existants
+- [x] **P1-12** · WEB · 3 pts — i18n : externaliser les textes catalogue existants
   - Fichiers : `apps/web/i18n/locales/fr-FR/`, `en-US/`
 
-- [ ] **P1-13** · WEB · 5 pts — E2E Playwright : login → ajout panier → checkout
+- [x] **P1-13** · WEB · 5 pts — E2E Playwright : login → ajout panier → checkout
   - Fichiers : `apps/web/e2e/checkout.spec.ts`
 
-**Phase 1 complète** : [ ]
+**Phase 1 complète** : [x]
 
 ---
 
@@ -467,39 +467,39 @@ gantt
 
 ### API
 
-- [ ] **P2-01** · API · 8 pts — Module `Search` : `POST /search/ai` avec prompt structuré
+- [x] **P2-01** · API · 8 pts — Module `Search` : `POST /search/ai` avec prompt structuré
   - Fichiers : `apps/api/src/search/`
 
-- [ ] **P2-02** · API · 5 pts — Abstraction `LlmProvider` (interface + impl OpenAI SDK)
+- [x] **P2-02** · API · 5 pts — Abstraction `LlmProvider` (interface + impl OpenAI-compatible)
   - Fichiers : `apps/api/src/search/llm.provider.ts`
 
-- [ ] **P2-03** · API · 3 pts — Prompt system : contraintes catalogue + JSON schema output
+- [x] **P2-03** · API · 3 pts — Prompt system : contraintes catalogue + JSON schema output
   - Fichiers : `apps/api/src/search/prompts/`
 
-- [ ] **P2-04** · API · 3 pts — `POST /search/questionnaire` — filtres depuis réponses structurées
+- [x] **P2-04** · API · 3 pts — `POST /search/questionnaire` — filtres depuis réponses structurées
   - Fichiers : `apps/api/src/search/questionnaire.dto.ts`
 
-- [ ] **P2-05** · API · 3 pts — Tests Jest : mapping LLM → filtres Sequelize
+- [x] **P2-05** · API · 3 pts — Tests Jest : mapping LLM → filtres Sequelize
   - Fichiers : `apps/api/src/search/search.service.spec.ts`
 
 ### Web
 
-- [ ] **P2-06** · WEB · 8 pts — Page `/trouver-mon-pneu` — wizard questionnaire multi-étapes
+- [x] **P2-06** · WEB · 8 pts — Page `/trouver-mon-pneu` — wizard questionnaire multi-étapes
   - Fichiers : `apps/web/app/pages/trouver-mon-pneu.vue`
 
-- [ ] **P2-07** · WEB · 5 pts — Composant `AiSearchBar` — champ libre + bulle explication IA
+- [x] **P2-07** · WEB · 5 pts — Composant `AiSearchBar` — champ libre + bulle explication IA
   - Fichiers : `apps/web/app/components/search/AiSearchBar.vue`
 
-- [ ] **P2-08** · WEB · 5 pts — Page `/recherche` — filtres manuels + résultats IA
+- [x] **P2-08** · WEB · 5 pts — Page `/recherche` — filtres manuels + résultats IA
   - Fichiers : `apps/web/app/pages/recherche.vue`
 
-- [ ] **P2-09** · WEB · 2 pts — Intégrer `AiSearchBar` dans `AppSiteHeader` + `Hero`
+- [x] **P2-09** · WEB · 2 pts — Intégrer `AiSearchBar` dans `AppSiteHeader` + `Hero`
   - Fichiers : `apps/web/app/components/catalogue/`
 
-- [ ] **P2-10** · WEB · 1 pt — Types `SearchResult`, `AiSearchResponse`
+- [x] **P2-10** · WEB · 1 pt — Types `SearchResult`, `AiSearchResponse`
   - Fichiers : `apps/web/app/types/search.ts`
 
-**Phase 2 complète** : [ ]
+**Phase 2 complète** : [x]
 
 ```mermaid
 sequenceDiagram

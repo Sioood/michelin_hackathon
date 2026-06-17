@@ -9,6 +9,7 @@ import {
 } from '~/utils/catalogue'
 
 export function useCatalogue(products: Ref<Product[]>) {
+  const { t } = useI18n()
   const selectedCategory = ref<CategoryFilter>('all')
   const selectedUse = ref<string[]>(['all'])
   const selectedDiameter = ref<string[]>(['all'])
@@ -39,12 +40,12 @@ export function useCatalogue(products: Ref<Product[]>) {
   })
 
   const useSelectItems = computed<SelectItem[]>(() => [
-    { label: 'Tous les usages', value: 'all' },
+    { label: t('catalogue.filters.allUses'), value: 'all' },
     ...useOptions.value.map((useCase) => ({ label: useCase, value: useCase })),
   ])
 
   const diameterSelectItems = computed<SelectItem[]>(() => [
-    { label: 'Tous les diamètres', value: 'all' },
+    { label: t('catalogue.filters.allDiameters'), value: 'all' },
     ...diameterOptions.value.map((diameter) => ({ label: diameter, value: diameter })),
   ])
 
@@ -121,13 +122,13 @@ export function useCatalogue(products: Ref<Product[]>) {
   })
 
   const heroStats = computed(() => [
-    { label: 'Références catalogue', value: products.value.length.toString() },
+    { label: t('catalogue.stats.references'), value: products.value.length.toString() },
     {
-      label: 'Gammes web',
+      label: t('catalogue.stats.ranges'),
       value: new Set(products.value.map((product) => product.rangeName)).size.toString(),
     },
     {
-      label: 'Univers vélo',
+      label: t('catalogue.stats.categories'),
       value: categoryStats.value.filter((item) => item.count > 0).length.toString(),
     },
   ])

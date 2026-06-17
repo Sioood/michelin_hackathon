@@ -1,50 +1,6 @@
-export type ProductCategory =
-  | 'commuting-tour'
-  | 'e-bike'
-  | 'gravel'
-  | 'inner-tubes'
-  | 'kids'
-  | 'mtb'
-  | 'road'
+import type { Product, ProductCategory } from '~/types/product'
 
-export interface Product {
-  id?: number
-  brand: string
-  productType: string
-  cycleTypeWeb: string
-  category: ProductCategory
-  segment: string | null
-  rangeName: string
-  slug: string
-  cai: string
-  eanCode: string | null
-  designation: string
-  webDiameterMm: string | null
-  webDiameterInch: string | null
-  webWidthMm: string | null
-  webWidthInch: string | null
-  rimType: string | null
-  bead: string | null
-  fitting: string | null
-  tpi: string | null
-  minPressureBar: number | null
-  maxPressureBar: number | null
-  minPressurePsi: number | null
-  maxPressurePsi: number | null
-  sidewallColor: string | null
-  treadPatternColor: string | null
-  labelType: string | null
-  useCases: string[]
-  terrainTypes: string[]
-  technologies: string[]
-  eBikeReady: boolean
-  tubelessReady: boolean
-  reflectiveStrip: boolean
-  weightG: number | null
-  headline: string
-  description: string
-  imageKey: string
-}
+export type { Product, ProductCategory } from '~/types/product'
 
 export type CategoryFilter = ProductCategory | 'all'
 
