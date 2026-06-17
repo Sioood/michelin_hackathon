@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Select as ArkSelect } from '@ark-ui/vue/select'
 
-import { buttonCVA } from '~/utils/Components/Button/variants'
 import {
   selectChromeKey,
   type SelectIntent,
@@ -32,6 +31,7 @@ const attrs = useAttrs()
 
 const intent = computed(() => props.intent ?? chrome?.intent.value ?? 'primary')
 const size = computed(() => props.size ?? chrome?.size.value ?? 'md')
+const disabled = computed(() => props.disabled ?? false)
 
 const triggerAttrs = computed(() => {
   const {
@@ -53,19 +53,8 @@ const triggerAttrs = computed(() => {
 <template>
   <ArkSelect.Trigger
     v-bind="triggerAttrs"
-    :class="
-      cn(
-        buttonCVA({
-          variant: 'subtle',
-          intent,
-          size,
-          disabled,
-        }),
-        selectTriggerCVA({ intent, size }),
-        triggerAttrs.class as ClassValue,
-        ui,
-      )
-    "
+    :disabled="disabled"
+    :class="cn(selectTriggerCVA({ intent, size, disabled }), triggerAttrs.class as ClassValue, ui)"
   >
     <slot />
   </ArkSelect.Trigger>
