@@ -9,7 +9,7 @@ const schema = z.object({
   email: z.email('Adresse e-mail invalide'),
   firstName: z.string(),
   lastName: z.string(),
-  password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caracteres'),
+  password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
 })
 
 type RegisterValues = z.infer<typeof schema>
@@ -26,7 +26,7 @@ const fields: SchemaFieldsMap<RegisterValues> = {
   firstName: {
     as: UIFormInput,
     props: {
-      label: 'Prenom',
+      label: 'Prénom',
       placeholder: 'Marie',
     },
   },
@@ -41,7 +41,7 @@ const fields: SchemaFieldsMap<RegisterValues> = {
     as: UIFormInput,
     props: {
       label: 'Mot de passe',
-      placeholder: '8 caracteres minimum',
+      placeholder: '8 caractères minimum',
       type: 'password',
     },
   },
@@ -63,6 +63,32 @@ const errorMessage = ref('')
 const redirectTo = computed(() => {
   const { redirect } = route.query
   return typeof redirect === 'string' && redirect.startsWith('/') ? redirect : '/'
+})
+
+const loginLink = computed(() => `/login?redirect=${encodeURIComponent(redirectTo.value)}`)
+
+const registerCopy = computed(() => {
+  if (redirectTo.value.startsWith('/garage')) {
+    return {
+      description:
+        'Créez votre espace pour conserver vos vélos, vos pneus montés et vos rappels de remplacement.',
+      title: 'Créez votre compte pour ouvrir votre garage.',
+    }
+  }
+
+  if (redirectTo.value.startsWith('/checkout')) {
+    return {
+      description:
+        'Paiement plus rapide, historique de commandes et panier sauvegardé pour vos prochains pneus.',
+      title: 'Créez votre compte et finalisez votre commande.',
+    }
+  }
+
+  return {
+    description:
+      'Paiement plus rapide, historique de commandes, panier sauvegardé et garage vélo au même endroit.',
+    title: 'Créez votre compte et gardez le contrôle.',
+  }
 })
 
 async function submit(values: RegisterValues) {
@@ -90,10 +116,9 @@ async function submit(values: RegisterValues) {
     <section class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_460px]">
       <div class="flex flex-col justify-center">
         <UIBadge label="Nouveau client" intent="secondary" size="sm" />
-        <h1 class="txt-h1 mt-4 max-w-3xl font-black">Creez votre compte et gardez le controle.</h1>
+        <h1 class="txt-h1 mt-4 max-w-3xl font-black">{{ registerCopy.title }}</h1>
         <p class="txt-lg mt-4 max-w-2xl text-neutral-text-subtle">
-          Paiement plus rapide, historique de commandes et panier sauvegarde pour vos prochains
-          pneus.
+          {{ registerCopy.description }}
         </p>
       </div>
 
@@ -122,7 +147,7 @@ async function submit(values: RegisterValues) {
             <UIButton
               type="submit"
               class="w-full"
-              text="Creer mon compte"
+              text="Créer mon compte"
               intent="primary"
               size="lg"
               :disabled="!canSubmit || isSubmitting"
@@ -132,8 +157,8 @@ async function submit(values: RegisterValues) {
         </UIForm>
 
         <p class="txt-base mt-5 text-neutral-text-subtle">
-          Deja inscrit ?
-          <UILink to="/login" intent="primary" variant="ghost">Se connecter</UILink>
+          Déjà inscrit ?
+          <UILink :to="loginLink" intent="primary" variant="ghost">Se connecter</UILink>
         </p>
       </UICard>
     </section>

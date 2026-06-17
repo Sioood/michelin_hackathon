@@ -44,10 +44,10 @@ async function startCheckout() {
     <section class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <UIBadge label="Checkout securise" intent="primary" size="sm" />
+          <UIBadge label="Checkout sécurisé" intent="primary" size="sm" />
           <h1 class="txt-h1 mt-4 font-black">Finaliser la commande</h1>
           <p class="txt-lg mt-3 max-w-2xl text-neutral-text-subtle">
-            Verifiez votre panier, confirmez la livraison puis basculez vers Stripe Checkout.
+            Vérifiez votre panier, confirmez la livraison puis basculez vers Stripe Checkout.
           </p>
         </div>
         <p class="txt-h4 font-black">{{ formatPrice(cart.totalCents) }}</p>
@@ -108,16 +108,16 @@ async function startCheckout() {
           <UIStepsContent :index="1">
             <div class="mt-6 grid gap-4 md:grid-cols-2">
               <UICard intent="neutral" variant="subtle" :card-base-ui="{ body: 'rounded-md p-4' }">
-                <h2 class="txt-h5 font-black">Livraison demo</h2>
+                <h2 class="txt-h5 font-black">Livraison démo</h2>
                 <p class="txt-base mt-2 text-neutral-text-subtle">
-                  Adresse rattachee a votre compte client. La phase hackathon garde Stripe comme
+                  Adresse rattachée à votre compte client. La phase hackathon garde Stripe comme
                   source de paiement.
                 </p>
               </UICard>
               <UICard intent="neutral" variant="subtle" :card-base-ui="{ body: 'rounded-md p-4' }">
-                <h2 class="txt-h5 font-black">Disponibilite</h2>
+                <h2 class="txt-h5 font-black">Disponibilité</h2>
                 <p class="txt-base mt-2 text-neutral-text-subtle">
-                  Les stocks sont reserves au moment de la confirmation Stripe.
+                  Les stocks sont réservés au moment de la confirmation Stripe.
                 </p>
               </UICard>
             </div>
@@ -127,7 +127,7 @@ async function startCheckout() {
             <div class="mt-6">
               <h2 class="txt-h4 font-black">Paiement Stripe</h2>
               <p class="txt-base mt-2 max-w-2xl text-neutral-text-subtle">
-                Une session Stripe Checkout sera creee depuis le panier actif.
+                Une session Stripe Checkout sera créée depuis le panier actif.
               </p>
               <UIButton
                 class="mt-6"

@@ -127,7 +127,7 @@ export function createHeuristicSearchPlan(query: string): LlmSearchPlan {
   }
 
   return {
-    explanation: 'Selection construite a partir des mots-cles de votre demande.',
+    explanation: 'Sélection construite à partir des mots-clés de votre demande.',
     filters,
     suggestedSlugs: [],
   }
@@ -139,7 +139,7 @@ export function normalizeSearchPlan(input: unknown, fallbackQuery: string): LlmS
   const explanation =
     typeof record.explanation === 'string' && record.explanation.trim().length > 0
       ? record.explanation.trim()
-      : 'Selection construite a partir de votre demande.'
+      : 'Sélection construite à partir de votre demande.'
   const suggestedSlugs = Array.isArray(record.suggestedSlugs)
     ? record.suggestedSlugs.filter((slug): slug is string => typeof slug === 'string')
     : []

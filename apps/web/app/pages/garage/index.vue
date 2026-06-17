@@ -86,7 +86,7 @@ async function createBike() {
 
 onMounted(async () => {
   if (!auth.isAuthenticated) {
-    await navigateTo('/login?redirect=/garage')
+    await navigateTo(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
     return
   }
 

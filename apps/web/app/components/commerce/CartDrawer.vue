@@ -10,7 +10,7 @@ const open = computed({
 })
 
 const checkoutTarget = computed(() =>
-  auth.isAuthenticated ? '/checkout' : '/login?redirect=/checkout',
+  auth.isAuthenticated ? '/checkout' : `/login?redirect=${encodeURIComponent('/checkout')}`,
 )
 
 onMounted(() => {
@@ -51,7 +51,7 @@ onMounted(() => {
       <Icon name="tabler:shopping-cart" class="size-10 text-neutral-text-subtle" />
       <h2 class="txt-h5 mt-4 font-black">Votre panier est vide</h2>
       <p class="txt-base mt-2 max-w-xs text-neutral-text-subtle">
-        Ajoutez un pneu depuis le catalogue pour demarrer votre commande.
+        Ajoutez un pneu depuis le catalogue pour démarrer votre commande.
       </p>
       <UIButton
         class="mt-6"
@@ -93,7 +93,7 @@ onMounted(() => {
               <UIButton
                 type="button"
                 icon="tabler:minus"
-                aria-label="Diminuer la quantite"
+                aria-label="Diminuer la quantité"
                 intent="neutral"
                 variant="subtle"
                 size="sm"
@@ -105,7 +105,7 @@ onMounted(() => {
               <UIButton
                 type="button"
                 icon="tabler:plus"
-                aria-label="Augmenter la quantite"
+                aria-label="Augmenter la quantité"
                 intent="neutral"
                 variant="subtle"
                 size="sm"

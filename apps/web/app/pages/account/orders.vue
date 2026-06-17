@@ -8,9 +8,9 @@ const pending = ref(false)
 const errorMessage = ref('')
 
 const statusLabels: Record<Order['status'], string> = {
-  paid: 'Payee',
+  paid: 'Payée',
   pending: 'En attente',
-  shipped: 'Expediee',
+  shipped: 'Expédiée',
 }
 
 onMounted(async () => {
@@ -28,6 +28,11 @@ onMounted(async () => {
     pending.value = false
   }
 })
+
+async function logout() {
+  auth.logout()
+  await navigateTo('/login')
+}
 </script>
 
 <template>
@@ -41,7 +46,7 @@ onMounted(async () => {
           <h1 class="txt-h1 mt-4 font-black">Mes commandes</h1>
           <p class="txt-lg mt-3 text-neutral-text-subtle">Suivez vos achats de pneus Michelin.</p>
         </div>
-        <UIButton text="Deconnexion" intent="neutral" variant="subtle" @click="auth.logout" />
+        <UIButton text="Déconnexion" intent="neutral" variant="subtle" @click="logout" />
       </div>
 
       <UIProgress
@@ -97,7 +102,7 @@ onMounted(async () => {
             >
               <div>
                 <p class="txt-label font-black">{{ item.productName }}</p>
-                <p class="txt-caption text-neutral-text-subtle">Quantite {{ item.quantity }}</p>
+                <p class="txt-caption text-neutral-text-subtle">Quantité {{ item.quantity }}</p>
               </div>
               <p class="txt-label font-black">{{ formatPrice(item.totalCents, order.currency) }}</p>
             </div>

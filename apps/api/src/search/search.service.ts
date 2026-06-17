@@ -157,7 +157,7 @@ export class SearchService {
         }
 
         if (matchReasons.length === 0) {
-          matchReasons.push('Reference proche de votre recherche')
+          matchReasons.push('Référence proche de votre recherche')
         }
 
         return { matchReasons, product, score }
@@ -183,15 +183,15 @@ export class SearchService {
 
   private createQuestionnaireExplanation(filters: SearchFilters): string {
     const parts = [
-      filters.category !== undefined ? `categorie ${filters.category}` : null,
+      filters.category !== undefined ? `catégorie ${filters.category}` : null,
       filters.terrain !== undefined ? `terrain ${filters.terrain.toLowerCase()}` : null,
-      filters.diameter !== undefined ? `diametre ${filters.diameter}` : null,
+      filters.diameter !== undefined ? `diamètre ${filters.diameter}` : null,
       filters.tubelessReady === true ? 'tubeless' : null,
       filters.eBikeReady === true ? 'compatible e-bike' : null,
     ].filter((part): part is string => part !== null)
 
     return parts.length > 0
-      ? `Selection basee sur vos reponses: ${parts.join(', ')}.`
-      : 'Selection Michelin recommandee pour demarrer.'
+      ? `Sélection basée sur vos réponses: ${parts.join(', ')}.`
+      : 'Sélection Michelin recommandée pour démarrer.'
   }
 }

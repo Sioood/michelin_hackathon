@@ -131,7 +131,7 @@ async function removeInstallation(installationId: number) {
 
 onMounted(async () => {
   if (!auth.isAuthenticated) {
-    await navigateTo(`/login?redirect=/garage/${route.params.bikeId}`)
+    await navigateTo(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
     return
   }
 

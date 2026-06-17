@@ -183,7 +183,7 @@ async function addToCart() {
             />
 
             <div class="mt-6 border-t border-neutral-border-subtle pt-6">
-              <h2 class="txt-h5 font-black">Pression recommandee</h2>
+              <h2 class="txt-h5 font-black">Pression recommandée</h2>
               <p class="txt-h4 mt-2 font-black text-primary-text-default">{{ pressureLabel }}</p>
               <p v-if="psiLabel" class="txt-caption mt-1 text-neutral-text-subtle">
                 {{ psiLabel }}

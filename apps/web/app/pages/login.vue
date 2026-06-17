@@ -7,7 +7,7 @@ import UIFormInput from '~ui/app/components/Form/Input.vue'
 
 const schema = z.object({
   email: z.email('Adresse e-mail invalide'),
-  password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caracteres'),
+  password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
 })
 
 type LoginValues = z.infer<typeof schema>
@@ -25,7 +25,7 @@ const fields: SchemaFieldsMap<LoginValues> = {
     as: UIFormInput,
     props: {
       label: 'Mot de passe',
-      placeholder: '8 caracteres minimum',
+      placeholder: '8 caractères minimum',
       type: 'password',
     },
   },
@@ -44,6 +44,39 @@ const successMessage = ref('')
 const redirectTo = computed(() => {
   const { redirect } = route.query
   return typeof redirect === 'string' && redirect.startsWith('/') ? redirect : '/'
+})
+
+const registerLink = computed(() => `/register?redirect=${encodeURIComponent(redirectTo.value)}`)
+
+const loginCopy = computed(() => {
+  if (redirectTo.value.startsWith('/checkout')) {
+    return {
+      description:
+        'Retrouvez votre panier, lancez le checkout Stripe et suivez vos commandes depuis votre espace.',
+      title: 'Connectez-vous pour finaliser votre commande.',
+    }
+  }
+
+  if (redirectTo.value.startsWith('/garage')) {
+    return {
+      description:
+        'Votre garage est lié à votre compte pour conserver vos vélos, vos montages et vos rappels.',
+      title: 'Connectez-vous pour accéder à votre garage.',
+    }
+  }
+
+  if (redirectTo.value.startsWith('/account/orders')) {
+    return {
+      description: 'Retrouvez l’historique de vos achats et le suivi de vos commandes Michelin.',
+      title: 'Connectez-vous pour consulter vos commandes.',
+    }
+  }
+
+  return {
+    description:
+      'Retrouvez votre panier, vos commandes et votre garage Michelin depuis un seul espace.',
+    title: 'Connectez-vous à votre espace Michelin.',
+  }
 })
 
 async function submit(values: LoginValues) {
@@ -69,17 +102,16 @@ async function submit(values: LoginValues) {
       <div class="flex flex-col justify-center">
         <UIBadge label="Compte Michelin" intent="primary" size="sm" />
         <h1 class="txt-h1 mt-4 max-w-3xl font-black">
-          Connectez-vous pour finaliser votre commande.
+          {{ loginCopy.title }}
         </h1>
         <p class="txt-lg mt-4 max-w-2xl text-neutral-text-subtle">
-          Retrouvez votre panier, lancez le checkout Stripe et suivez vos commandes depuis votre
-          espace.
+          {{ loginCopy.description }}
         </p>
       </div>
 
       <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-6' }">
         <h2 class="txt-h4 font-black">Connexion</h2>
-        <p class="txt-base mt-2 text-neutral-text-subtle">Accedez a votre espace client.</p>
+        <p class="txt-base mt-2 text-neutral-text-subtle">Accédez à votre espace client.</p>
 
         <UIAlert
           v-if="errorMessage"
@@ -92,7 +124,7 @@ async function submit(values: LoginValues) {
           v-if="successMessage"
           class="mt-5"
           intent="success"
-          title="Connecte"
+          title="Connecté"
           :description="successMessage"
         />
 
@@ -120,7 +152,7 @@ async function submit(values: LoginValues) {
 
         <p class="txt-base mt-5 text-neutral-text-subtle">
           Pas encore de compte ?
-          <UILink to="/register" intent="primary" variant="ghost">Creer un compte</UILink>
+          <UILink :to="registerLink" intent="primary" variant="ghost">Créer un compte</UILink>
         </p>
       </UICard>
     </section>

@@ -21,10 +21,10 @@ onMounted(() => {
     <CatalogueAppSiteHeader />
 
     <section class="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
-      <UIBadge label="Commande lancee" intent="success" size="sm" />
+      <UIBadge label="Commande lancée" intent="success" size="sm" />
       <h1 class="txt-h1 mt-5 font-black">Merci, votre commande est en cours.</h1>
       <p class="txt-lg mt-4 text-neutral-text-subtle">
-        Stripe a pris le relais pour le paiement. L'historique sera mis a jour apres confirmation du
+        Stripe a pris le relais pour le paiement. L'historique sera mis à jour après confirmation du
         webhook.
       </p>
       <p v-if="orderId" class="txt-label mt-4 font-black">Commande #{{ orderId }}</p>
