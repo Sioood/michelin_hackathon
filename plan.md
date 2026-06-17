@@ -14,7 +14,7 @@
 | P0    | Fondations backend (NestJS)        | ~47    | ✅     |
 | P1    | E-commerce frontend (Nuxt)         | ~43    | ✅     |
 | P2    | Recherche IA + questionnaire       | ~43    | ✅     |
-| P3    | Garage virtuel                     | ~43    | ⬜     |
+| P3    | Garage virtuel                     | ~43    | ✅     |
 | P4    | Fidélité, cross-sell, gamification | ~58    | ⬜     |
 | P5    | Contenu produit enrichi            | ~32    | ⬜     |
 | P6    | Michelin Riders Club               | ~52    | ⬜     |
@@ -527,39 +527,39 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P3-01** · API · 5 pts — Modèles `Bike`, `BikeTireInstallation` (Sequelize)
+- [x] **P3-01** · API · 5 pts — Modèles `Bike`, `BikeTireInstallation` (Sequelize)
   - Fichiers : `apps/api/src/garage/`
 
-- [ ] **P3-02** · API · 5 pts — CRUD `/garage/bikes`, `/garage/bikes/:id/tires`
+- [x] **P3-02** · API · 5 pts — CRUD `/garage/bikes`, `/garage/bikes/:id/tires`
   - Fichiers : `apps/api/src/garage/garage.controller.ts`
 
-- [ ] **P3-03** · API · 3 pts — Lien installations ↔ commandes (historique achat auto)
+- [x] **P3-03** · API · 3 pts — Lien installations ↔ commandes (historique achat auto)
   - Fichiers : `apps/api/src/garage/garage.service.ts`
 
-- [ ] **P3-04** · API · 5 pts — Rappels remplacement (> 3000 km ou > 18 mois)
+- [x] **P3-04** · API · 5 pts — Rappels remplacement (> 3000 km ou > 18 mois)
   - Fichiers : `apps/api/src/garage/reminder.service.ts`
 
-- [ ] **P3-05** · API · 5 pts — `GET /garage/suggestions` — pneus selon saison + type vélo
+- [x] **P3-05** · API · 5 pts — `GET /garage/suggestions` — pneus selon saison + type vélo
   - Fichiers : `apps/api/src/garage/suggestions.service.ts`
 
 ### Web
 
-- [ ] **P3-06** · WEB · 8 pts — Page `/garage` — liste vélos, état pneus, alertes
+- [x] **P3-06** · WEB · 8 pts — Page `/garage` — liste vélos, état pneus, alertes
   - Fichiers : `apps/web/app/pages/garage/index.vue`
 
-- [ ] **P3-07** · WEB · 5 pts — Page `/garage/[bikeId]` — détail, historique, bouton « Racheter »
+- [x] **P3-07** · WEB · 5 pts — Page `/garage/[bikeId]` — détail, historique, bouton « Racheter »
   - Fichiers : `apps/web/app/pages/garage/[bikeId].vue`
 
-- [ ] **P3-08** · WEB · 2 pts — Composable `useGarage` + types `Bike`, `TireInstallation`
+- [x] **P3-08** · WEB · 2 pts — Composable `useGarage` + types `Bike`, `TireInstallation`
   - Fichiers : `apps/web/app/composables/useGarage.ts`
 
-- [ ] **P3-09** · WEB · 3 pts — Flow « Ajouter au garage » post-achat (modal checkout success)
+- [x] **P3-09** · WEB · 3 pts — Flow « Ajouter au garage » post-achat (modal checkout success)
   - Fichiers : `apps/web/app/pages/checkout/success.vue`
 
-- [ ] **P3-10** · WEB · 2 pts — `ReorderButton` → ajout panier direct depuis le garage
+- [x] **P3-10** · WEB · 2 pts — `ReorderButton` → ajout panier direct depuis le garage
   - Fichiers : `apps/web/app/components/garage/ReorderButton.vue`
 
-**Phase 3 complète** : [ ]
+**Phase 3 complète** : [x]
 
 ---
 

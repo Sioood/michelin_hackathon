@@ -12,6 +12,7 @@ catalogue:
     tyres: 'Pneus vélo'
     catalogue: 'Catalogue'
     technologies: 'Technologies'
+    garage: 'Garage'
   hero:
     badge: 'Vélo route, gravel, VTT, ville et e-bike'
     title: 'Trouvez le pneu vélo adapté à votre pratique'

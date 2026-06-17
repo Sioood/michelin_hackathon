@@ -5,6 +5,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { CartModule } from './cart/cart.module'
+import { GarageModule } from './garage/garage.module'
 import { OrdersModule } from './orders/orders.module'
 import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
@@ -33,6 +34,7 @@ import { UsersModule } from './users/users.module'
     OrdersModule,
     PaymentsModule,
     SearchModule,
+    GarageModule,
   ],
   providers: [AppService],
 })
