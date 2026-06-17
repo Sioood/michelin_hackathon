@@ -85,6 +85,7 @@ flowchart TB
 
 - **Toute la logique métier** vit dans `apps/api`
 - **Le front** gère affichage, validation Zod et appels API
+- **Composants UI** : design system dans `packages/ui/` ; composants métier dans `apps/web/app/components/`
 - **Pas de BFF Nitro** : le web appelle NestJS via `runtimeConfig.public.apiBaseUrl`
 - **Types partagés** : dupliqués dans `apps/web/app/types/` (pas de package shared)
 
@@ -229,6 +230,31 @@ NUXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 **Lancer** : `pnpm --filter @michelin_hackaton/web dev`
+
+### Règle composants UI (obligatoire)
+
+| Besoin                                                | Où ?                                  | Exemple                                                   |
+| ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------- |
+| Boutons, formulaires, cartes, modales, tables, steps… | **`packages/ui/`** — composants `UI*` | `UIButton`, `UIForm`, `UICard`, `UIDrawer`, `UISteps`     |
+| Composants métier e-commerce (spécifiques à l'app)    | **`apps/web/app/components/`**        | `CartDrawer`, `AiSearchBar`, `BikeCard`, `ProductReviews` |
+
+**À faire absolument :**
+
+- Composer toutes les pages et features avec les composants existants de [`packages/ui/`](packages/ui/) (`@michelin_hackaton/ui`)
+- Vérifier le catalogue avant d'écrire du HTML/CSS custom : `packages/ui/app/components/`
+- S'inspirer des exemples e-commerce du playground : `packages/ui/.playground/app/pages/previews/modules/` (`CheckoutStepsScenario`, `LoginScenario`, etc.)
+
+**Interdit pour le hackathon :**
+
+- Créer de nouveaux composants génériques dans `packages/ui/` (hors scope, review layer)
+- Réimplémenter un bouton, input, modal ou card en HTML brut alors qu'un `UI*` existe
+- Dupliquer des composants déjà présents dans le design system
+
+**Si un composant manque :**
+
+1. Chercher l'équivalent le plus proche dans `packages/ui/`
+2. Composer plusieurs `UI*` si nécessaire
+3. En dernier recours, créer un composant **métier** dans `apps/web/app/components/{domaine}/` qui wrappe les `UI*`
 
 ---
 
@@ -721,7 +747,9 @@ sequenceDiagram
 ### `apps/web` (Nuxt 4)
 
 - App thin : logique métier dans l'API
-- `<script setup lang="ts">`, composants `UI*`, Pinia, Zod
+- **Composants UI** : utiliser **obligatoirement** [`packages/ui/`](packages/ui/) (`UIButton`, `UIForm`, `UICard`, `UIDrawer`, `UISteps`, `UITable`, `UIFormRating`…)
+- **Nouveaux composants** : uniquement dans [`apps/web/app/components/`](apps/web/app/components/) — composants métier qui composent les `UI*`, jamais dans `packages/ui/`
+- `<script setup lang="ts">`, Pinia, Zod
 - `useApi()` pour tous les appels NestJS
 - Types dans `app/types/`, utils purs dans `app/utils/`
 - E2E Playwright dans `e2e/`
@@ -737,13 +765,14 @@ sequenceDiagram
 
 ## Risques et mitigations
 
-| Risque                           | Mitigation                                                   |
-| -------------------------------- | ------------------------------------------------------------ |
-| LLM retourne filtres invalides   | Zod parse + fallback filtres vides + message explicatif      |
-| 441 produits sans images réelles | `imageKey` + visuels `ProductTireVisual`                     |
-| Scope trop large                 | Chemin critique P0→P1→P2→P3 ; P6/P7 = stretch                |
-| Stripe webhook en local          | `stripe listen --forward-to localhost:3001/payments/webhook` |
-| Pas de prix dans seed actuel     | Script `seedPrices.ts` au bootstrap                          |
+| Risque                           | Mitigation                                                    |
+| -------------------------------- | ------------------------------------------------------------- |
+| LLM retourne filtres invalides   | Zod parse + fallback filtres vides + message explicatif       |
+| 441 produits sans images réelles | `imageKey` + visuels `ProductTireVisual`                      |
+| Scope trop large                 | Chemin critique P0→P1→P2→P3 ; P6/P7 = stretch                 |
+| Réinvention de composants UI     | Toujours `packages/ui/` en priorité ; métier dans `apps/web/` |
+| Stripe webhook en local          | `stripe listen --forward-to localhost:3001/payments/webhook`  |
+| Pas de prix dans seed actuel     | Script `seedPrices.ts` au bootstrap                           |
 
 ---
 
