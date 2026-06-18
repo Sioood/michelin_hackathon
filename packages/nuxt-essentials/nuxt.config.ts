@@ -62,6 +62,7 @@ export default defineNuxtConfig({
     registerType: 'prompt',
     workbox: {
       globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
+      navigateFallback: null,
       runtimeCaching: [
         {
           // Keep dynamic API responses fresh while still leveraging cache on flaky networks.
