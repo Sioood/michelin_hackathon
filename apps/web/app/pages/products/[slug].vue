@@ -170,7 +170,6 @@ async function addToCart() {
 
           <section class="mt-10">
             <h2 class="txt-h3 font-black">Technologies</h2>
-            <p class="txt-base mt-2 text-neutral-text-subtle">{{ product.proStats.highlight }}</p>
             <div class="mt-4 flex flex-wrap gap-2">
               <UIBadge
                 v-for="technology in allTechnologies"
@@ -180,9 +179,15 @@ async function addToCart() {
                 size="sm"
                 variant="subtle"
               />
+              <p v-if="allTechnologies.length === 0" class="txt-base text-neutral-text-subtle">
+                Aucune technologie renseignée pour cette référence.
+              </p>
             </div>
           </section>
 
+          <ProductProStats :stats="product.proStats" />
+
+          <ProductReviews v-if="product.id !== undefined" :product-id="product.id" />
           <CommerceCrossSellCarousel
             v-if="product.id !== undefined"
             class="mt-10"

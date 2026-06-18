@@ -74,3 +74,15 @@ export interface Product {
   createdAt?: string
   updatedAt?: string
 }
+
+export interface Review {
+  id?: number
+  productId: number
+  userId: number
+  rating: number
+  title: string | null
+  body: string | null
+  userDisplayName: string
+  createdAt?: string
+  updatedAt?: string
+}
