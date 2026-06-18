@@ -56,7 +56,7 @@ async function addToCart() {
               :intent="getCategoryIntent(product.category)"
               size="sm"
               variant="subtle"
-              :ui="{ label: 'txt-caption font-black uppercase' }"
+              :ui="{ label: 'txt-label font-black uppercase' }"
             />
             <h3 class="txt-h6 mt-2 leading-6 font-black group-hover:text-primary-text-default">
               {{ product.rangeName }}
@@ -68,7 +68,7 @@ async function addToCart() {
             size="sm"
             :ui="{
               root: 'mt-0.5 mr-1 shrink-0 border-none bg-secondary-fill-default',
-              label: 'txt-caption font-black uppercase text-secondary-text-inverse',
+              label: 'txt-label font-black uppercase text-secondary-text-inverse',
             }"
           />
         </div>

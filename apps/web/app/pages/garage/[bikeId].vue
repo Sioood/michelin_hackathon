@@ -334,7 +334,7 @@ onMounted(async () => {
                     <UIBadge
                       :label="positionLabel(installation.position)"
                       intent="neutral"
-                      size="sm"
+                      size="md"
                     />
                     <UIBadge
                       v-if="installation.reminder"
@@ -346,7 +346,7 @@ onMounted(async () => {
                             : 'OK'
                       "
                       :intent="reminderIntent(installation.reminder.severity)"
-                      size="sm"
+                      size="md"
                     />
                   </div>
                   <p class="txt-caption mt-1 text-neutral-text-subtle">

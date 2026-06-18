@@ -14,8 +14,8 @@ describe('Badge', () => {
 
   it('applies badgeIcon size classes for each size variant', async () => {
     const sizes = [
-      { iconSizeClass: 'size-2.5', size: 'sm' as const },
-      { iconSizeClass: 'size-3', size: 'md' as const },
+      { iconSizeClass: 'size-3', size: 'sm' as const },
+      { iconSizeClass: 'size-3.5', size: 'md' as const },
       { iconSizeClass: 'size-4', size: 'lg' as const },
     ]
 
@@ -45,6 +45,6 @@ describe('Badge', () => {
 
     const icon = wrapper.find('.custom-icon-class')
     expect(icon.exists()).toBe(true)
-    expect(icon.classes()).toContain('size-3')
+    expect(icon.classes()).toContain('size-3.5')
   })
 })

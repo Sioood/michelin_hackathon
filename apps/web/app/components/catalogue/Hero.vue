@@ -27,7 +27,7 @@ defineProps<{
           size="lg"
           :ui="{
             root: 'mb-4 border-none bg-secondary-fill-default px-3 py-1',
-            label: 'txt-caption font-black uppercase text-secondary-text-inverse',
+            label: 'txt-label font-black uppercase text-secondary-text-inverse',
           }"
         />
         <h1

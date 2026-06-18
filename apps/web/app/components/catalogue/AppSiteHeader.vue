@@ -95,14 +95,18 @@ watch(
   >
     <div class="mx-auto flex max-w-7xl items-center gap-2 px-4 py-3 sm:gap-3 sm:px-6">
       <NuxtLink to="/" class="flex shrink-0 items-center gap-3 no-underline">
-        <div
-          class="grid size-10 shrink-0 place-items-center rounded-md bg-secondary-fill-default font-black text-secondary-text-inverse sm:size-11"
-        >
-          M
+        <div class="rounded-md bg-neutral-surface-default px-2 py-1">
+          <NuxtImg
+            src="/images/michelin-logo.png"
+            alt="Michelin"
+            class="h-7 w-auto shrink-0 object-contain sm:h-8"
+            width="140"
+            height="79"
+            loading="eager"
+          />
         </div>
-        <div class="hidden min-w-0 sm:block">
-          <p class="txt-label font-black whitespace-nowrap uppercase">Michelin</p>
-          <p class="txt-caption hidden whitespace-nowrap text-primary-text-inverse/70 lg:block">
+        <div class="hidden min-w-0 lg:block">
+          <p class="txt-caption whitespace-nowrap text-primary-text-inverse/70">
             {{ $t('catalogue.header.subtitle') }}
           </p>
         </div>

@@ -18,7 +18,7 @@ const {
 })
 
 const specRows = computed(() => {
-  if (product.value === null) {
+  if (!product.value) {
     return []
   }
 
@@ -42,7 +42,7 @@ const pressureLabel = computed(() => {
     return 'Pression non communiquee'
   }
 
-  return `${product.value.minPressureBar} - ${product.value.maxPressureBar} bar`
+  return `${product.value?.minPressureBar} - ${product.value?.maxPressureBar} bar`
 })
 
 const psiLabel = computed(() => {
@@ -50,11 +50,11 @@ const psiLabel = computed(() => {
     return null
   }
 
-  return `${product.value.minPressurePsi} - ${product.value.maxPressurePsi} psi`
+  return `${product.value?.minPressurePsi} - ${product.value?.maxPressurePsi} psi`
 })
 
 const allTechnologies = computed(() => {
-  if (product.value === null) {
+  if (!product.value) {
     return []
   }
 
@@ -66,6 +66,18 @@ const allTechnologies = computed(() => {
     ...product.value.reinforcementTechnologies,
     ...product.value.eBikeTechnologies,
   ].filter((technology, index, list) => technology.length > 0 && list.indexOf(technology) === index)
+})
+
+const productStats = computed(() => {
+  if (!product.value) {
+    return []
+  }
+
+  return [
+    { label: 'Victoires pro', value: product.value.proStats.victories },
+    { label: 'Podiums', value: product.value.proStats.podiums },
+    { label: 'Stock', value: product.value.stock },
+  ]
 })
 
 async function addToCart() {
@@ -91,7 +103,7 @@ async function addToCart() {
       />
 
       <UIProgress
-        v-if="pending"
+        v-if="pending || !product"
         class="mt-10"
         intent="primary"
         size="sm"
@@ -99,7 +111,7 @@ async function addToCart() {
       />
 
       <UIAlert
-        v-else-if="error || product === null"
+        v-else-if="error || !product"
         class="mt-10"
         intent="error"
         title="Produit introuvable"
@@ -145,11 +157,7 @@ async function addToCart() {
 
           <div class="mt-8 grid gap-4 md:grid-cols-3">
             <UICard
-              v-for="stat in [
-                { label: 'Victoires pro', value: product.proStats.victories },
-                { label: 'Podiums', value: product.proStats.podiums },
-                { label: 'Stock', value: product.stock },
-              ]"
+              v-for="stat in productStats"
               :key="stat.label"
               intent="neutral"
               variant="subtle"
