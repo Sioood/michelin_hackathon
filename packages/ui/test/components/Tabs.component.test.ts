@@ -204,6 +204,7 @@ describe('UITabs', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TabsProviderTest',
+
         components: { UITabs },
         setup() {
           const tabs = useTabs()
@@ -227,6 +228,7 @@ describe('UITabs', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TabsProviderPropsTest',
+
         components: { UITabs },
         setup() {
           const tabs = useTabs()
@@ -305,6 +307,7 @@ describe('UITabs', () => {
 
     const Controlled = defineComponent({
       name: 'TabsVModelUpdateTest',
+
       components: { UITabs },
       setup() {
         return { model }

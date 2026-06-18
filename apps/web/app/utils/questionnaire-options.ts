@@ -1,7 +1,6 @@
 import type { Product, ProductCategory } from '~/types/product'
 import type { SelectItem } from '~ui/app/components/Form/Select/index.vue'
 
-
 export function buildDiameterSelectItems(
   products: Product[],
   category?: ProductCategory,

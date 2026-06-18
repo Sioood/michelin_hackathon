@@ -12,6 +12,7 @@ const DummyInput = defineComponent({
     modelValue: { default: '', type: String },
     name: String,
   },
+
   emits: ['update:modelValue', 'blur'],
   setup(props, { emit }) {
     return () =>

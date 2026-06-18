@@ -113,6 +113,7 @@ describe('FileUpload', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'FileUploadProviderTest',
+
         components: { FileUpload },
         setup() {
           const fileUpload = useFileUpload({ maxFiles: 3 })

@@ -303,6 +303,7 @@ describe('UIFormDatePickerRoot (provider)', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'ProviderHarness',
+
         components: { UIFormDatePickerRoot },
         setup() {
           const api = useDatePicker({
@@ -328,6 +329,7 @@ describe('UIFormDatePickerRoot (provider)', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'SelectTodayHarness',
+
         components: { UIFormDatePickerRoot },
         setup() {
           const api = useDatePicker()

@@ -141,6 +141,7 @@ describe('UIFormNumberInput', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'NumberInputRefTest',
+
         components: { NumberInput },
         setup() {
           return { componentRef }
@@ -164,6 +165,7 @@ describe('UIFormNumberInput', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'NumberInputFocusTest',
+
         components: { NumberInput },
         setup() {
           return { componentRef }
