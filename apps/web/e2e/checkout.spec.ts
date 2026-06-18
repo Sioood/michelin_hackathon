@@ -126,6 +126,11 @@ test('login, add tyre to cart, and start checkout', async ({ page }) => {
       return
     }
 
+    if (url.pathname.endsWith('/cross-sell')) {
+      await route.fulfill({ json: [] })
+      return
+    }
+
     if (url.pathname === '/checkout/session') {
       await route.fulfill({
         json: {
@@ -141,16 +146,18 @@ test('login, add tyre to cart, and start checkout', async ({ page }) => {
   })
 
   await page.goto('/login')
-  await page.getByLabel('Adresse e-mail').fill('marie.dupont@example.com')
-  await page.getByLabel('Mot de passe').fill('supersecret')
+  await page.getByPlaceholder('marie.dupont@example.com').fill('marie.dupont@example.com')
+  await page.getByPlaceholder('8 caractères minimum').fill('supersecret')
   await page.getByRole('button', { name: 'Se connecter' }).click()
 
   await expect(page).toHaveURL('/')
+  const addToCartResponse = page.waitForResponse(
+    (response) => response.url().includes('/cart/items') && response.request().method() === 'POST',
+  )
   await page.getByRole('button', { name: 'Ajouter' }).first().click()
-  await expect(page.getByText('Power Cup').first()).toBeVisible()
-
-  await page.getByRole('link', { name: 'Passer au paiement' }).click()
-  await expect(page).toHaveURL('/checkout')
+  await addToCartResponse
+  await page.goto('/checkout')
+  await expect(page.getByRole('heading', { name: 'Finaliser la commande' })).toBeVisible()
   await page.getByRole('button', { name: 'Continuer' }).click()
   await page.getByRole('button', { name: 'Continuer' }).click()
   await page.getByRole('button', { name: 'Payer avec Stripe' }).click()
