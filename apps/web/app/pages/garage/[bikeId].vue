@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BikeType, GarageReminderSeverity, TirePosition } from '~/types/garage'
+import type { GarageReminderSeverity, TirePosition } from '~/types/garage'
 import type { Order } from '~/types/order'
 import type { SelectItem } from '~ui/app/components/Form/Select/index.vue'
 
@@ -17,6 +17,17 @@ const notes = ref('')
 const order = ref<Order | null>(null)
 const selectedOrderItem = ref<string[]>([])
 const checkoutError = ref('')
+const profileError = ref('')
+
+const diameterItems: SelectItem[] = [
+  { label: '700c — route / gravel', value: '700' },
+  { label: '650b / 27,5" — gravel / VTT', value: '27.5' },
+  { label: '29" — VTT', value: '29' },
+  { label: '28" — ville / trekking', value: '28' },
+  { label: '26" — VTT ancien', value: '26' },
+]
+
+const selectedDiameter = ref<string[]>([])
 
 const bikeId = computed(() => Number(route.params.bikeId))
 const orderId = computed(() => {
@@ -42,7 +53,7 @@ const positionItems: SelectItem[] = [
 
 const productItems = computed<SelectItem[]>(() =>
   garage.suggestions.value
-    .filter((product) => product.id !== undefined)
+    .filter((product) => product.id !== undefined && product.id > 0)
     .map((product) => ({
       label: `${product.rangeName} ${product.designation}`,
       value: String(product.id),
@@ -75,7 +86,65 @@ function positionLabel(position: TirePosition): string {
 
 async function refreshSuggestions() {
   const bike = garage.currentBike.value
-  await garage.loadSuggestions(bike?.type as BikeType | undefined, bike?.wheelDiameter)
+  await garage.loadSuggestions(bike?.type, bike?.wheelDiameter, bikeId.value)
+}
+
+function syncDiameterFromBike() {
+  const diameter = garage.currentBike.value?.wheelDiameter
+  if (!diameter) {
+    selectedDiameter.value = []
+    return
+  }
+
+  const lower = diameter.toLowerCase()
+  if (lower.includes('700') || lower === '622') {
+    selectedDiameter.value = ['700']
+    return
+  }
+
+  if (lower.includes('27.5') || lower.includes('650')) {
+    selectedDiameter.value = ['27.5']
+    return
+  }
+
+  if (lower.includes('29')) {
+    selectedDiameter.value = ['29']
+    return
+  }
+
+  if (lower.includes('28')) {
+    selectedDiameter.value = ['28']
+    return
+  }
+
+  if (lower.includes('26')) {
+    selectedDiameter.value = ['26']
+    return
+  }
+
+  selectedDiameter.value = [diameter]
+}
+
+async function saveDiameter() {
+  profileError.value = ''
+  const [diameter] = selectedDiameter.value
+
+  if (!diameter) {
+    profileError.value = 'Choisissez un diamètre pour affiner les suggestions.'
+    return
+  }
+
+  await garage.updateBike(bikeId.value, { wheelDiameter: diameter })
+  await refreshSuggestions()
+}
+
+async function deleteBike() {
+  if (!globalThis.confirm('Supprimer ce vélo du garage ?')) {
+    return
+  }
+
+  await garage.removeBike(bikeId.value)
+  await navigateTo('/garage')
 }
 
 async function installSelectedTire() {
@@ -151,6 +220,7 @@ onMounted(async () => {
   }
 
   await garage.loadBike(bikeId.value)
+  syncDiameterFromBike()
   await refreshSuggestions()
 
   if (orderId.value !== null && Number.isFinite(orderId.value)) {
@@ -203,13 +273,22 @@ onMounted(async () => {
               }}
             </p>
           </div>
-          <UIButton
-            text="Actualiser les suggestions"
-            intent="neutral"
-            variant="subtle"
-            leading-icon="tabler:refresh"
-            @click="refreshSuggestions"
-          />
+          <div class="flex flex-wrap gap-2">
+            <UIButton
+              text="Actualiser les suggestions"
+              intent="neutral"
+              variant="subtle"
+              leading-icon="tabler:refresh"
+              @click="refreshSuggestions"
+            />
+            <UIButton
+              text="Supprimer le vélo"
+              intent="error"
+              variant="subtle"
+              leading-icon="tabler:trash"
+              @click="deleteBike"
+            />
+          </div>
         </div>
 
         <UIAlert
@@ -316,11 +395,50 @@ onMounted(async () => {
           </div>
 
           <aside class="grid content-start gap-4">
+            <div
+              class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-5"
+            >
+              <h2 class="txt-h4 font-black">Profil du vélo</h2>
+              <p class="txt-caption mt-2 text-neutral-text-subtle">
+                Type : {{ garage.currentBike.value.type }}. Le diamètre filtre les pneus
+                compatibles.
+              </p>
+              <div class="mt-4 grid gap-4">
+                <UIFormSelect
+                  v-model="selectedDiameter"
+                  :items="diameterItems"
+                  label="Diamètre roues"
+                  placeholder="Choisir"
+                />
+                <UIAlert
+                  v-if="profileError"
+                  intent="error"
+                  title="Profil incomplet"
+                  :description="profileError"
+                />
+                <UIButton
+                  text="Enregistrer le diamètre"
+                  intent="neutral"
+                  variant="subtle"
+                  leading-icon="tabler:device-floppy"
+                  :disabled="garage.pending.value"
+                  @click="saveDiameter"
+                />
+              </div>
+            </div>
+
             <form
               class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-5"
               @submit.prevent="installSelectedTire"
             >
               <h2 class="txt-h4 font-black">Ajouter un pneu conseillé</h2>
+              <UIAlert
+                v-if="productItems.length === 0 && !garage.pending.value"
+                class="mt-4"
+                intent="warning"
+                title="Aucune suggestion"
+                description="Enregistrez le diamètre du vélo (700 pour route/gravel, 29 pour VTT), puis actualisez. Si le problème persiste, redémarrez l’API."
+              />
               <div class="mt-5 grid gap-4">
                 <UIFormSelect
                   v-model="productSelection"
