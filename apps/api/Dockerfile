@@ -36,7 +36,7 @@ COPY packages packages
 COPY scripts/docker-dev-api-entrypoint.sh /usr/local/bin/michelin_hackaton-docker-dev-api-entrypoint.sh
 RUN chmod +x /usr/local/bin/michelin_hackaton-docker-dev-api-entrypoint.sh
 RUN mkdir -p /pnpm/store \
-  && pnpm install --frozen-lockfile
+  && pnpm install --frozen-lockfile --ignore-scripts
 ENV NODE_ENV=development
 ENV PORT=3000
 EXPOSE 3000
