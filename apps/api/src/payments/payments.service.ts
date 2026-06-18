@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import Stripe from 'stripe'
 
+import { LoyaltyService } from '../loyalty/loyalty.service'
 import { OrdersService } from '../orders/orders.service'
 
 import type { PublicUserDto } from '../users/users.service'
@@ -24,7 +25,10 @@ export interface StripeWebhookPayload {
 export class PaymentsService {
   private readonly stripe: Stripe | null
 
-  constructor(private readonly ordersService: OrdersService) {
+  constructor(
+    private readonly loyaltyService: LoyaltyService,
+    private readonly ordersService: OrdersService,
+  ) {
     this.stripe =
       process.env.STRIPE_SECRET_KEY === undefined ? null : new Stripe(process.env.STRIPE_SECRET_KEY)
   }
@@ -46,6 +50,7 @@ export class PaymentsService {
 
     const session = await this.stripe.checkout.sessions.create({
       cancel_url: process.env.CHECKOUT_CANCEL_URL ?? 'http://localhost:3000/checkout',
+      ...(await this.buildStripeDiscounts(user.id as number)),
       line_items:
         order.items?.map((item) => ({
           price_data: {
@@ -78,7 +83,22 @@ export class PaymentsService {
   }
 
   async handleCheckoutCompleted(sessionId: string): Promise<void> {
-    await this.ordersService.markPaidByStripeSession(sessionId)
+    const order = await this.ordersService.markPaidByStripeSession(sessionId)
+    await this.loyaltyService.onOrderPaid(order)
+  }
+
+  private async buildStripeDiscounts(
+    userId: number,
+  ): Promise<Pick<Stripe.Checkout.SessionCreateParams, 'discounts'>> {
+    const couponId = await this.loyaltyService.getCheckoutDiscountCouponId(userId)
+
+    if (couponId === null || couponId.startsWith('demo_')) {
+      return {}
+    }
+
+    return {
+      discounts: [{ coupon: couponId }],
+    }
   }
 
   async handleWebhook(

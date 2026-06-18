@@ -60,22 +60,17 @@ const diameterCount = computed(() => Math.max(0, diameterSelectItems.value.lengt
         />
       </aside>
 
-      <div>
+      <div class="min-w-0">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <p class="txt-brand text-primary-text-default">Gammes mises en avant</p>
-            <h2 class="txt-h2 mt-2 font-black">Explorer par famille de pneus</h2>
+            <p class="txt-brand text-primary-text-default">{{ $t('catalogue.ranges.eyebrow') }}</p>
+            <h2 class="txt-h2 mt-2 font-black">{{ $t('catalogue.ranges.title') }}</h2>
           </div>
-          <UIProgress
-            v-if="pending"
-            intent="primary"
-            size="sm"
-            label="Chargement du catalogue..."
-          />
+          <UIProgress v-if="pending" intent="primary" size="sm" :label="$t('catalogue.loading')" />
           <UIAlert
             v-else-if="error"
-            title="API indisponible"
-            description="Vérifie que `pnpm dev` est lancé pour l'API et le front."
+            :title="$t('catalogue.apiError.title')"
+            :description="$t('catalogue.apiError.description')"
             intent="error"
             icon="tabler:alert-circle"
           />
@@ -85,17 +80,25 @@ const diameterCount = computed(() => Math.max(0, diameterSelectItems.value.lengt
           <CatalogueRangeCard
             v-for="range in featuredRanges"
             :key="range.rangeName"
+            class="min-w-0"
             :range="range"
           />
         </div>
 
         <div class="mt-12 flex items-end justify-between gap-6">
           <div>
-            <p class="txt-brand text-primary-text-default">Produits</p>
-            <h2 class="txt-h2 mt-2 font-black">Catalogue détaillé</h2>
+            <p class="txt-brand text-primary-text-default">
+              {{ $t('catalogue.products.eyebrow') }}
+            </p>
+            <h2 class="txt-h2 mt-2 font-black">{{ $t('catalogue.products.title') }}</h2>
           </div>
           <p class="txt-base hidden text-neutral-text-subtle sm:block">
-            {{ visibleProducts.length }} affichés sur {{ filteredProducts.length }}
+            {{
+              $t('catalogue.products.count', {
+                visible: visibleProducts.length,
+                total: filteredProducts.length,
+              })
+            }}
           </p>
         </div>
 
@@ -103,6 +106,7 @@ const diameterCount = computed(() => Math.max(0, diameterSelectItems.value.lengt
           <CatalogueProductCard
             v-for="product in visibleProducts"
             :key="product.slug"
+            class="min-w-0"
             :product="product"
           />
         </div>
@@ -110,7 +114,7 @@ const diameterCount = computed(() => Math.max(0, diameterSelectItems.value.lengt
         <div v-if="visibleProducts.length < filteredProducts.length" class="mt-8 text-center">
           <UIButton
             type="button"
-            text="Afficher plus de références"
+            :text="$t('catalogue.products.loadMore')"
             intent="primary"
             size="lg"
             @click="loadMore"

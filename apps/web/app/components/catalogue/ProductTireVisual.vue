@@ -1,13 +1,24 @@
 <script setup lang="ts">
 import type { ProductCategory } from '~/utils/catalogue'
 
-defineProps<{
-  category: ProductCategory
-}>()
+withDefaults(
+  defineProps<{
+    category: ProductCategory
+    size?: 'default' | 'compact'
+  }>(),
+  {
+    size: 'default',
+  },
+)
 </script>
 
 <template>
-  <div class="product-visual grid min-h-44 place-items-center" :data-category="category">
+  <div
+    class="product-visual grid place-items-center overflow-hidden"
+    :class="size === 'compact' ? 'min-h-0' : 'min-h-44'"
+    :data-category="category"
+    :data-size="size"
+  >
     <div class="tire-visual" aria-hidden="true">
       <span />
     </div>
@@ -117,5 +128,26 @@ defineProps<{
   position: relative;
   width: 56px;
   z-index: 1;
+}
+
+.product-visual[data-size='compact'] .tire-visual {
+  border-width: 8px;
+  box-shadow:
+    inset 0 0 0 2px var(--color-neutral-border-strong),
+    0 4px 12px color-mix(in srgb, var(--color-primary-bg-inverse) 18%, transparent);
+  height: 48px;
+  width: 48px;
+}
+
+.product-visual[data-size='compact'] .tire-visual::before,
+.product-visual[data-size='compact'] .tire-visual::after {
+  height: 6px;
+  width: 52px;
+}
+
+.product-visual[data-size='compact'] .tire-visual span {
+  border-width: 2px;
+  height: 20px;
+  width: 20px;
 }
 </style>

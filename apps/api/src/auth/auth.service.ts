@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { compare, hash } from 'bcrypt'
 
+import { LoyaltyService } from '../loyalty/loyalty.service'
 import { UsersService } from '../users/users.service'
 
 import type { LoginDto } from './dto/login.dto'
@@ -19,6 +20,7 @@ export interface AuthResponseDto {
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
+    private readonly loyaltyService: LoyaltyService,
     private readonly usersService: UsersService,
   ) {}
 
@@ -29,6 +31,12 @@ export class AuthService {
       lastName: input.lastName ?? null,
       passwordHash: await hash(input.password, 12),
     })
+
+    if (user.id === undefined) {
+      throw new BadRequestException('Invalid user')
+    }
+
+    await this.loyaltyService.bootstrapForRegistration(user.id, input.referralCode)
 
     return this.createAuthResponse(user)
   }

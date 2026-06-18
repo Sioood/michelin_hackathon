@@ -12,10 +12,12 @@
 | Phase | Description                        | Points | Statut |
 | ----- | ---------------------------------- | ------ | ------ |
 | P0    | Fondations backend (NestJS)        | ~47    | ✅     |
-| P1    | E-commerce frontend (Nuxt)         | ~43    | ⬜     |
-| P2    | Recherche IA + questionnaire       | ~43    | ⬜     |
-| P3    | Garage virtuel                     | ~43    | ⬜     |
+| P1    | E-commerce frontend (Nuxt)         | ~43    | ✅     |
+| P2    | Recherche IA + questionnaire       | ~43    | ✅     |
+| P3    | Garage virtuel                     | ~43    | ✅     |
 | P4    | Fidélité, cross-sell, gamification | ~58    | ⬜     |
+| P5    | Contenu produit enrichi            | ~32    | ✅     |
+| P4    | Fidélité, cross-sell, gamification | ~58    | ✅     |
 | P5    | Contenu produit enrichi            | ~32    | ⬜     |
 | P6    | Michelin Riders Club               | ~52    | ⬜     |
 | P7    | Polish & innovation (stretch)      | ~40    | ⬜     |
@@ -260,34 +262,36 @@ NUXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ## Contrat API REST
 
-| Méthode  | Endpoint                      | Auth        | Consommateur web        |
-| -------- | ----------------------------- | ----------- | ----------------------- |
-| `GET`    | `/products`                   | Public      | `index.vue`             |
-| `GET`    | `/products/:slug`             | Public      | `products/[slug].vue`   |
-| `GET`    | `/products/compare?slugs=a,b` | Public      | `comparer.vue`          |
-| `GET`    | `/products/:id/cross-sell`    | Public      | `CrossSellCarousel.vue` |
-| `GET`    | `/products/:id/reviews`       | Public      | `ProductReviews.vue`    |
-| `POST`   | `/products/:id/reviews`       | JWT         | `ProductReviews.vue`    |
-| `POST`   | `/auth/register`              | Public      | `register.vue`          |
-| `POST`   | `/auth/login`                 | Public      | `login.vue`             |
-| `GET`    | `/cart`                       | JWT / guest | `useCartStore`          |
-| `POST`   | `/cart/items`                 | JWT / guest | `CartDrawer.vue`        |
-| `PATCH`  | `/cart/items/:id`             | JWT / guest | `CartDrawer.vue`        |
-| `DELETE` | `/cart/items/:id`             | JWT / guest | `CartDrawer.vue`        |
-| `POST`   | `/checkout/session`           | JWT         | `checkout/index.vue`    |
-| `POST`   | `/payments/webhook`           | Stripe sig  | API seul                |
-| `GET`    | `/orders`                     | JWT         | `account/orders.vue`    |
-| `GET`    | `/orders/:id`                 | JWT         | `account/orders.vue`    |
-| `POST`   | `/search/ai`                  | Public      | `AiSearchBar.vue`       |
-| `POST`   | `/search/questionnaire`       | Public      | `trouver-mon-pneu.vue`  |
-| `GET`    | `/garage/bikes`               | JWT         | `garage/index.vue`      |
-| `POST`   | `/garage/bikes`               | JWT         | `garage/index.vue`      |
-| `GET`    | `/garage/bikes/:id`           | JWT         | `garage/[bikeId].vue`   |
-| `POST`   | `/garage/bikes/:id/tires`     | JWT         | `garage/[bikeId].vue`   |
-| `GET`    | `/garage/suggestions`         | JWT         | `garage/index.vue`      |
-| `GET`    | `/loyalty`                    | JWT         | `account/loyalty.vue`   |
-| `POST`   | `/loyalty/redeem-code`        | JWT         | `RedeemCodeForm.vue`    |
-| `POST`   | `/games/roulette/spin`        | JWT         | `roulette.vue`          |
+| Méthode  | Endpoint                                 | Auth        | Consommateur web        |
+| -------- | ---------------------------------------- | ----------- | ----------------------- |
+| `GET`    | `/products`                              | Public      | `index.vue`             |
+| `GET`    | `/products/:slug`                        | Public      | `products/[slug].vue`   |
+| `GET`    | `/products/compare?slugs=a,b`            | Public      | `comparer.vue`          |
+| `GET`    | `/products/:id/cross-sell`               | Public      | `CrossSellCarousel.vue` |
+| `GET`    | `/products/:productId/reviews`           | Public      | `Reviews.vue`           |
+| `POST`   | `/products/:productId/reviews`           | JWT         | `Reviews.vue`           |
+| `PATCH`  | `/products/:productId/reviews/:reviewId` | JWT         | `Reviews.vue`           |
+| `DELETE` | `/products/:productId/reviews/:reviewId` | JWT         | `Reviews.vue`           |
+| `POST`   | `/auth/register`                         | Public      | `register.vue`          |
+| `POST`   | `/auth/login`                            | Public      | `login.vue`             |
+| `GET`    | `/cart`                                  | JWT / guest | `useCartStore`          |
+| `POST`   | `/cart/items`                            | JWT / guest | `CartDrawer.vue`        |
+| `PATCH`  | `/cart/items/:id`                        | JWT / guest | `CartDrawer.vue`        |
+| `DELETE` | `/cart/items/:id`                        | JWT / guest | `CartDrawer.vue`        |
+| `POST`   | `/checkout/session`                      | JWT         | `checkout/index.vue`    |
+| `POST`   | `/payments/webhook`                      | Stripe sig  | API seul                |
+| `GET`    | `/orders`                                | JWT         | `account/orders.vue`    |
+| `GET`    | `/orders/:id`                            | JWT         | `account/orders.vue`    |
+| `POST`   | `/search/ai`                             | Public      | `AiSearchBar.vue`       |
+| `POST`   | `/search/questionnaire`                  | Public      | `trouver-mon-pneu.vue`  |
+| `GET`    | `/garage/bikes`                          | JWT         | `garage/index.vue`      |
+| `POST`   | `/garage/bikes`                          | JWT         | `garage/index.vue`      |
+| `GET`    | `/garage/bikes/:id`                      | JWT         | `garage/[bikeId].vue`   |
+| `POST`   | `/garage/bikes/:id/tires`                | JWT         | `garage/[bikeId].vue`   |
+| `GET`    | `/garage/suggestions`                    | JWT         | `garage/index.vue`      |
+| `GET`    | `/loyalty`                               | JWT         | `account/loyalty.vue`   |
+| `POST`   | `/loyalty/redeem-code`                   | JWT         | `RedeemCodeForm.vue`    |
+| `POST`   | `/games/roulette/spin`                   | JWT         | `roulette.vue`          |
 
 ---
 
@@ -417,46 +421,46 @@ gantt
 > Objectif : parcours d'achat complet B2C.
 > App : **Nuxt uniquement** — dépend de Phase 0.
 
-- [ ] **P1-01** · WEB · 2 pts — Types TS (`Product`, `User`, `Cart`, `Order`)
+- [x] **P1-01** · WEB · 2 pts — Types TS (`Product`, `User`, `Cart`, `Order`)
   - Fichiers : `apps/web/app/types/`
 
-- [ ] **P1-02** · WEB · 2 pts — Composable `useApi` — `$fetch` + header `Authorization: Bearer`
+- [x] **P1-02** · WEB · 2 pts — Composable `useApi` — `$fetch` + header `Authorization: Bearer`
   - Fichiers : `apps/web/app/composables/useApi.ts`
 
-- [ ] **P1-03** · WEB · 3 pts — Store Pinia `useAuthStore` (login, register, logout, token)
+- [x] **P1-03** · WEB · 3 pts — Store Pinia `useAuthStore` (login, register, logout, token)
   - Fichiers : `apps/web/app/stores/auth.ts`
 
-- [ ] **P1-04** · WEB · 3 pts — Pages `/login` et `/register` avec `UIForm` + Zod
+- [x] **P1-04** · WEB · 3 pts — Pages `/login` et `/register` avec `UIForm` + Zod
   - Fichiers : `apps/web/app/pages/login.vue`, `register.vue`
 
-- [ ] **P1-05** · WEB · 5 pts — Page `/products/[slug]` — fiche produit (specs, pression, technologies)
+- [x] **P1-05** · WEB · 5 pts — Page `/products/[slug]` — fiche produit (specs, pression, technologies)
   - Fichiers : `apps/web/app/pages/products/[slug].vue`
 
-- [ ] **P1-06** · WEB · 5 pts — Store `useCartStore` + `UIDrawer` panier latéral
+- [x] **P1-06** · WEB · 5 pts — Store `useCartStore` + `UIDrawer` panier latéral
   - Fichiers : `apps/web/app/stores/cart.ts`, `apps/web/app/components/commerce/CartDrawer.vue`
 
-- [ ] **P1-07** · WEB · 5 pts — Page `/checkout` avec `UISteps` (Panier → Livraison → Paiement)
+- [x] **P1-07** · WEB · 5 pts — Page `/checkout` avec `UISteps` (Panier → Livraison → Paiement)
   - Fichiers : `apps/web/app/pages/checkout/index.vue`
 
-- [ ] **P1-08** · WEB · 3 pts — Redirection Stripe Checkout + page `/checkout/success`
+- [x] **P1-08** · WEB · 3 pts — Redirection Stripe Checkout + page `/checkout/success`
   - Fichiers : `apps/web/app/pages/checkout/success.vue`
 
-- [ ] **P1-09** · WEB · 3 pts — Page `/account/orders` — historique commandes
+- [x] **P1-09** · WEB · 3 pts — Page `/account/orders` — historique commandes
   - Fichiers : `apps/web/app/pages/account/orders.vue`
 
-- [ ] **P1-10** · WEB · 2 pts — Header : état connecté, icône panier, badge quantité
+- [x] **P1-10** · WEB · 2 pts — Header : état connecté, icône panier, badge quantité
   - Fichiers : `apps/web/app/components/catalogue/AppSiteHeader.vue`
 
-- [ ] **P1-11** · WEB · 2 pts — `ProductCard` → lien `/products/[slug]` + bouton ajouter au panier
+- [x] **P1-11** · WEB · 2 pts — `ProductCard` → lien `/products/[slug]` + bouton ajouter au panier
   - Fichiers : `apps/web/app/components/catalogue/ProductCard.vue`
 
-- [ ] **P1-12** · WEB · 3 pts — i18n : externaliser les textes catalogue existants
+- [x] **P1-12** · WEB · 3 pts — i18n : externaliser les textes catalogue existants
   - Fichiers : `apps/web/i18n/locales/fr-FR/`, `en-US/`
 
-- [ ] **P1-13** · WEB · 5 pts — E2E Playwright : login → ajout panier → checkout
+- [x] **P1-13** · WEB · 5 pts — E2E Playwright : login → ajout panier → checkout
   - Fichiers : `apps/web/e2e/checkout.spec.ts`
 
-**Phase 1 complète** : [ ]
+**Phase 1 complète** : [x]
 
 ---
 
@@ -467,39 +471,39 @@ gantt
 
 ### API
 
-- [ ] **P2-01** · API · 8 pts — Module `Search` : `POST /search/ai` avec prompt structuré
+- [x] **P2-01** · API · 8 pts — Module `Search` : `POST /search/ai` avec prompt structuré
   - Fichiers : `apps/api/src/search/`
 
-- [ ] **P2-02** · API · 5 pts — Abstraction `LlmProvider` (interface + impl OpenAI SDK)
+- [x] **P2-02** · API · 5 pts — Abstraction `LlmProvider` (interface + impl OpenAI-compatible)
   - Fichiers : `apps/api/src/search/llm.provider.ts`
 
-- [ ] **P2-03** · API · 3 pts — Prompt system : contraintes catalogue + JSON schema output
+- [x] **P2-03** · API · 3 pts — Prompt system : contraintes catalogue + JSON schema output
   - Fichiers : `apps/api/src/search/prompts/`
 
-- [ ] **P2-04** · API · 3 pts — `POST /search/questionnaire` — filtres depuis réponses structurées
+- [x] **P2-04** · API · 3 pts — `POST /search/questionnaire` — filtres depuis réponses structurées
   - Fichiers : `apps/api/src/search/questionnaire.dto.ts`
 
-- [ ] **P2-05** · API · 3 pts — Tests Jest : mapping LLM → filtres Sequelize
+- [x] **P2-05** · API · 3 pts — Tests Jest : mapping LLM → filtres Sequelize
   - Fichiers : `apps/api/src/search/search.service.spec.ts`
 
 ### Web
 
-- [ ] **P2-06** · WEB · 8 pts — Page `/trouver-mon-pneu` — wizard questionnaire multi-étapes
+- [x] **P2-06** · WEB · 8 pts — Page `/trouver-mon-pneu` — wizard questionnaire multi-étapes
   - Fichiers : `apps/web/app/pages/trouver-mon-pneu.vue`
 
-- [ ] **P2-07** · WEB · 5 pts — Composant `AiSearchBar` — champ libre + bulle explication IA
+- [x] **P2-07** · WEB · 5 pts — Composant `AiSearchBar` — champ libre + bulle explication IA
   - Fichiers : `apps/web/app/components/search/AiSearchBar.vue`
 
-- [ ] **P2-08** · WEB · 5 pts — Page `/recherche` — filtres manuels + résultats IA
+- [x] **P2-08** · WEB · 5 pts — Page `/recherche` — filtres manuels + résultats IA
   - Fichiers : `apps/web/app/pages/recherche.vue`
 
-- [ ] **P2-09** · WEB · 2 pts — Intégrer `AiSearchBar` dans `AppSiteHeader` + `Hero`
+- [x] **P2-09** · WEB · 2 pts — Intégrer `AiSearchBar` dans `AppSiteHeader` + `Hero`
   - Fichiers : `apps/web/app/components/catalogue/`
 
-- [ ] **P2-10** · WEB · 1 pt — Types `SearchResult`, `AiSearchResponse`
+- [x] **P2-10** · WEB · 1 pt — Types `SearchResult`, `AiSearchResponse`
   - Fichiers : `apps/web/app/types/search.ts`
 
-**Phase 2 complète** : [ ]
+**Phase 2 complète** : [x]
 
 ```mermaid
 sequenceDiagram
@@ -527,39 +531,39 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P3-01** · API · 5 pts — Modèles `Bike`, `BikeTireInstallation` (Sequelize)
+- [x] **P3-01** · API · 5 pts — Modèles `Bike`, `BikeTireInstallation` (Sequelize)
   - Fichiers : `apps/api/src/garage/`
 
-- [ ] **P3-02** · API · 5 pts — CRUD `/garage/bikes`, `/garage/bikes/:id/tires`
+- [x] **P3-02** · API · 5 pts — CRUD `/garage/bikes`, `/garage/bikes/:id/tires`
   - Fichiers : `apps/api/src/garage/garage.controller.ts`
 
-- [ ] **P3-03** · API · 3 pts — Lien installations ↔ commandes (historique achat auto)
+- [x] **P3-03** · API · 3 pts — Lien installations ↔ commandes (historique achat auto)
   - Fichiers : `apps/api/src/garage/garage.service.ts`
 
-- [ ] **P3-04** · API · 5 pts — Rappels remplacement (> 3000 km ou > 18 mois)
+- [x] **P3-04** · API · 5 pts — Rappels remplacement (> 3000 km ou > 18 mois)
   - Fichiers : `apps/api/src/garage/reminder.service.ts`
 
-- [ ] **P3-05** · API · 5 pts — `GET /garage/suggestions` — pneus selon saison + type vélo
+- [x] **P3-05** · API · 5 pts — `GET /garage/suggestions` — pneus selon saison + type vélo
   - Fichiers : `apps/api/src/garage/suggestions.service.ts`
 
 ### Web
 
-- [ ] **P3-06** · WEB · 8 pts — Page `/garage` — liste vélos, état pneus, alertes
+- [x] **P3-06** · WEB · 8 pts — Page `/garage` — liste vélos, état pneus, alertes
   - Fichiers : `apps/web/app/pages/garage/index.vue`
 
-- [ ] **P3-07** · WEB · 5 pts — Page `/garage/[bikeId]` — détail, historique, bouton « Racheter »
+- [x] **P3-07** · WEB · 5 pts — Page `/garage/[bikeId]` — détail, historique, bouton « Racheter »
   - Fichiers : `apps/web/app/pages/garage/[bikeId].vue`
 
-- [ ] **P3-08** · WEB · 2 pts — Composable `useGarage` + types `Bike`, `TireInstallation`
+- [x] **P3-08** · WEB · 2 pts — Composable `useGarage` + types `Bike`, `TireInstallation`
   - Fichiers : `apps/web/app/composables/useGarage.ts`
 
-- [ ] **P3-09** · WEB · 3 pts — Flow « Ajouter au garage » post-achat (modal checkout success)
+- [x] **P3-09** · WEB · 3 pts — Flow « Ajouter au garage » post-achat (modal checkout success)
   - Fichiers : `apps/web/app/pages/checkout/success.vue`
 
-- [ ] **P3-10** · WEB · 2 pts — `ReorderButton` → ajout panier direct depuis le garage
+- [x] **P3-10** · WEB · 2 pts — `ReorderButton` → ajout panier direct depuis le garage
   - Fichiers : `apps/web/app/components/garage/ReorderButton.vue`
 
-**Phase 3 complète** : [ ]
+**Phase 3 complète** : [x]
 
 ---
 
@@ -567,48 +571,48 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P4-01** · API · 5 pts — Modèle `LoyaltyAccount` + `LoyaltyTransaction`
+- [x] **P4-01** · API · 5 pts — Modèle `LoyaltyAccount` + `LoyaltyTransaction`
   - Fichiers : `apps/api/src/loyalty/`
 
-- [ ] **P4-02** · API · 5 pts — +100 pts inscription, -20% 1ère commande (coupon Stripe)
+- [x] **P4-02** · API · 5 pts — +100 pts inscription, -20% 1ère commande (coupon Stripe)
   - Fichiers : `apps/api/src/loyalty/welcome.service.ts`
 
-- [ ] **P4-03** · API · 3 pts — Points à l'achat (1 pt/€) via webhook commande
+- [x] **P4-03** · API · 3 pts — Points à l'achat (1 pt/€) via webhook commande
   - Fichiers : `apps/api/src/loyalty/`
 
-- [ ] **P4-04** · API · 5 pts — Catalogue récompenses + échange points
+- [x] **P4-04** · API · 5 pts — Catalogue récompenses + échange points
   - Fichiers : `apps/api/src/loyalty/rewards.seed.ts`
 
-- [ ] **P4-05** · API · 5 pts — Module `CrossSell` : règles chambre à air, pneu complémentaire
+- [x] **P4-05** · API · 5 pts — Module `CrossSell` : règles chambre à air, pneu complémentaire
   - Fichiers : `apps/api/src/cross-sell/`
 
-- [ ] **P4-06** · API · 5 pts — `POST /loyalty/redeem-code` — codes QR / emballage
-  - Fichiers : `apps/api/src/loyalty/redeem.controller.ts`
+- [x] **P4-06** · API · 5 pts — `POST /loyalty/redeem-code` — codes QR / emballage
+  - Fichiers : `apps/api/src/loyalty/loyalty.controller.ts`
 
-- [ ] **P4-07** · API · 5 pts — Roulette backend : 1 spin/jour, gains points ou %
+- [x] **P4-07** · API · 5 pts — Roulette backend : 1 spin/jour, gains points ou %
   - Fichiers : `apps/api/src/games/roulette/`
 
-- [ ] **P4-08** · API · 8 pts — Parrainage : code unique, +pts parrain/filleul
+- [x] **P4-08** · API · 8 pts — Parrainage : code unique, +pts parrain/filleul
   - Fichiers : `apps/api/src/loyalty/referral.service.ts`
 
 ### Web
 
-- [ ] **P4-09** · WEB · 3 pts — `CrossSellCarousel` sur PDP + panier + garage
+- [x] **P4-09** · WEB · 3 pts — `CrossSellCarousel` sur PDP + panier + garage
   - Fichiers : `apps/web/app/components/commerce/CrossSellCarousel.vue`
 
-- [ ] **P4-10** · WEB · 3 pts — Widget points fidélité header + `/account/loyalty`
+- [x] **P4-10** · WEB · 3 pts — Widget points fidélité header + `/account/loyalty`
   - Fichiers : `apps/web/app/components/loyalty/`, `apps/web/app/pages/account/loyalty.vue`
 
-- [ ] **P4-11** · WEB · 5 pts — Page `/roulette` + composant `RouletteWheel`
+- [x] **P4-11** · WEB · 5 pts — Page `/roulette` + composant `RouletteWheel`
   - Fichiers : `apps/web/app/pages/roulette.vue`
 
-- [ ] **P4-12** · WEB · 3 pts — Composant saisie code promo / QR
+- [x] **P4-12** · WEB · 3 pts — Composant saisie code promo / QR
   - Fichiers : `apps/web/app/components/loyalty/RedeemCodeForm.vue`
 
-- [ ] **P4-13** · WEB · 3 pts — Parrainage : lien `/register?ref=CODE`
+- [x] **P4-13** · WEB · 3 pts — Parrainage : lien `/register?ref=CODE`
   - Fichiers : `apps/web/app/pages/register.vue`
 
-**Phase 4 complète** : [ ]
+**Phase 4 complète** : [x]
 
 ---
 
@@ -616,30 +620,30 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P5-01** · API · 5 pts — Modèle `Review` + CRUD `/products/:id/reviews`
+- [x] **P5-01** · API · 5 pts — Modèle `Review` + CRUD `/products/:id/reviews`
   - Fichiers : `apps/api/src/reviews/`
 
-- [ ] **P5-02** · API · 3 pts — `GET /products/compare?slugs=a,b` — données comparatives
-  - Fichiers : `apps/api/src/products/compare.controller.ts`
+- [x] **P5-02** · API · 3 pts — `GET /products/compare?slugs=a,b` — données comparatives
+  - Fichiers : `apps/api/src/products/products.controller.ts`, `apps/api/src/products/products.service.ts`
 
 ### Web
 
-- [ ] **P5-03** · WEB · 5 pts — Section avis sur PDP + `UIFormRating`
-  - Fichiers : `apps/web/app/components/product/ProductReviews.vue`
+- [x] **P5-03** · WEB · 5 pts — Section avis sur PDP + `UIFormRating`
+  - Fichiers : `apps/web/app/components/product/Reviews.vue`
 
-- [ ] **P5-04** · WEB · 8 pts — Page `/comparer` — sélection 2 pneus, tableau stats
+- [x] **P5-04** · WEB · 8 pts — Page `/comparer` — sélection 2 pneus, tableau stats
   - Fichiers : `apps/web/app/pages/comparer.vue`
 
-- [ ] **P5-05** · WEB · 3 pts — Bloc « Performances pros » sur PDP (`proStats`)
+- [x] **P5-05** · WEB · 3 pts — Bloc « Performances pros » sur PDP (`proStats`)
   - Fichiers : `apps/web/app/components/product/ProStats.vue`
 
-- [ ] **P5-06** · WEB · 3 pts — Calculateur pression (logique pure, sans API)
+- [x] **P5-06** · WEB · 3 pts — Calculateur pression (logique pure, sans API)
   - Fichiers : `apps/web/app/utils/pressure-calculator.ts`
 
-- [ ] **P5-07** · WEB · 5 pts — Page `/calculateur-pression` — formulaire poids + vélo
+- [x] **P5-07** · WEB · 5 pts — Page `/calculateur-pression` — formulaire poids + vélo
   - Fichiers : `apps/web/app/pages/calculateur-pression.vue`
 
-**Phase 5 complète** : [ ]
+**Phase 5 complète** : [x]
 
 ---
 

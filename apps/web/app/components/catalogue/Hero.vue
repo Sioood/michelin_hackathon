@@ -22,23 +22,50 @@ defineProps<{
     >
       <div class="pb-10">
         <UIBadge
-          label="Vélo route, gravel, VTT, ville et e-bike"
+          :label="$t('catalogue.hero.badge')"
           intent="secondary"
           size="lg"
           :ui="{
             root: 'mb-4 border-none bg-secondary-fill-default px-3 py-1',
-            label: 'txt-caption font-black uppercase text-secondary-text-inverse',
+            label: 'txt-label font-black uppercase text-secondary-text-inverse',
           }"
         />
         <h1
           class="txt-title max-w-3xl leading-[0.96] font-black tracking-normal sm:text-6xl lg:text-7xl"
         >
-          Trouvez le pneu vélo adapté à votre pratique
+          {{ $t('catalogue.hero.title') }}
         </h1>
         <p class="txt-base mt-6 max-w-2xl leading-8 text-primary-text-inverse/84">
-          Une expérience catalogue inspirée du site Michelin Bicycle, enrichie avec les références
-          du fichier produit 2026.
+          {{ $t('catalogue.hero.description') }}
         </p>
+        <div class="mt-8">
+          <SearchAiSearchBar redirect-on-search />
+        </div>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <UIButton
+            to="/trouver-mon-pneu"
+            :text="$t('catalogue.tools.findTyre')"
+            intent="secondary"
+            leading-icon="tabler:sparkles"
+            class="shadow-lg shadow-black/20"
+          />
+          <UIButton
+            to="/comparer"
+            :text="$t('catalogue.tools.compare')"
+            intent="neutral"
+            variant="subtle"
+            leading-icon="tabler:arrows-diff"
+            class="border-white/80! bg-white/95! text-primary-text-strong! shadow-lg shadow-black/20 hover:border-secondary-border-default! hover:bg-secondary-fill-default! hover:text-secondary-text-inverse!"
+          />
+          <UIButton
+            to="/calculateur-pression"
+            :text="$t('catalogue.tools.pressure')"
+            intent="neutral"
+            variant="subtle"
+            leading-icon="tabler:gauge"
+            class="border-white/35! bg-primary-bg-inverse/75! text-primary-text-inverse! shadow-lg shadow-black/20 backdrop-blur hover:border-white! hover:bg-white! hover:text-primary-text-strong!"
+          />
+        </div>
         <div class="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
           <UICard
             v-for="stat in stats"

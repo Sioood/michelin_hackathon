@@ -96,9 +96,11 @@ extendCompodiumMeta({
       </UIStepsItem>
     </UIStepsList>
 
-    <slot />
+    <div class="w-full min-w-0">
+      <slot />
+    </div>
 
-    <div v-if="showTriggers" class="flex justify-between">
+    <div v-if="showTriggers" class="flex w-full justify-between">
       <UIStepsPrevTrigger />
       <UIStepsNextTrigger />
     </div>

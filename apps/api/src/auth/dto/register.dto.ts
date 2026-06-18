@@ -17,4 +17,9 @@ export class RegisterDto {
   @IsString()
   @MaxLength(100)
   declare lastName?: string
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(32)
+  declare referralCode?: string
 }

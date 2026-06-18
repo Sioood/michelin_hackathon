@@ -53,8 +53,8 @@ extendCompodiumMeta({
     <slot />
   </ArkSteps.Trigger>
   <ArkSteps.Trigger v-else v-bind="triggerAttrs" as-child :class="ui?.root">
-    <UIButton :variant="'ghost'" :intent :size>
-      <slot />
+    <UIButton :variant="'ghost'" :intent :size class="max-w-full min-w-0">
+      <span class="truncate"><slot /></span>
     </UIButton>
   </ArkSteps.Trigger>
 </template>

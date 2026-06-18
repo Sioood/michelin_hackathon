@@ -18,9 +18,9 @@ const CardBodyHeaderCVA = cva('flex w-full items-center justify-between font-mon
       secondary: 'text-secondary-text-subtle',
     } as const satisfies Record<CardIntent, string>,
     size: {
-      lg: 'txt-base mt-3 mr-4 mb-2 min-w-60 gap-3',
-      md: 'txt-caption mt-2 mr-3 mb-1 min-w-60 gap-2',
-      sm: 'txt-small mt-1 mr-2 mb-0.5 min-w-60 gap-1',
+      lg: 'txt-base mt-3 mr-4 mb-2 min-w-0 gap-3',
+      md: 'txt-caption mt-2 mr-3 mb-1 min-w-0 gap-2',
+      sm: 'txt-small mt-1 mr-2 mb-0.5 min-w-0 gap-1',
     } as const satisfies Record<CardSize, string>,
   },
 })
@@ -139,14 +139,14 @@ const cardBaseProps = computed(() => ({
       <UIBadge
         v-if="tag"
         :label="tag"
-        :ui="{ root: 'absolute top-0 right-0' }"
+        :ui="{ root: 'absolute top-2 right-2' }"
         variant="subtle"
         :intent="elementIntent"
       />
 
       <div
         v-if="subtitle || leadingIconName || trailingIconName"
-        :class="cn(CardBodyHeaderCVA({ intent, size }))"
+        :class="cn(CardBodyHeaderCVA({ intent, size }), ui?.bodyHeader)"
       >
         <Icon
           v-if="isLeading && leadingIconName"

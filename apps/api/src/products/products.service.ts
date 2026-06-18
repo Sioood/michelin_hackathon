@@ -2,6 +2,9 @@ import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Op } from 'sequelize'
 
+import { mapSearchTerrainToProductTerrains } from '../search/terrain-map'
+
+import { normalizeDiameterVariants } from './diameter-variants'
 import { Product } from './product.model'
 import { seedProducts } from './products.seed'
 import { enrichProductSeed } from './seed-prices'
@@ -59,6 +62,28 @@ export class ProductsService implements OnModuleInit {
     return product.toJSON<ProductDto>()
   }
 
+  async findBySlugs(slugs: string[]): Promise<ProductDto[]> {
+    const products = await this.productModel.findAll({ where: { slug: slugs } })
+    const productsBySlug = new Map(
+      products.map((product) => [product.slug, product.toJSON<ProductDto>()]),
+    )
+    const missingSlugs = slugs.filter((slug) => !productsBySlug.has(slug))
+
+    if (missingSlugs.length > 0) {
+      throw new NotFoundException(`Products not found: ${missingSlugs.join(', ')}`)
+    }
+
+    return slugs.map((slug) => {
+      const product = productsBySlug.get(slug)
+
+      if (product === undefined) {
+        throw new NotFoundException(`Product not found: ${slug}`)
+      }
+
+      return product
+    })
+  }
+
   async findModelById(id: number): Promise<Product> {
     const product = await this.productModel.findByPk(id)
 
@@ -77,14 +102,25 @@ export class ProductsService implements OnModuleInit {
     }
 
     if (filters.diameter !== undefined && filters.diameter.length > 0) {
-      conditions.push({
-        [Op.or]: [{ webDiameterMm: filters.diameter }, { webDiameterInch: filters.diameter }],
-      } as WhereOptions<ProductAttributes>)
+      const diameterVariants = normalizeDiameterVariants(filters.diameter)
+      if (diameterVariants.length > 0) {
+        conditions.push({
+          [Op.or]: diameterVariants.flatMap((variant) => [
+            { webDiameterMm: variant },
+            { webDiameterInch: variant },
+            { webDiameterMm: { [Op.iLike]: `%${variant}%` } },
+            { webDiameterInch: { [Op.iLike]: `%${variant}%` } },
+            { diameterEtrto: variant },
+          ]),
+        } as WhereOptions<ProductAttributes>)
+      }
     }
 
     if (filters.terrain !== undefined && filters.terrain.length > 0) {
       conditions.push({
-        terrainTypes: { [Op.overlap]: [filters.terrain.toUpperCase()] },
+        terrainTypes: {
+          [Op.overlap]: mapSearchTerrainToProductTerrains(filters.terrain),
+        },
       } as WhereOptions<ProductAttributes>)
     }
 

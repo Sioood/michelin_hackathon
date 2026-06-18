@@ -1967,7 +1967,7 @@ html {
   @apply text-neutral-text-default;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --color-gray-50: #0d0d0d;
     --color-gray-100: #1a1a1a;
@@ -1997,7 +1997,7 @@ html {
   html {
     @apply bg-neutral-bg-default!;
   }
-}
+} */
 
 :root {
   font-size: 16px;
@@ -2007,9 +2007,9 @@ html {
   @apply font-normal;
 }
 
-html.dark {
+/* html.dark {
   @apply bg-neutral-bg-default!;
-}
+} */
 
 body {
   @apply font-primary;
