@@ -90,7 +90,7 @@ export class OpenAiLlmProvider implements LlmProvider {
   }
 }
 
-export function createHeuristicSearchPlan(query: string): LlmSearchPlan {
+function createHeuristicSearchPlan(query: string): LlmSearchPlan {
   const normalizedQuery = normalizeText(query)
   const filters: SearchFilters = { search: query.trim() }
   const categoryMatch = categoryKeywords.find((item) =>
@@ -133,7 +133,7 @@ export function createHeuristicSearchPlan(query: string): LlmSearchPlan {
   }
 }
 
-export function normalizeSearchPlan(input: unknown, fallbackQuery: string): LlmSearchPlan {
+function normalizeSearchPlan(input: unknown, fallbackQuery: string): LlmSearchPlan {
   const record = isRecord(input) ? input : {}
   const filters = normalizeFilters(record.filters, fallbackQuery)
   const explanation =

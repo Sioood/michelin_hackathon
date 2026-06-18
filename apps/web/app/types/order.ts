@@ -1,8 +1,8 @@
 import type { Product } from './product'
 
-export type OrderStatus = 'paid' | 'pending' | 'shipped'
+type OrderStatus = 'paid' | 'pending' | 'shipped'
 
-export interface OrderItem {
+interface OrderItem {
   createdAt?: string
   id?: number
   orderId: number

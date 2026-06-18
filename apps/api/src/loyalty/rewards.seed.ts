@@ -1,4 +1,4 @@
-export type LoyaltyRewardType = 'discount_fixed' | 'discount_percent' | 'free_shipping'
+type LoyaltyRewardType = 'discount_fixed' | 'discount_percent' | 'free_shipping'
 
 export interface LoyaltyReward {
   description: string

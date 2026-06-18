@@ -10,8 +10,6 @@ import { Order } from './order.model'
 import type { OrderStatus } from './order.model'
 import type { CartItem } from '../cart/cart-item.model'
 
-export type OrderDto = Order
-
 @Injectable()
 export class OrdersService {
   constructor(
