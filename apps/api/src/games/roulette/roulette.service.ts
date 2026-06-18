@@ -6,7 +6,7 @@ import { LoyaltyService } from '../../loyalty/loyalty.service'
 
 import type { PendingDiscount } from '../../loyalty/loyalty-account.model'
 
-export type RoulettePrizeType = 'discount_percent' | 'points'
+type RoulettePrizeType = 'discount_percent' | 'points'
 
 export interface RoulettePrize {
   amount: number

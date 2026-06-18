@@ -2,7 +2,7 @@ import type { Product, ProductCategory } from './product'
 
 export type SearchTerrain = 'CITY' | 'GRAVEL' | 'MIXED' | 'MTB' | 'ROAD'
 
-export interface SearchFilters {
+interface SearchFilters {
   category?: ProductCategory
   diameter?: string
   eBikeReady?: boolean
@@ -11,7 +11,7 @@ export interface SearchFilters {
   tubelessReady?: boolean
 }
 
-export interface SearchResult {
+interface SearchResult {
   matchReasons: string[]
   product: Product
   score: number

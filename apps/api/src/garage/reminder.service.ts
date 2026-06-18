@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common'
 
 import type { BikeTireInstallation } from './bike-tire-installation.model'
 
-export type GarageReminderSeverity = 'due' | 'soon' | 'ok'
-export type GarageReminderReason = 'age' | 'distance'
+type GarageReminderSeverity = 'due' | 'soon' | 'ok'
+type GarageReminderReason = 'age' | 'distance'
 
 export interface GarageReminderDto {
   installationId: number
