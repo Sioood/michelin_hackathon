@@ -349,7 +349,7 @@
   --color-primary-text-inverse: var(--color-white);
   --color-primary-text-inverse-hover: var(--color-primary-50);
   --color-primary-text-inverse-active: var(--color-primary-100);
-  --color-primary-text-inverse-disabled: var(--color-primary-300);
+  --color-primary-text-inverse-disabled: var(--color-primary-600);
 
   /* icon subtle - low emphasis */
   --color-primary-icon-subtle: var(--color-primary-400);
@@ -373,7 +373,7 @@
   --color-primary-icon-inverse: var(--color-white);
   --color-primary-icon-inverse-hover: var(--color-primary-50);
   --color-primary-icon-inverse-active: var(--color-primary-100);
-  --color-primary-icon-inverse-disabled: var(--color-primary-300);
+  --color-primary-icon-inverse-disabled: var(--color-primary-600);
 
   /* text-on-fill — white on blue buttons */
   --color-primary-text-on-fill: var(--color-white);
