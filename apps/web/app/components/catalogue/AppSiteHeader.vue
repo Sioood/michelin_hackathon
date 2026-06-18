@@ -13,6 +13,7 @@ const navItems = [
   { href: '/#technologies', labelKey: 'catalogue.nav.technologies' },
   { href: '/garage', labelKey: 'catalogue.nav.garage' },
   { href: '/riders-club', labelKey: 'catalogue.nav.ridersClub' },
+  { href: '/b2b', labelKey: 'catalogue.nav.b2b' },
 ] as const
 
 const toolItems = [

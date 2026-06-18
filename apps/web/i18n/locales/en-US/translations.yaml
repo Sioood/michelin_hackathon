@@ -14,6 +14,7 @@ catalogue:
     technologies: 'Technologies'
     garage: 'Garage'
     ridersClub: 'Riders Club'
+    b2b: 'Retailers'
   tools:
     label: 'Tools'
     findTyre: 'Find my tyre'

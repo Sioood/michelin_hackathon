@@ -23,7 +23,9 @@
     "@internationalized/date": "catalog:",
     "@michelin_hackaton/nuxt-essentials": "workspace:^",
     "@michelin_hackaton/ui": "workspace:^",
+    "@tresjs/core": "catalog:",
     "nuxt": "catalog:",
+    "three": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
     "zod": "catalog:"
@@ -33,6 +35,7 @@
     "@michelin_hackaton/oxlint": "workspace:^",
     "@nuxt/kit": "catalog:",
     "@playwright/test": "catalog:",
+    "@types/three": "catalog:",
     "eslint": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:"

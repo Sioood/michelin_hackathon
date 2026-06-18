@@ -18,7 +18,7 @@
 | P4    | Fidélité, cross-sell, gamification | ~58    | ✅     |
 | P5    | Contenu produit enrichi            | ~32    | ✅     |
 | P6    | Michelin Riders Club               | ~52    | ✅     |
-| P7    | Polish & innovation (stretch)      | ~40    | ⬜     |
+| P7    | Polish & innovation (stretch)      | ~40    | ✅     |
 | DOC   | Documentation sans code            | ~9     | ⬜     |
 
 **Cible hackathon** : ~120–150 points (P0 → P1 → P2 → P3 → P4 partiel)
@@ -680,27 +680,27 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P7-05** · API · 8 pts — Module admin : stats commandes, stocks
+- [x] **P7-05** · API · 8 pts — Module admin : stats commandes, stocks
   - Fichiers : `apps/api/src/admin/`
 
 ### Web
 
-- [ ] **P7-01** · WEB · 13 pts — Viewer 3D pneu TresJS + GLB par catégorie
+- [x] **P7-01** · WEB · 13 pts — Viewer 3D TresJS pneu interactif par catégorie
   - Fichiers : `apps/web/app/components/product/TireViewer3D.vue`
 
-- [ ] **P7-02** · WEB · 2 pts — CSP nuxt-security : autoriser scripts 3D en prod
+- [x] **P7-02** · WEB · 2 pts — CSP nuxt-security : autoriser scripts 3D en prod
   - Fichiers : `apps/web/nuxt.config.ts`
 
-- [ ] **P7-03** · WEB · 8 pts — PWA : notifications rappel remplacement pneu
+- [x] **P7-03** · WEB · 8 pts — PWA : notifications rappel remplacement pneu
   - Fichiers : `apps/web/nuxt.config.ts`
 
-- [ ] **P7-04** · WEB · 1 pt — Page B2B placeholder « Espace revendeur — bientôt »
+- [x] **P7-04** · WEB · 1 pt — Page B2B placeholder « Espace revendeur — bientôt »
   - Fichiers : `apps/web/app/pages/b2b.vue`
 
-- [ ] **P7-06** · WEB · 8 pts — Dashboard admin commandes/stocks
+- [x] **P7-06** · WEB · 8 pts — Dashboard admin commandes/stocks
   - Fichiers : `apps/web/app/pages/admin/`
 
-**Phase 7 complète** : [ ]
+**Phase 7 complète** : [x]
 
 ---
 

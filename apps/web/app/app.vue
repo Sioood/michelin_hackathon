@@ -1,5 +1,7 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <NuxtPwaAssets />
+  <NuxtPage />
+  <UIToast />
+  <UIPwaNotifier />
+  <GarageReminderNotifier />
 </template>
