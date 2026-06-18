@@ -21,7 +21,7 @@ const maxUploadSizeBytes = 8 * 1024 * 1024
 
 @Injectable()
 export class CommunityUploadService {
-  private readonly uploadDir = join(process.cwd(), 'apps/api/uploads/community')
+  private readonly uploadDir = join(process.cwd(), 'uploads/community')
 
   async save(file: UploadedCommunityFile | undefined): Promise<CommunityUploadDto> {
     if (file === undefined) {
