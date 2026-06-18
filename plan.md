@@ -17,6 +17,8 @@
 | P3    | Garage virtuel                     | ~43    | ✅     |
 | P4    | Fidélité, cross-sell, gamification | ~58    | ⬜     |
 | P5    | Contenu produit enrichi            | ~32    | ✅     |
+| P4    | Fidélité, cross-sell, gamification | ~58    | ✅     |
+| P5    | Contenu produit enrichi            | ~32    | ⬜     |
 | P6    | Michelin Riders Club               | ~52    | ⬜     |
 | P7    | Polish & innovation (stretch)      | ~40    | ⬜     |
 | DOC   | Documentation sans code            | ~9     | ⬜     |
@@ -569,48 +571,48 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P4-01** · API · 5 pts — Modèle `LoyaltyAccount` + `LoyaltyTransaction`
+- [x] **P4-01** · API · 5 pts — Modèle `LoyaltyAccount` + `LoyaltyTransaction`
   - Fichiers : `apps/api/src/loyalty/`
 
-- [ ] **P4-02** · API · 5 pts — +100 pts inscription, -20% 1ère commande (coupon Stripe)
+- [x] **P4-02** · API · 5 pts — +100 pts inscription, -20% 1ère commande (coupon Stripe)
   - Fichiers : `apps/api/src/loyalty/welcome.service.ts`
 
-- [ ] **P4-03** · API · 3 pts — Points à l'achat (1 pt/€) via webhook commande
+- [x] **P4-03** · API · 3 pts — Points à l'achat (1 pt/€) via webhook commande
   - Fichiers : `apps/api/src/loyalty/`
 
-- [ ] **P4-04** · API · 5 pts — Catalogue récompenses + échange points
+- [x] **P4-04** · API · 5 pts — Catalogue récompenses + échange points
   - Fichiers : `apps/api/src/loyalty/rewards.seed.ts`
 
-- [ ] **P4-05** · API · 5 pts — Module `CrossSell` : règles chambre à air, pneu complémentaire
+- [x] **P4-05** · API · 5 pts — Module `CrossSell` : règles chambre à air, pneu complémentaire
   - Fichiers : `apps/api/src/cross-sell/`
 
-- [ ] **P4-06** · API · 5 pts — `POST /loyalty/redeem-code` — codes QR / emballage
-  - Fichiers : `apps/api/src/loyalty/redeem.controller.ts`
+- [x] **P4-06** · API · 5 pts — `POST /loyalty/redeem-code` — codes QR / emballage
+  - Fichiers : `apps/api/src/loyalty/loyalty.controller.ts`
 
-- [ ] **P4-07** · API · 5 pts — Roulette backend : 1 spin/jour, gains points ou %
+- [x] **P4-07** · API · 5 pts — Roulette backend : 1 spin/jour, gains points ou %
   - Fichiers : `apps/api/src/games/roulette/`
 
-- [ ] **P4-08** · API · 8 pts — Parrainage : code unique, +pts parrain/filleul
+- [x] **P4-08** · API · 8 pts — Parrainage : code unique, +pts parrain/filleul
   - Fichiers : `apps/api/src/loyalty/referral.service.ts`
 
 ### Web
 
-- [ ] **P4-09** · WEB · 3 pts — `CrossSellCarousel` sur PDP + panier + garage
+- [x] **P4-09** · WEB · 3 pts — `CrossSellCarousel` sur PDP + panier + garage
   - Fichiers : `apps/web/app/components/commerce/CrossSellCarousel.vue`
 
-- [ ] **P4-10** · WEB · 3 pts — Widget points fidélité header + `/account/loyalty`
+- [x] **P4-10** · WEB · 3 pts — Widget points fidélité header + `/account/loyalty`
   - Fichiers : `apps/web/app/components/loyalty/`, `apps/web/app/pages/account/loyalty.vue`
 
-- [ ] **P4-11** · WEB · 5 pts — Page `/roulette` + composant `RouletteWheel`
+- [x] **P4-11** · WEB · 5 pts — Page `/roulette` + composant `RouletteWheel`
   - Fichiers : `apps/web/app/pages/roulette.vue`
 
-- [ ] **P4-12** · WEB · 3 pts — Composant saisie code promo / QR
+- [x] **P4-12** · WEB · 3 pts — Composant saisie code promo / QR
   - Fichiers : `apps/web/app/components/loyalty/RedeemCodeForm.vue`
 
-- [ ] **P4-13** · WEB · 3 pts — Parrainage : lien `/register?ref=CODE`
+- [x] **P4-13** · WEB · 3 pts — Parrainage : lien `/register?ref=CODE`
   - Fichiers : `apps/web/app/pages/register.vue`
 
-**Phase 4 complète** : [ ]
+**Phase 4 complète** : [x]
 
 ---
 

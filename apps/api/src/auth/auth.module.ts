@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 
+import { LoyaltyModule } from '../loyalty/loyalty.module'
 import { UsersModule } from '../users/users.module'
 
 import { AuthController } from './auth.controller'
@@ -17,6 +18,7 @@ const jwtExpiresIn = (process.env.JWT_EXPIRES_IN ?? '24h') as NonNullable<
 @Module({
   controllers: [AuthController],
   imports: [
+    LoyaltyModule,
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({

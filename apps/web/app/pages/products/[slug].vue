@@ -147,6 +147,12 @@ async function addToCart() {
           <ProductProStats :stats="product.proStats" />
 
           <ProductReviews v-if="product.id !== undefined" :product-id="product.id" />
+          <CommerceCrossSellCarousel
+            v-if="product.id !== undefined"
+            class="mt-10"
+            :product-id="product.id"
+            title="Pensez aussi à"
+          />
         </div>
 
         <aside class="h-fit lg:sticky lg:top-24">

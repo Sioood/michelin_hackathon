@@ -22,7 +22,7 @@
     "format:check": "pnpm exec oxfmt --check .",
     "check-types": "turbo run check-types",
     "prepare": "husky || true",
-    "pre-commit": "lint-staged",
+    "pre-commit": "pnpm exec lint-staged",
     "changeset": "pnpm exec changeset",
     "changeset:conventional-commits": "node ./.changeset/changeset-conventional-commits.ts",
     "changeset:release": "pnpm exec changeset tag",

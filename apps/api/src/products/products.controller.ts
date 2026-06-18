@@ -1,4 +1,7 @@
 import { BadRequestException, Controller, Get, Param, Query } from '@nestjs/common'
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common'
+
+import { CrossSellService } from '../cross-sell/cross-sell.service'
 
 import { ProductsService } from './products.service'
 
@@ -6,7 +9,10 @@ import type { ProductDto, ProductFilters } from './products.service'
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly crossSellService: CrossSellService,
+    private readonly productsService: ProductsService,
+  ) {}
 
   @Get()
   findAll(@Query() filters: ProductFilters): Promise<ProductDto[]> {
@@ -27,6 +33,9 @@ export class ProductsController {
     }
 
     return this.productsService.findBySlugs(slugList)
+  @Get(':id/cross-sell')
+  findCrossSell(@Param('id', ParseIntPipe) id: number): Promise<ProductDto[]> {
+    return this.crossSellService.findForProduct(id)
   }
 
   @Get(':slug')

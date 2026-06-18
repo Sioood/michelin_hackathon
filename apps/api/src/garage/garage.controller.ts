@@ -50,6 +50,16 @@ export class GarageController {
     return this.garageService.create(user.id as number, input)
   }
 
+  @Get('bikes/:id/suggestions')
+  async suggestForBike(
+    @CurrentUser() user: PublicUserDto,
+    @Param('id', ParseIntPipe) bikeId: number,
+  ): Promise<ProductDto[]> {
+    const bike = await this.garageService.findForUser(user.id as number, bikeId)
+
+    return this.suggestionsService.suggestForBike(bike.type, bike.wheelDiameter)
+  }
+
   @Get('bikes/:id')
   findOne(
     @CurrentUser() user: PublicUserDto,

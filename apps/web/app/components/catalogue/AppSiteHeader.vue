@@ -91,6 +91,15 @@ onMounted(() => {
 
       <div class="flex items-center gap-2">
         <UIButton
+          :text="$t('catalogue.header.findTyre')"
+          intent="secondary"
+          size="sm"
+          leading-icon="tabler:circle-filled"
+          to="/trouver-mon-pneu"
+          class="hidden sm:inline-flex"
+        />
+        <LoyaltyPointsBadge />
+        <UIButton
           v-if="auth.isAuthenticated"
           :text="auth.displayName"
           intent="primary"

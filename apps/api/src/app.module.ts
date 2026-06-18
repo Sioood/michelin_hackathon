@@ -5,7 +5,10 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { CartModule } from './cart/cart.module'
+import { CrossSellModule } from './cross-sell/cross-sell.module'
+import { RouletteModule } from './games/roulette/roulette.module'
 import { GarageModule } from './garage/garage.module'
+import { LoyaltyModule } from './loyalty/loyalty.module'
 import { OrdersModule } from './orders/orders.module'
 import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
@@ -37,6 +40,9 @@ import { UsersModule } from './users/users.module'
     SearchModule,
     GarageModule,
     ReviewsModule,
+    LoyaltyModule,
+    CrossSellModule,
+    RouletteModule,
   ],
   providers: [AppService],
 })
