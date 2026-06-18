@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { SequelizeModule } from '@nestjs/sequelize'
 
-import { OrdersModule } from '../orders/orders.module'
+import { Order } from '../orders/order.model'
 
 import { LoyaltyAccount } from './loyalty-account.model'
 import { LoyaltyTransaction } from './loyalty-transaction.model'
@@ -16,8 +16,13 @@ import { WelcomeService } from './welcome.service'
   controllers: [LoyaltyController],
   exports: [LoyaltyService, WelcomeService, ReferralService],
   imports: [
-    OrdersModule,
-    SequelizeModule.forFeature([LoyaltyAccount, LoyaltyTransaction, PromoCode, PromoRedemption]),
+    SequelizeModule.forFeature([
+      LoyaltyAccount,
+      LoyaltyTransaction,
+      Order,
+      PromoCode,
+      PromoRedemption,
+    ]),
   ],
   providers: [LoyaltyService, WelcomeService, ReferralService],
 })

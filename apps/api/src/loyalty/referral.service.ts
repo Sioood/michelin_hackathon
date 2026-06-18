@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 
-import { OrdersService } from '../orders/orders.service'
+import { Order } from '../orders/order.model'
 
 import { LoyaltyTransaction } from './loyalty-transaction.model'
 import { WelcomeService } from './welcome.service'
 
-import type { Order } from '../orders/order.model'
+import type { Order as OrderModel } from '../orders/order.model'
 
 const REFERRAL_REFERRER_BONUS_POINTS = 200
 
 @Injectable()
 export class ReferralService {
-  constructor(
-    @InjectModel(LoyaltyTransaction)
-    private readonly loyaltyTransactionModel: typeof LoyaltyTransaction,
-    private readonly ordersService: OrdersService,
-    private readonly welcomeService: WelcomeService,
-  ) {}
+  @InjectModel(LoyaltyTransaction)
+  private readonly loyaltyTransactionModel!: typeof LoyaltyTransaction
+
+  @InjectModel(Order)
+  private readonly orderModel!: typeof Order
+
+  constructor(private readonly welcomeService: WelcomeService) {}
 
   async resolveReferrerUserId(referralCode: string | undefined): Promise<number | null> {
     if (referralCode === undefined || referralCode.trim().length === 0) {
@@ -29,8 +30,10 @@ export class ReferralService {
     return account?.userId ?? null
   }
 
-  async awardReferrerOnFirstOrder(order: Order): Promise<void> {
-    const paidOrderCount = await this.ordersService.countPaidOrdersForUser(order.userId)
+  async awardReferrerOnFirstOrder(order: OrderModel): Promise<void> {
+    const paidOrderCount = await this.orderModel.count({
+      where: { status: 'paid', userId: order.userId },
+    })
 
     if (paidOrderCount !== 1) {
       return
