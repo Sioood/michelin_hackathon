@@ -1,5 +1,11 @@
 # @michelin_hackaton/typescript
 
+## 2.0.0
+
+### Major Changes
+
+- 585b00c: v1.0.0
+
 ## 1.2.0
 
 ### Patch Changes
