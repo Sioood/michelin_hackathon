@@ -1,12 +1,12 @@
 import type { OrderStatus } from './order'
 import type { ProductCategory } from './product'
 
-export interface AdminOrderStatusStat {
+interface AdminOrderStatusStat {
   status: OrderStatus
   count: number
 }
 
-export interface AdminRecentOrder {
+interface AdminRecentOrder {
   id: number
   currency: 'EUR'
   customer: string
@@ -16,7 +16,7 @@ export interface AdminRecentOrder {
   createdAt: string
 }
 
-export interface AdminLowStockProduct {
+interface AdminLowStockProduct {
   id: number
   category: ProductCategory
   designation: string
