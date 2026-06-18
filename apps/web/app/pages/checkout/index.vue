@@ -62,21 +62,25 @@ async function startCheckout() {
       />
 
       <UICard
-        class="mt-8"
+        class="mt-8 w-full"
         intent="neutral"
         variant="default"
-        :card-base-ui="{ body: 'rounded-md p-6' }"
+        :card-base-ui="{
+          root: 'flex w-full min-w-0 max-w-full flex-col',
+          body: 'rounded-md p-6',
+        }"
       >
         <UISteps
           v-model:step="step"
+          class="w-full"
           :items="steps"
           intent="primary"
           show-progress
           size="sm"
           :show-triggers="false"
         >
-          <UIStepsContent :index="0">
-            <div v-if="cart.isEmpty" class="py-8 text-center">
+          <UIStepsContent :index="0" class="w-full">
+            <div v-if="cart.isEmpty" class="w-full py-8 text-center">
               <Icon
                 name="tabler:shopping-cart-off"
                 class="mx-auto size-10 text-neutral-text-subtle"
@@ -88,7 +92,7 @@ async function startCheckout() {
               <UIButton class="mt-5" to="/#catalogue" text="Voir le catalogue" intent="primary" />
             </div>
 
-            <div v-else class="mt-6 divide-y divide-neutral-border-subtle">
+            <div v-else class="mt-6 w-full divide-y divide-neutral-border-subtle">
               <article
                 v-for="item in cart.cart?.items"
                 :key="item.id"
@@ -105,8 +109,8 @@ async function startCheckout() {
             </div>
           </UIStepsContent>
 
-          <UIStepsContent :index="1">
-            <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <UIStepsContent :index="1" class="w-full">
+            <div class="mt-6 grid w-full gap-4 md:grid-cols-2">
               <UICard intent="neutral" variant="subtle" :card-base-ui="{ body: 'rounded-md p-4' }">
                 <h2 class="txt-h5 font-black">Livraison démo</h2>
                 <p class="txt-base mt-2 text-neutral-text-subtle">
@@ -123,8 +127,8 @@ async function startCheckout() {
             </div>
           </UIStepsContent>
 
-          <UIStepsContent :index="2">
-            <div class="mt-6">
+          <UIStepsContent :index="2" class="w-full">
+            <div class="mt-6 w-full">
               <h2 class="txt-h4 font-black">Paiement Stripe</h2>
               <p class="txt-base mt-2 max-w-2xl text-neutral-text-subtle">
                 Une session Stripe Checkout sera créée depuis le panier actif.
@@ -144,13 +148,13 @@ async function startCheckout() {
         </UISteps>
 
         <UIProgress
-          class="mt-6"
+          class="mt-6 w-full"
           :model-value="progressValue"
           label="Progression"
           intent="primary"
         />
 
-        <div class="mt-6 flex justify-between gap-3">
+        <div class="mt-6 flex w-full justify-between gap-3">
           <UIButton
             type="button"
             text="Retour"

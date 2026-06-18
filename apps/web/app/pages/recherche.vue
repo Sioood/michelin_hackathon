@@ -37,6 +37,7 @@ const terrainOptions: Array<{ label: string; value: SearchTerrain | 'all' }> = [
 ]
 
 const resultProducts = computed(() => response.value?.results ?? [])
+const suggestionCount = computed(() => response.value?.suggestedSlugs.length ?? 0)
 
 async function searchAi(value = query.value) {
   const normalized = value.trim()
@@ -100,26 +101,35 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="min-h-svh bg-neutral-bg-default text-neutral-text-strong">
+  <main class="min-h-svh overflow-x-hidden bg-neutral-bg-default text-neutral-text-strong">
     <CatalogueAppSiteHeader />
 
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-        <div>
+        <div class="min-w-0">
           <UIBadge label="Recherche intelligente" intent="primary" size="sm" />
           <h1 class="txt-h1 mt-4 font-black">Trouver une référence Michelin</h1>
           <p class="txt-lg mt-3 max-w-3xl text-neutral-text-subtle">
             Décrivez votre vélo, votre terrain ou vos contraintes, puis ajustez avec les filtres.
           </p>
         </div>
-        <UISegmentGroup v-model="mode" :options="modeOptions" intent="primary" size="sm" />
+        <UISegmentGroup
+          v-model="mode"
+          :options="modeOptions"
+          intent="primary"
+          size="sm"
+          class="shrink-0"
+        />
       </div>
 
-      <div class="mt-8 grid gap-8 lg:grid-cols-[360px_1fr]">
-        <aside class="h-fit lg:sticky lg:top-24">
-          <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-5' }">
+      <div class="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start">
+        <aside class="w-full shrink-0 lg:sticky lg:top-24 lg:w-80">
+          <div
+            class="rounded-md border border-neutral-border-subtle bg-neutral-surface-default p-5"
+          >
             <SearchAiSearchBar
               v-model="query"
+              stacked
               :pending="pending"
               :response="response"
               @search="searchAi"
@@ -153,13 +163,14 @@ onMounted(() => {
                 intent="primary"
                 leading-icon="tabler:adjustments-horizontal"
                 :state="pending && mode === 'manual' ? 'loading' : 'default'"
+                class="whitespace-nowrap"
                 @click="searchManual"
               />
             </div>
-          </UICard>
+          </div>
         </aside>
 
-        <section>
+        <div class="min-w-0 flex-1 overflow-hidden">
           <UIAlert
             v-if="errorMessage"
             intent="error"
@@ -176,38 +187,33 @@ onMounted(() => {
             </p>
           </div>
 
-          <div v-else>
-            <div class="flex items-end justify-between gap-4">
-              <div>
+          <div v-else class="min-w-0">
+            <div class="flex flex-wrap items-end justify-between gap-3">
+              <div class="min-w-0">
                 <p class="txt-brand text-primary-text-default">Résultats</p>
                 <h2 class="txt-h2 mt-2 font-black">{{ resultProducts.length }} références</h2>
               </div>
-              <p class="txt-caption text-neutral-text-subtle">
-                Suggestions : {{ response.suggestedSlugs.join(', ') || 'aucune' }}
-              </p>
+              <UIBadge
+                v-if="suggestionCount > 0"
+                :label="`${suggestionCount} suggestion${suggestionCount > 1 ? 's' : ''} IA`"
+                intent="info"
+                size="sm"
+                variant="subtle"
+                class="shrink-0"
+              />
             </div>
 
-            <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              <div
+            <div class="mt-6 grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+              <CatalogueProductCard
                 v-for="result in resultProducts"
                 :key="result.product.slug"
-                class="flex flex-col gap-2"
-              >
-                <CatalogueProductCard :product="result.product" />
-                <div class="flex flex-wrap gap-2">
-                  <UIChip
-                    v-for="reason in result.matchReasons"
-                    :key="reason"
-                    :label="reason"
-                    intent="info"
-                    size="sm"
-                    variant="subtle"
-                  />
-                </div>
-              </div>
+                class="w-full min-w-0"
+                :product="result.product"
+                :tags="result.matchReasons"
+              />
             </div>
           </div>
-        </section>
+        </div>
       </div>
     </section>
   </main>

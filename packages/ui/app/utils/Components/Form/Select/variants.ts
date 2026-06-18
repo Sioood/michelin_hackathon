@@ -4,11 +4,11 @@ import type { SelectIntent, SelectSize } from './context'
 
 export const selectRootCVA = cva('flex w-full flex-col gap-1')
 
-export const selectControlCVA = cva('flex items-center gap-1')
+export const selectControlCVA = cva('flex min-w-0 flex-1 items-center gap-1')
 
 export const selectTriggerCVA = cva(
   [
-    'inline-flex w-full cursor-pointer items-center justify-between gap-2',
+    'inline-flex w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden',
     'rounded-md border-0 bg-transparent shadow-none outline-none',
     'hover:bg-transparent active:scale-100',
   ],
@@ -69,7 +69,7 @@ export const selectContentCVA = cva(
 )
 
 export const selectItemCVA = cva(
-  'flex cursor-pointer items-center rounded-sm outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
+  'flex min-w-0 cursor-pointer items-center rounded-sm outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
   {
     variants: {
       intent: {

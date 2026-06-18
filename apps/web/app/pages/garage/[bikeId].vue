@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { parseDate, type DateValue } from '@internationalized/date'
+
 import type { GarageReminderSeverity, TirePosition } from '~/types/garage'
 import type { Order } from '~/types/order'
 import type { SelectItem } from '~ui/app/components/Form/Select/index.vue'
@@ -12,7 +14,7 @@ const productSelection = ref<string[]>([])
 const positionSelection = ref<string[]>(['both'])
 const currentDistanceKm = ref('0')
 const distanceKmAtInstall = ref('0')
-const installedAt = ref(new Date().toISOString().slice(0, 10))
+const installedAt = ref<DateValue[]>([parseDate(new Date().toISOString().slice(0, 10))])
 const notes = ref('')
 const order = ref<Order | null>(null)
 const selectedOrderItem = ref<string[]>([])
@@ -55,10 +57,14 @@ const productItems = computed<SelectItem[]>(() =>
   garage.suggestions.value
     .filter((product) => product.id !== undefined && product.id > 0)
     .map((product) => ({
-      label: `${product.rangeName} ${product.designation}`,
+      label: product.rangeName,
       value: String(product.id),
     })),
 )
+
+function getInstalledAtIso(): string {
+  return installedAt.value[0]?.toString() ?? new Date().toISOString().slice(0, 10)
+}
 
 const orderItemOptions = computed<SelectItem[]>(() =>
   (order.value?.items ?? [])
@@ -164,7 +170,7 @@ async function installSelectedTire() {
   await garage.installTire(bikeId.value, {
     currentDistanceKm: Number.isFinite(currentDistance) ? currentDistance : 0,
     distanceKmAtInstall: Number.isFinite(installDistance) ? installDistance : 0,
-    installedAt: installedAt.value,
+    installedAt: getInstalledAtIso(),
     notes: notes.value.trim() || undefined,
     orderId: sourceItem && orderId.value !== null ? orderId.value : undefined,
     orderItemId: sourceItem?.id,
@@ -189,7 +195,7 @@ async function installFromOrder() {
   await garage.installTire(bikeId.value, {
     currentDistanceKm: 0,
     distanceKmAtInstall: 0,
-    installedAt: installedAt.value,
+    installedAt: getInstalledAtIso(),
     orderId: orderId.value,
     orderItemId: item.id,
     position: positionSelection.value[0] as TirePosition | undefined,
@@ -299,7 +305,7 @@ onMounted(async () => {
           :description="garage.errorMessage.value"
         />
 
-        <div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_400px]">
+        <div class="mt-8 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)]">
           <div class="grid content-start gap-4">
             <h2 class="txt-h3 font-black">Pneus montés</h2>
 
@@ -394,7 +400,7 @@ onMounted(async () => {
             </div>
           </div>
 
-          <aside class="grid content-start gap-4">
+          <aside class="grid min-w-0 content-start gap-4">
             <div
               class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-5"
             >
@@ -446,6 +452,7 @@ onMounted(async () => {
                   label="Pneu"
                   placeholder="Choisir une référence"
                   empty-text="Aucune suggestion"
+                  :ui="{ valueText: 'min-w-0 truncate' }"
                 />
                 <UIFormSelect v-model="positionSelection" :items="positionItems" label="Position" />
                 <div class="grid gap-4 sm:grid-cols-2">
@@ -462,7 +469,11 @@ onMounted(async () => {
                     min="0"
                   />
                 </div>
-                <UIFormInput v-model="installedAt" label="Date de pose" type="date" />
+                <UIFormDatePicker
+                  v-model="installedAt"
+                  label="Date de pose"
+                  selection-mode="single"
+                />
                 <UIFormInput
                   v-model="notes"
                   label="Notes"

@@ -118,6 +118,7 @@ onMounted(async () => {
               variant="subtle"
               size="sm"
               leading-icon="tabler:link"
+              :ui="secondaryButtonUi"
               @click="copyReferralLink"
             />
           </UICard>

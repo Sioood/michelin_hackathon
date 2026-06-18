@@ -115,13 +115,28 @@ async function addToCart() {
               :label="categoryLabels[product.category]"
               :intent="getCategoryIntent(product.category)"
               size="sm"
+              variant="subtle"
             />
-            <UIChip v-if="product.tubelessReady" label="Tubeless Ready" intent="primary" />
-            <UIChip v-if="product.eBikeReady" label="E-bike Ready" intent="success" />
-            <UIChip
+            <UIBadge
+              v-if="product.tubelessReady"
+              label="Tubeless Ready"
+              intent="primary"
+              size="sm"
+              variant="subtle"
+            />
+            <UIBadge
+              v-if="product.eBikeReady"
+              label="E-bike Ready"
+              intent="success"
+              size="sm"
+              variant="subtle"
+            />
+            <UIBadge
               v-if="product.reflectiveStrip"
-              label="Bande reflechissante"
+              label="Bande réfléchissante"
               intent="secondary"
+              size="sm"
+              variant="subtle"
             />
           </div>
 
@@ -149,11 +164,12 @@ async function addToCart() {
             <h2 class="txt-h3 font-black">Technologies</h2>
             <p class="txt-base mt-2 text-neutral-text-subtle">{{ product.proStats.highlight }}</p>
             <div class="mt-4 flex flex-wrap gap-2">
-              <UIChip
+              <UIBadge
                 v-for="technology in allTechnologies"
                 :key="technology"
                 :label="technology"
                 intent="primary"
+                size="sm"
                 variant="subtle"
               />
             </div>

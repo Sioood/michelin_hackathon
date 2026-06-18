@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 
 import type { StepsIntent, StepsSize } from './context'
 
-export const stepsRootCVA = cva('flex flex-col gap-4', {
+export const stepsRootCVA = cva('flex w-full min-w-0 flex-col gap-4', {
   defaultVariants: {
     intent: 'neutral',
     size: 'md',

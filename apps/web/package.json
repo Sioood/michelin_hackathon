@@ -20,6 +20,7 @@
     "i18n:coverage:namespace": "pnpm exec michelin_hackaton-i18n-coverage -f ./i18n/locales --ns"
   },
   "dependencies": {
+    "@internationalized/date": "catalog:",
     "@michelin_hackaton/nuxt-essentials": "workspace:^",
     "@michelin_hackaton/ui": "workspace:^",
     "nuxt": "catalog:",

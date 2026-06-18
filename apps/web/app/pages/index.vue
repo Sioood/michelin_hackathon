@@ -60,7 +60,7 @@ const diameterCount = computed(() => Math.max(0, diameterSelectItems.value.lengt
         />
       </aside>
 
-      <div>
+      <div class="min-w-0">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p class="txt-brand text-primary-text-default">{{ $t('catalogue.ranges.eyebrow') }}</p>
@@ -80,6 +80,7 @@ const diameterCount = computed(() => Math.max(0, diameterSelectItems.value.lengt
           <CatalogueRangeCard
             v-for="range in featuredRanges"
             :key="range.rangeName"
+            class="min-w-0"
             :range="range"
           />
         </div>
@@ -105,6 +106,7 @@ const diameterCount = computed(() => Math.max(0, diameterSelectItems.value.lengt
           <CatalogueProductCard
             v-for="product in visibleProducts"
             :key="product.slug"
+            class="min-w-0"
             :product="product"
           />
         </div>

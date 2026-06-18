@@ -7,12 +7,14 @@ const props = withDefaults(
     pending?: boolean
     redirectOnSearch?: boolean
     response?: AiSearchResponse | null
+    stacked?: boolean
   }>(),
   {
     compact: false,
     pending: false,
     redirectOnSearch: false,
     response: null,
+    stacked: false,
   },
 )
 
@@ -41,13 +43,13 @@ function submit() {
 <template>
   <form
     class="flex w-full flex-col gap-3"
-    :class="compact ? 'max-w-sm' : 'max-w-3xl'"
+    :class="compact ? 'max-w-sm' : stacked ? '' : 'max-w-3xl'"
     @submit.prevent="submit"
   >
-    <div class="flex min-w-0 gap-2">
+    <div :class="stacked ? 'flex flex-col gap-2' : 'flex min-w-0 gap-2'">
       <UIFormSearchInput
         v-model="query"
-        class="min-w-0 flex-1"
+        class="w-full min-w-0 flex-1"
         :debounce="0"
         :placeholder="
           compact ? 'Gravel tubeless...' : 'Ex: pneu gravel tubeless pour vélo électrique en 700'
@@ -58,11 +60,14 @@ function submit() {
       <UIButton
         type="submit"
         :text="compact ? '' : 'Rechercher'"
-        icon="tabler:sparkles"
+        :icon="compact ? 'tabler:sparkles' : undefined"
+        :leading-icon="compact ? undefined : 'tabler:sparkles'"
         intent="secondary"
         :aria-label="compact ? 'Recherche IA' : undefined"
         :state="pending ? 'loading' : 'default'"
         :disabled="pending"
+        :class="stacked ? 'w-full whitespace-nowrap' : 'shrink-0'"
+        :ui="secondaryButtonUi"
       />
     </div>
 
