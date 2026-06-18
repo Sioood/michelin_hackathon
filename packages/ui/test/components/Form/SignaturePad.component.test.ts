@@ -181,6 +181,7 @@ describe('UIFormSignaturePad', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'SignaturePadProviderTest',
+
         components: { UIFormSignaturePad },
         setup() {
           const signaturePad = useSignaturePad()

@@ -98,6 +98,7 @@ describe('UIAccordion', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'AccordionProviderTest',
+
         components: {
           UIAccordion,
           UIAccordionItem,
@@ -127,6 +128,7 @@ describe('UIAccordion', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'AccordionProviderPropsTest',
+
         components: {
           UIAccordion,
           UIAccordionItem,
@@ -156,6 +158,7 @@ describe('UIAccordion', () => {
 
     const Controlled = defineComponent({
       name: 'AccordionVModelUpdateTest',
+
       components: { UIAccordion, UIAccordionItem, UIAccordionItemContent, UIAccordionItemTrigger },
       setup() {
         return { model }

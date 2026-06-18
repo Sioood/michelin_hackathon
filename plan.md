@@ -3,7 +3,7 @@
 > Point d'appui pour le développement du hackathon Michelin.
 > Cocher les cases `- [x]` au fur et à mesure de l'avancement.
 
-**Dernière mise à jour** : 2026-06-17
+**Dernière mise à jour** : 2026-06-18
 
 ---
 
@@ -15,11 +15,9 @@
 | P1    | E-commerce frontend (Nuxt)         | ~43    | ✅     |
 | P2    | Recherche IA + questionnaire       | ~43    | ✅     |
 | P3    | Garage virtuel                     | ~43    | ✅     |
-| P4    | Fidélité, cross-sell, gamification | ~58    | ⬜     |
-| P5    | Contenu produit enrichi            | ~32    | ✅     |
 | P4    | Fidélité, cross-sell, gamification | ~58    | ✅     |
-| P5    | Contenu produit enrichi            | ~32    | ⬜     |
-| P6    | Michelin Riders Club               | ~52    | ⬜     |
+| P5    | Contenu produit enrichi            | ~32    | ✅     |
+| P6    | Michelin Riders Club               | ~52    | ✅     |
 | P7    | Polish & innovation (stretch)      | ~40    | ⬜     |
 | DOC   | Documentation sans code            | ~9     | ⬜     |
 
@@ -651,30 +649,30 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P6-01** · API · 5 pts — Modèle `CommunityPost` (avis, test, photo, vidéo, challenge)
+- [x] **P6-01** · API · 5 pts — Modèle `CommunityPost` (avis, test, photo, vidéo, challenge)
   - Fichiers : `apps/api/src/community/`
 
-- [ ] **P6-02** · API · 5 pts — Feed API paginé + filtres par type
+- [x] **P6-02** · API · 5 pts — Feed API paginé + filtres par type
   - Fichiers : `apps/api/src/community/community.controller.ts`
 
-- [ ] **P6-03** · API · 8 pts — Upload images (stockage local)
+- [x] **P6-03** · API · 8 pts — Upload images (stockage local)
   - Fichiers : `apps/api/src/community/uploads/`
 
-- [ ] **P6-04** · API · 13 pts — Challenges communautaires + leaderboard
+- [x] **P6-04** · API · 13 pts — Challenges communautaires + leaderboard
   - Fichiers : `apps/api/src/community/challenges/`
 
-- [ ] **P6-05** · API · 5 pts — Modération basique (signalement, hide)
+- [x] **P6-05** · API · 5 pts — Modération basique (signalement, hide)
   - Fichiers : `apps/api/src/community/moderation/`
 
 ### Web
 
-- [ ] **P6-06** · WEB · 8 pts — Page `/riders-club` — feed, création post
+- [x] **P6-06** · WEB · 8 pts — Page `/riders-club` — feed, création post
   - Fichiers : `apps/web/app/pages/riders-club/index.vue`
 
-- [ ] **P6-07** · WEB · 8 pts — Composants `PostCard`, `CreatePostForm`, `ChallengeBoard`
+- [x] **P6-07** · WEB · 8 pts — Composants `PostCard`, `CreatePostForm`, `ChallengeBoard`
   - Fichiers : `apps/web/app/components/community/`
 
-**Phase 6 complète** : [ ]
+**Phase 6 complète** : [x]
 
 ---
 

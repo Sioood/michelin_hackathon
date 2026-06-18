@@ -22,8 +22,8 @@ const catalogueError = ref('')
 
 const productItems = computed(() =>
   catalogue.value.map((product) => ({
-    group: categoryLabels[product.category],
-    label: `${product.rangeName} — ${product.designation}`,
+    group: `${categoryLabels[product.category]} · ${product.rangeName}`,
+    label: product.designation,
     value: product.slug,
   })),
 )
@@ -191,7 +191,7 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
   <main class="min-h-svh bg-neutral-bg-default text-neutral-text-strong">
     <CatalogueAppSiteHeader />
 
-    <section class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <section class="mx-auto max-w-6xl min-w-0 px-4 py-10 sm:px-6">
       <UIButton
         to="/"
         text="Retour au catalogue"
@@ -207,29 +207,43 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
       </p>
 
       <UICard
-        class="mt-8"
+        class="mt-8 w-full min-w-0"
         intent="neutral"
         variant="default"
-        :card-base-ui="{ body: 'rounded-md p-6' }"
+        :card-base-ui="{
+          root: 'flex w-full min-w-0 max-w-full flex-col',
+          body: 'rounded-md p-6',
+        }"
       >
-        <form class="grid gap-4 sm:grid-cols-[1fr_1fr_auto]" @submit.prevent="compare">
-          <UIFormSelect
-            v-model="selectionA"
-            :items="productItems"
-            :loading="catalogueLoading"
-            label="Pneu 1"
-            placeholder="Choisir une référence"
-            :show-clear="false"
-          />
-          <UIFormSelect
-            v-model="selectionB"
-            :items="productItems"
-            :loading="catalogueLoading"
-            label="Pneu 2"
-            placeholder="Choisir une référence"
-            :show-clear="false"
-          />
-          <div class="flex items-end">
+        <form
+          class="grid min-w-0 gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+          @submit.prevent="compare"
+        >
+          <div class="max-w-full min-w-0">
+            <UIFormSelect
+              v-model="selectionA"
+              :items="productItems"
+              :loading="catalogueLoading"
+              label="Pneu 1"
+              placeholder="Choisir une référence"
+              :show-clear="false"
+              class="max-w-full"
+              :ui="{ root: 'min-w-0 max-w-full', trigger: 'max-w-full', valueText: 'min-w-0' }"
+            />
+          </div>
+          <div class="max-w-full min-w-0">
+            <UIFormSelect
+              v-model="selectionB"
+              :items="productItems"
+              :loading="catalogueLoading"
+              label="Pneu 2"
+              placeholder="Choisir une référence"
+              :show-clear="false"
+              class="max-w-full"
+              :ui="{ root: 'min-w-0 max-w-full', trigger: 'max-w-full', valueText: 'min-w-0' }"
+            />
+          </div>
+          <div class="flex shrink-0 items-end">
             <UIButton
               type="submit"
               text="Comparer"

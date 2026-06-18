@@ -158,6 +158,7 @@ describe('UIFormPinInput', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'PinInputRefTest',
+
         components: { UIFormPinInput },
         setup() {
           return { componentRef }
@@ -181,6 +182,7 @@ describe('UIFormPinInput', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'PinInputFocusTest',
+
         components: { UIFormPinInput },
         setup() {
           return { componentRef }

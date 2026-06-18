@@ -490,6 +490,7 @@ describe('UIPagination triggers with asChild', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'PrevTriggerAsChildHarness',
+
         components: { UIPaginationPrevTrigger, UIPaginationRoot },
         setup() {
           return () =>
@@ -512,6 +513,7 @@ describe('UIPagination triggers with asChild', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'NextTriggerAsChildHarness',
+
         components: { UIPaginationNextTrigger, UIPaginationRoot },
         setup() {
           return () =>
@@ -534,6 +536,7 @@ describe('UIPagination triggers with asChild', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'FirstTriggerAsChildHarness',
+
         components: { UIPaginationFirstTrigger, UIPaginationRoot },
         setup() {
           return () =>
@@ -556,6 +559,7 @@ describe('UIPagination triggers with asChild', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'LastTriggerAsChildHarness',
+
         components: { UIPaginationLastTrigger, UIPaginationRoot },
         setup() {
           return () =>

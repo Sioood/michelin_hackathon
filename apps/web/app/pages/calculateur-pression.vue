@@ -129,14 +129,28 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
             helper-text="Ex : 25 mm route, 40 mm gravel, 57 mm VTT"
           />
 
-          <div>
+          <div class="w-full min-w-0">
             <p class="txt-label mb-2 font-bold">Type de vélo</p>
-            <UISegmentGroup v-model="bikeType" :options="bikeTypeOptions" intent="primary" />
+            <UISegmentGroup
+              v-model="bikeType"
+              :options="bikeTypeOptions"
+              intent="primary"
+              variant="pill"
+              class="w-full"
+              :ui="{ item: 'flex-1 justify-center', root: 'flex w-full' }"
+            />
           </div>
 
-          <div>
+          <div class="w-full min-w-0">
             <p class="txt-label mb-2 font-bold">Type de surface</p>
-            <UISegmentGroup v-model="surface" :options="surfaceOptions" intent="primary" />
+            <UISegmentGroup
+              v-model="surface"
+              :options="surfaceOptions"
+              intent="primary"
+              variant="pill"
+              class="w-full"
+              :ui="{ item: 'flex-1 justify-center', root: 'flex w-full' }"
+            />
           </div>
 
           <div class="flex items-center gap-3">
