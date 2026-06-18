@@ -10,7 +10,7 @@ import { User } from '../users/user.model'
 import type { OrderStatus } from '../orders/order.model'
 import type { ProductCategory } from '../products/product.model'
 
-export interface AdminOrderStatusStatDto {
+interface AdminOrderStatusStatDto {
   status: OrderStatus
   count: number
 }
@@ -25,7 +25,7 @@ export interface AdminRecentOrderDto {
   createdAt: Date
 }
 
-export interface AdminLowStockProductDto {
+interface AdminLowStockProductDto {
   id: number
   category: ProductCategory
   designation: string
