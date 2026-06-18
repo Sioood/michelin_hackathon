@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import type { MenuListEntry } from '~ui/app/components/Menu/index.vue'
+
+const { t } = useI18n()
 const auth = useAuthStore()
 const cart = useCartStore()
 const route = useRoute()
+const loyalty = useLoyalty()
 
 const navItems = [
   { href: '/#categories', labelKey: 'catalogue.nav.tyres' },
@@ -44,35 +48,106 @@ function getToolClass(item: (typeof toolItems)[number]): string {
   return route.path === item.href ? item.activeClass : item.restClass
 }
 
+const navMenuItems = computed<MenuListEntry[]>(() =>
+  navItems.map((item) => ({
+    label: t(item.labelKey),
+    to: item.href,
+    type: 'item' as const,
+    value: item.href,
+  })),
+)
+
+const accountMenuItems = computed<MenuListEntry[]>(() => {
+  const items: MenuListEntry[] = [
+    {
+      label: t('catalogue.header.findTyre'),
+      to: '/trouver-mon-pneu',
+      type: 'item',
+      value: 'find-tyre',
+    },
+    {
+      label: t('catalogue.nav.garage'),
+      to: '/garage',
+      type: 'item',
+      value: 'garage',
+    },
+  ]
+
+  if (auth.isAuthenticated) {
+    items.push(
+      { type: 'separator' },
+      {
+        label: t('loyalty.header.points', { count: loyalty.balance.value }),
+        to: '/account/loyalty',
+        type: 'item',
+        value: 'loyalty',
+      },
+      {
+        label: auth.displayName,
+        to: '/account/orders',
+        type: 'item',
+        value: 'account',
+      },
+    )
+  } else {
+    items.push(
+      { type: 'separator' },
+      {
+        label: t('catalogue.header.login'),
+        to: '/login',
+        type: 'item',
+        value: 'login',
+      },
+    )
+  }
+
+  return items
+})
+
 onMounted(() => {
   void cart.load()
+  if (auth.isAuthenticated) {
+    void loyalty.loadOverview()
+  }
 })
+
+watch(
+  () => auth.isAuthenticated,
+  (isAuthenticated) => {
+    if (isAuthenticated) {
+      void loyalty.loadOverview()
+      return
+    }
+
+    loyalty.clear()
+  },
+)
 </script>
 
 <template>
   <header
     class="sticky top-0 z-30 border-b border-primary-border-strong bg-primary-bg-inverse text-primary-text-inverse"
   >
-    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-      <NuxtLink
-        to="/"
-        aria-label="Retour à l’accueil"
-        class="flex items-center gap-3 rounded-md focus-visible:ring-2 focus-visible:ring-secondary-border-default focus-visible:ring-offset-2 focus-visible:ring-offset-primary-bg-inverse focus-visible:outline-none"
-      >
-        <div
-          class="grid size-11 place-items-center rounded-md bg-secondary-fill-default font-black text-secondary-text-inverse shadow-sm"
-        >
-          M
+    <div class="mx-auto flex max-w-7xl items-center gap-2 px-4 py-3 sm:gap-3 sm:px-6">
+      <NuxtLink to="/" class="flex shrink-0 items-center gap-3 no-underline">
+        <div class="rounded-md bg-neutral-surface-default px-2 py-1">
+          <NuxtImg
+            src="/images/michelin-logo.png"
+            alt="Michelin"
+            class="h-7 w-auto shrink-0 object-contain sm:h-8"
+            width="140"
+            height="79"
+            loading="eager"
+          />
         </div>
-        <div>
-          <p class="txt-label font-black uppercase">Michelin</p>
-          <p class="txt-caption text-primary-text-inverse/70">
+        <div class="hidden min-w-0 lg:block">
+          <p class="txt-caption whitespace-nowrap text-primary-text-inverse/70">
             {{ $t('catalogue.header.subtitle') }}
           </p>
         </div>
       </NuxtLink>
 
-      <nav class="hidden items-center gap-6 md:flex">
+      <nav class="hidden items-center gap-4 whitespace-nowrap xl:flex">
         <UILink
           v-for="item in navItems"
           :key="item.href"
@@ -80,46 +155,88 @@ onMounted(() => {
           intent="neutral"
           variant="ghost"
           :ui="{
-            root: 'txt-label font-semibold text-primary-text-inverse/80 hover:text-primary-text-inverse',
+            root: 'txt-label shrink-0 whitespace-nowrap font-semibold text-primary-text-inverse/80 hover:text-primary-text-inverse',
           }"
         >
           {{ $t(item.labelKey) }}
         </UILink>
       </nav>
 
-      <SearchAiSearchBar compact class="hidden xl:flex" />
+      <div class="min-w-0 flex-1" />
 
-      <div class="flex items-center gap-2">
+      <SearchAiSearchBar compact class="hidden max-w-52 shrink-0 2xl:flex" />
+
+      <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
         <UIButton
           :text="$t('catalogue.header.findTyre')"
           intent="secondary"
           size="sm"
           leading-icon="tabler:circle-filled"
           to="/trouver-mon-pneu"
-          class="hidden sm:inline-flex"
+          class="hidden whitespace-nowrap 2xl:inline-flex"
+          :ui="secondaryButtonUi"
         />
-        <LoyaltyPointsBadge />
+        <UIButton
+          icon="tabler:circle-filled"
+          :aria-label="$t('catalogue.header.findTyre')"
+          intent="secondary"
+          size="sm"
+          to="/trouver-mon-pneu"
+          class="inline-flex xl:hidden"
+          :ui="secondaryButtonUi"
+        />
+
         <UIButton
           v-if="auth.isAuthenticated"
-          :text="auth.displayName"
-          intent="primary"
-          variant="ghost"
+          :text="$t('loyalty.header.points', { count: loyalty.balance.value })"
+          intent="secondary"
+          variant="subtle"
           size="sm"
-          leading-icon="tabler:user"
-          to="/account/orders"
-          class="hidden lg:inline-flex"
+          leading-icon="tabler:stars"
+          to="/account/loyalty"
+          class="hidden whitespace-nowrap xl:inline-flex"
+          :ui="secondaryButtonUi"
         />
-        <UIButton
-          v-else
-          :text="$t('catalogue.header.login')"
+
+        <UIMenu
           intent="primary"
-          variant="ghost"
-          size="sm"
-          leading-icon="tabler:user"
-          to="/login"
-          class="hidden lg:inline-flex"
-        />
-        <div class="relative">
+          :items="accountMenuItems"
+          :show-indicator="false"
+          unstyled
+          :ui="{ content: 'min-w-48' }"
+        >
+          <template #trigger>
+            <UIButton
+              icon="tabler:user"
+              :aria-label="auth.isAuthenticated ? auth.displayName : $t('catalogue.header.login')"
+              intent="primary"
+              variant="ghost"
+              size="sm"
+              :ui="{ root: 'text-primary-text-inverse hover:text-primary-text-inverse' }"
+            />
+          </template>
+        </UIMenu>
+
+        <UIMenu
+          intent="neutral"
+          :items="navMenuItems"
+          :show-indicator="false"
+          class="xl:hidden"
+          unstyled
+        >
+          <template #trigger>
+            <UIButton
+              icon="tabler:menu-2"
+              aria-label="Menu navigation"
+              intent="secondary"
+              variant="subtle"
+              size="sm"
+              :ui="secondaryButtonUi"
+            />
+          </template>
+        </UIMenu>
+
+        <div class="relative shrink-0">
           <UIButton
             type="button"
             icon="tabler:shopping-cart"
@@ -127,6 +244,7 @@ onMounted(() => {
             intent="secondary"
             variant="subtle"
             size="sm"
+            :ui="secondaryButtonUi"
             @click="cart.openDrawer"
           />
           <span

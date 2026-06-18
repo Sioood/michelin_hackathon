@@ -31,5 +31,6 @@ watch(
     leading-icon="tabler:stars"
     to="/account/loyalty"
     class="hidden md:inline-flex"
+    :ui="secondaryButtonUi"
   />
 </template>

@@ -174,7 +174,7 @@ extendCompodiumMeta({
       mergeProps(
         buttonRootAttrs,
         to
-          ? { ...linkProps, disabled }
+          ? { ...linkProps, disabled, styled: false }
           : {
               type,
               disabled: props.disabled || effectiveState === 'loading',

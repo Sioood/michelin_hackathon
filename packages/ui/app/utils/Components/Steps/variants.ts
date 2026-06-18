@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 
 import type { StepsIntent, StepsSize } from './context'
 
-export const stepsRootCVA = cva('flex flex-col gap-4', {
+export const stepsRootCVA = cva('flex w-full min-w-0 flex-col gap-4', {
   defaultVariants: {
     intent: 'neutral',
     size: 'md',
@@ -22,28 +22,31 @@ export const stepsRootCVA = cva('flex flex-col gap-4', {
   },
 })
 
-export const stepsListCVA = cva('flex w-full justify-center data-[orientation=vertical]:flex-col', {
-  defaultVariants: {
-    intent: 'neutral',
-    size: 'md',
+export const stepsListCVA = cva(
+  'flex w-full min-w-0 justify-between overflow-hidden data-[orientation=vertical]:flex-col data-[orientation=vertical]:justify-start',
+  {
+    defaultVariants: {
+      intent: 'neutral',
+      size: 'md',
+    },
+    variants: {
+      intent: {
+        accent: '',
+        neutral: '',
+        primary: '',
+        secondary: '',
+      } satisfies Record<StepsIntent, string>,
+      size: {
+        lg: 'gap-4',
+        md: 'gap-3',
+        sm: 'gap-2',
+      } satisfies Record<StepsSize, string>,
+    },
   },
-  variants: {
-    intent: {
-      accent: '',
-      neutral: '',
-      primary: '',
-      secondary: '',
-    } satisfies Record<StepsIntent, string>,
-    size: {
-      lg: 'gap-4',
-      md: 'gap-3',
-      sm: 'gap-2',
-    } satisfies Record<StepsSize, string>,
-  },
-})
+)
 
 export const stepsItemCVA = cva(
-  'group flex flex-1 items-center last:flex-none data-[orientation=vertical]:items-start',
+  'group flex min-w-0 flex-1 items-center last:flex-none data-[orientation=vertical]:items-start',
   {
     defaultVariants: {
       intent: 'neutral',

@@ -1,5 +1,4 @@
-import { BadRequestException, Controller, Get, Param, Query } from '@nestjs/common'
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common'
 
 import { CrossSellService } from '../cross-sell/cross-sell.service'
 
@@ -33,6 +32,8 @@ export class ProductsController {
     }
 
     return this.productsService.findBySlugs(slugList)
+  }
+
   @Get(':id/cross-sell')
   findCrossSell(@Param('id', ParseIntPipe) id: number): Promise<ProductDto[]> {
     return this.crossSellService.findForProduct(id)

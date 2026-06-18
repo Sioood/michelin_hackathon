@@ -2,6 +2,9 @@ import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Op } from 'sequelize'
 
+import { mapSearchTerrainToProductTerrains } from '../search/terrain-map'
+
+import { normalizeDiameterVariants } from './diameter-variants'
 import { Product } from './product.model'
 import { seedProducts } from './products.seed'
 import { enrichProductSeed } from './seed-prices'
@@ -99,14 +102,25 @@ export class ProductsService implements OnModuleInit {
     }
 
     if (filters.diameter !== undefined && filters.diameter.length > 0) {
-      conditions.push({
-        [Op.or]: [{ webDiameterMm: filters.diameter }, { webDiameterInch: filters.diameter }],
-      } as WhereOptions<ProductAttributes>)
+      const diameterVariants = normalizeDiameterVariants(filters.diameter)
+      if (diameterVariants.length > 0) {
+        conditions.push({
+          [Op.or]: diameterVariants.flatMap((variant) => [
+            { webDiameterMm: variant },
+            { webDiameterInch: variant },
+            { webDiameterMm: { [Op.iLike]: `%${variant}%` } },
+            { webDiameterInch: { [Op.iLike]: `%${variant}%` } },
+            { diameterEtrto: variant },
+          ]),
+        } as WhereOptions<ProductAttributes>)
+      }
     }
 
     if (filters.terrain !== undefined && filters.terrain.length > 0) {
       conditions.push({
-        terrainTypes: { [Op.overlap]: [filters.terrain.toUpperCase()] },
+        terrainTypes: {
+          [Op.overlap]: mapSearchTerrainToProductTerrains(filters.terrain),
+        },
       } as WhereOptions<ProductAttributes>)
     }
 

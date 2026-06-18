@@ -70,9 +70,9 @@ watch(
         v-for="(product, index) in products"
         :key="product.slug"
         :index="index"
-        class="min-w-0"
+        class="w-full min-w-0"
       >
-        <CatalogueProductCard :product="product" />
+        <CatalogueProductCard :product="product" :compact="compact" class="w-full" />
       </UICarouselItem>
     </UICarousel>
   </section>

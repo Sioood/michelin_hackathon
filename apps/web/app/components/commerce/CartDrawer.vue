@@ -70,7 +70,9 @@ onMounted(() => {
         :key="item.id"
         class="grid grid-cols-[72px_1fr] gap-4 border-b border-neutral-border-subtle pb-4"
       >
-        <CatalogueProductTireVisual :category="item.product.category" />
+        <div class="overflow-hidden">
+          <CatalogueProductTireVisual :category="item.product.category" size="compact" />
+        </div>
         <div class="min-w-0">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">

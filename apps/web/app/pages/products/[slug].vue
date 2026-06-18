@@ -18,7 +18,7 @@ const {
 })
 
 const specRows = computed(() => {
-  if (product.value === null) {
+  if (!product.value) {
     return []
   }
 
@@ -42,7 +42,7 @@ const pressureLabel = computed(() => {
     return 'Pression non communiquee'
   }
 
-  return `${product.value.minPressureBar} - ${product.value.maxPressureBar} bar`
+  return `${product.value?.minPressureBar} - ${product.value?.maxPressureBar} bar`
 })
 
 const psiLabel = computed(() => {
@@ -50,11 +50,11 @@ const psiLabel = computed(() => {
     return null
   }
 
-  return `${product.value.minPressurePsi} - ${product.value.maxPressurePsi} psi`
+  return `${product.value?.minPressurePsi} - ${product.value?.maxPressurePsi} psi`
 })
 
 const allTechnologies = computed(() => {
-  if (product.value === null) {
+  if (!product.value) {
     return []
   }
 
@@ -66,6 +66,18 @@ const allTechnologies = computed(() => {
     ...product.value.reinforcementTechnologies,
     ...product.value.eBikeTechnologies,
   ].filter((technology, index, list) => technology.length > 0 && list.indexOf(technology) === index)
+})
+
+const productStats = computed(() => {
+  if (!product.value) {
+    return []
+  }
+
+  return [
+    { label: 'Victoires pro', value: product.value.proStats.victories },
+    { label: 'Podiums', value: product.value.proStats.podiums },
+    { label: 'Stock', value: product.value.stock },
+  ]
 })
 
 async function addToCart() {
@@ -91,7 +103,7 @@ async function addToCart() {
       />
 
       <UIProgress
-        v-if="pending"
+        v-if="pending || !product"
         class="mt-10"
         intent="primary"
         size="sm"
@@ -99,7 +111,7 @@ async function addToCart() {
       />
 
       <UIAlert
-        v-else-if="error || product === null"
+        v-else-if="error || !product"
         class="mt-10"
         intent="error"
         title="Produit introuvable"
@@ -115,27 +127,56 @@ async function addToCart() {
               :label="categoryLabels[product.category]"
               :intent="getCategoryIntent(product.category)"
               size="sm"
+              variant="subtle"
             />
-            <UIChip v-if="product.tubelessReady" label="Tubeless Ready" intent="primary" />
-            <UIChip v-if="product.eBikeReady" label="E-bike Ready" intent="success" />
-            <UIChip
+            <UIBadge
+              v-if="product.tubelessReady"
+              label="Tubeless Ready"
+              intent="primary"
+              size="sm"
+              variant="subtle"
+            />
+            <UIBadge
+              v-if="product.eBikeReady"
+              label="E-bike Ready"
+              intent="success"
+              size="sm"
+              variant="subtle"
+            />
+            <UIBadge
               v-if="product.reflectiveStrip"
-              label="Bande reflechissante"
+              label="Bande réfléchissante"
               intent="secondary"
+              size="sm"
+              variant="subtle"
             />
           </div>
 
           <h1 class="txt-h1 mt-5 font-black">{{ product.rangeName }}</h1>
           <p class="txt-lg mt-4 max-w-3xl text-neutral-text-subtle">{{ product.description }}</p>
 
+          <div class="mt-8 grid gap-4 md:grid-cols-3">
+            <UICard
+              v-for="stat in productStats"
+              :key="stat.label"
+              intent="neutral"
+              variant="subtle"
+              :card-base-ui="{ body: 'rounded-md p-4' }"
+            >
+              <p class="txt-h4 font-black">{{ stat.value }}</p>
+              <p class="txt-caption mt-1 text-neutral-text-subtle">{{ stat.label }}</p>
+            </UICard>
+          </div>
+
           <section class="mt-10">
             <h2 class="txt-h3 font-black">Technologies</h2>
             <div class="mt-4 flex flex-wrap gap-2">
-              <UIChip
+              <UIBadge
                 v-for="technology in allTechnologies"
                 :key="technology"
                 :label="technology"
                 intent="primary"
+                size="sm"
                 variant="subtle"
               />
               <p v-if="allTechnologies.length === 0" class="txt-base text-neutral-text-subtle">

@@ -45,9 +45,9 @@ const badgeCVA = cva('flex w-fit items-center justify-center rounded-full', {
       yellow: 'border-yellow-border-default bg-yellow-surface-default',
     } satisfies Record<BadgeIntent, string>,
     size: {
-      lg: 'gap-1.5 border p-1.5',
-      md: 'gap-1 border p-1',
-      sm: 'gap-0.5 border p-0.5',
+      lg: 'gap-2 border px-3.5 py-1.5',
+      md: 'gap-1.5 border px-3 py-1',
+      sm: 'gap-1 border px-2.5 py-0.5',
     } satisfies Record<BadgeSize, string>,
     variant: {
       default: '',
@@ -80,8 +80,8 @@ const badgeIconCVA = cva('', {
     } satisfies Record<BadgeIntent, string>,
     size: {
       lg: 'size-4',
-      md: 'size-3',
-      sm: 'size-2.5',
+      md: 'size-3.5',
+      sm: 'size-3',
     } satisfies Record<BadgeSize, string>,
   },
 })
@@ -107,9 +107,9 @@ const badgeLabelCVA = cva('', {
       yellow: 'text-yellow-text-default',
     } satisfies Record<BadgeIntent, string>,
     size: {
-      lg: 'txt-base',
-      md: 'txt-caption',
-      sm: 'txt-small',
+      lg: 'txt-base font-semibold',
+      md: 'txt-label font-semibold',
+      sm: 'txt-caption font-semibold',
     } satisfies Record<BadgeSize, string>,
   },
 })

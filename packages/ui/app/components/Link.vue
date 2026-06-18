@@ -9,7 +9,9 @@ defineOptions({ inheritAttrs: false })
 type linkIntent = 'primary' | 'secondary' | 'accent' | 'info' | 'warning' | 'error' | 'neutral'
 type linkVariant = 'default' | 'ghost'
 
-const linkCVA = cva('w-fit', {
+const attrs = useAttrs()
+
+const linkCVA = cva('inline-flex w-fit items-center gap-1.5', {
   variants: {
     intent: {
       accent:
@@ -75,6 +77,7 @@ const linkClass = computed(() =>
     props.styled
       ? cn(linkCVA({ intent: props.intent, variant: props.variant }), props.ui?.root)
       : cn(props.ui?.root),
+    attrs.class as ClassValue,
   ),
 )
 

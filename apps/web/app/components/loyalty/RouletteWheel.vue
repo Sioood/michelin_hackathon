@@ -11,19 +11,79 @@ const emit = defineEmits<{
 }>()
 
 const segments = [
-  { color: 'bg-primary-fill-default', label: '10 points' },
-  { color: 'bg-secondary-fill-default', label: '25 points' },
-  { color: 'bg-accent-fill-default', label: '50 points' },
-  { color: 'bg-success-fill-default', label: '100 points' },
-  { color: 'bg-warning-fill-default', label: '5% de réduction' },
-  { color: 'bg-error-fill-default', label: '10% de réduction' },
+  {
+    fill: 'var(--color-primary-fill-default)',
+    label: '10 points',
+    textFill: 'var(--color-primary-text-inverse)',
+  },
+  {
+    fill: 'var(--color-secondary-fill-default)',
+    label: '25 points',
+    textFill: 'var(--color-primary-text-default)',
+  },
+  {
+    fill: 'var(--color-accent-fill-default)',
+    label: '50 points',
+    textFill: 'var(--color-accent-text-inverse)',
+  },
+  {
+    fill: 'var(--color-success-fill-default)',
+    label: '100 points',
+    textFill: 'var(--color-success-text-inverse)',
+  },
+  {
+    fill: 'var(--color-warning-fill-default)',
+    label: '5% de réduction',
+    textFill: 'var(--color-primary-text-default)',
+  },
+  {
+    fill: 'var(--color-error-fill-default)',
+    label: '10% de réduction',
+    textFill: 'var(--color-error-text-inverse)',
+  },
 ] as const
 
 const rotation = ref(0)
 const lastResult = ref<RouletteSpinResult | null>(null)
 const isAnimating = ref(false)
 
+const wheelSize = 200
+const wheelCenter = wheelSize / 2
+const wheelRadius = 96
 const segmentAngle = 360 / segments.length
+
+function polarToCartesian(radius: number, angleDeg: number) {
+  const radians = ((angleDeg - 90) * Math.PI) / 180
+
+  return {
+    x: wheelCenter + radius * Math.cos(radians),
+    y: wheelCenter + radius * Math.sin(radians),
+  }
+}
+
+function describeSlice(startAngle: number, endAngle: number) {
+  const start = polarToCartesian(wheelRadius, endAngle)
+  const end = polarToCartesian(wheelRadius, startAngle)
+  const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0
+
+  return [
+    `M ${wheelCenter} ${wheelCenter}`,
+    `L ${start.x} ${start.y}`,
+    `A ${wheelRadius} ${wheelRadius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
+    'Z',
+  ].join(' ')
+}
+
+function labelPosition(index: number) {
+  const angle = index * segmentAngle + segmentAngle / 2
+  const point = polarToCartesian(62, angle)
+
+  return {
+    angle,
+    x: point.x,
+    y: point.y,
+  }
+}
 
 function spinToLabel(label: string) {
   const targetIndex = segments.findIndex((segment) => segment.label === label)
@@ -58,30 +118,50 @@ defineExpose({ onSpinComplete })
   <div class="grid justify-items-center gap-6">
     <div class="relative size-72 max-w-full sm:size-80">
       <div
-        class="absolute inset-0 rounded-full border-8 border-neutral-border-strong shadow-lg transition-transform duration-[3000ms] ease-out"
-        :style="{ transform: `rotate(${rotation}deg)` }"
-      >
-        <div
-          v-for="(segment, index) in segments"
-          :key="segment.label"
-          class="absolute top-1/2 left-1/2 h-1/2 w-1/2 origin-bottom-left"
-          :style="{
-            transform: `rotate(${index * segmentAngle}deg) skewY(-${90 - segmentAngle}deg)`,
-          }"
-        >
-          <div
-            :class="segment.color"
-            class="txt-caption flex h-full w-full items-start justify-center pt-6 text-center font-black text-primary-text-inverse"
-          >
-            <span class="-rotate-90 whitespace-nowrap">{{ segment.label }}</span>
-          </div>
-        </div>
-      </div>
-      <div
-        class="absolute top-1/2 left-1/2 z-10 size-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-neutral-border-strong bg-neutral-surface-default shadow-md"
-      />
-      <div
         class="absolute top-0 left-1/2 z-20 -translate-x-1/2 -translate-y-1 border-x-8 border-b-[14px] border-x-transparent border-b-primary-fill-default"
+        aria-hidden="true"
+      />
+
+      <div
+        class="relative size-full overflow-hidden rounded-full border-8 border-neutral-border-strong bg-neutral-surface-default shadow-lg"
+      >
+        <svg
+          viewBox="0 0 200 200"
+          class="size-full origin-center transition-transform duration-[3000ms] ease-out"
+          :style="{ transform: `rotate(${rotation}deg)` }"
+          role="img"
+          aria-label="Roulette Michelin"
+        >
+          <g>
+            <path
+              v-for="(segment, index) in segments"
+              :key="segment.label"
+              :d="describeSlice(index * segmentAngle, (index + 1) * segmentAngle)"
+              :fill="segment.fill"
+              stroke="var(--color-neutral-border-strong)"
+              stroke-width="1"
+            />
+          </g>
+
+          <g v-for="(segment, index) in segments" :key="`${segment.label}-label`">
+            <text
+              :x="labelPosition(index).x"
+              :y="labelPosition(index).y"
+              :fill="segment.textFill"
+              :transform="`rotate(${labelPosition(index).angle} ${labelPosition(index).x} ${labelPosition(index).y})`"
+              class="txt-caption font-black"
+              dominant-baseline="middle"
+              text-anchor="middle"
+            >
+              {{ segment.label }}
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div
+        class="pointer-events-none absolute top-1/2 left-1/2 z-10 size-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-neutral-border-strong bg-neutral-surface-default shadow-md"
+        aria-hidden="true"
       />
     </div>
 
@@ -105,3 +185,11 @@ defineExpose({ onSpinComplete })
     />
   </div>
 </template>
+
+<style scoped>
+svg text {
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: -0.01em;
+}
+</style>

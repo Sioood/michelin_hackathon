@@ -177,14 +177,14 @@ onMounted(async () => {
               <div>
                 <div class="flex flex-wrap items-center gap-2">
                   <h2 class="txt-h4 font-black">{{ bike.name }}</h2>
-                  <UIBadge :label="typeLabel(bike.type)" intent="neutral" size="sm" />
+                  <UIBadge :label="typeLabel(bike.type)" intent="neutral" size="md" />
                   <UIBadge
                     v-if="primaryReminder(bike)"
                     :label="
                       primaryReminder(bike)?.severity === 'due' ? 'À remplacer' : 'À surveiller'
                     "
                     :intent="reminderIntent(primaryReminder(bike)!.severity)"
-                    size="sm"
+                    size="md"
                   />
                 </div>
                 <p class="txt-caption mt-1 text-neutral-text-subtle">

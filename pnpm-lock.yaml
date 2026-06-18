@@ -426,6 +426,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@internationalized/date':
+        specifier: 3.12.0
+        version: 3.12.0
       '@michelin_hackaton/nuxt-essentials':
         specifier: workspace:^
         version: link:../../packages/nuxt-essentials
