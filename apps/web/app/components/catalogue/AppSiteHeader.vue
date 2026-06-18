@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { MenuListEntry } from '~ui/app/components/Menu/index.vue'
 
-const { t } = useI18n()
+const { t, locale, setLocale } = useI18n()
 const auth = useAuthStore()
 const cart = useCartStore()
 const route = useRoute()
@@ -101,6 +101,22 @@ const accountMenuItems = computed<MenuListEntry[]>(() => {
       },
     )
   }
+
+  items.push(
+    { type: 'separator' },
+    {
+      items: [
+        { label: t('catalogue.header.languageFr'), value: 'fr-FR' },
+        { label: t('catalogue.header.languageEn'), value: 'en-US' },
+      ],
+      label: t('catalogue.header.language'),
+      onValueChange: (code: string) => {
+        void setLocale(code)
+      },
+      type: 'radio-group',
+      value: locale.value,
+    },
+  )
 
   return items
 })

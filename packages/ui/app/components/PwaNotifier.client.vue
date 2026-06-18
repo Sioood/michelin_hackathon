@@ -5,6 +5,31 @@ const { t } = useI18n()
 
 const hasShownOfflineReadyToast = ref(false)
 const hasShownUpdateToast = ref(false)
+const hasShownInstallPromptToast = ref(false)
+
+watch(
+  () => $pwa?.showInstallPrompt,
+  (showInstallPrompt) => {
+    if (!showInstallPrompt || hasShownInstallPromptToast.value || $pwa?.isPWAInstalled) {
+      return
+    }
+
+    toaster.value?.create({
+      action: {
+        label: t('pwa:installPrompt.installLabel'),
+        onClick: () => {
+          void $pwa?.install()
+        },
+      },
+      closable: true,
+      description: t('pwa:installPrompt.description'),
+      title: t('pwa:installPrompt.title'),
+      type: 'info',
+    })
+
+    hasShownInstallPromptToast.value = true
+  },
+)
 
 watch(
   () => $pwa?.offlineReady,
