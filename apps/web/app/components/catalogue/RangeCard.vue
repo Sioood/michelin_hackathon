@@ -38,7 +38,12 @@ const rangeLink = computed(() => ({
     >
       <template #header>
         <div class="flex justify-end p-4">
-          <CatalogueTireMark :category="range.category" />
+          <CatalogueProductTireVisual
+            :category="range.category"
+            :preview-seed="range.sample.slug"
+            size="compact"
+            class="h-20 w-full"
+          />
         </div>
       </template>
       <div class="flex flex-wrap gap-2 px-5 pb-5">

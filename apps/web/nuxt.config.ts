@@ -41,6 +41,9 @@ export default defineNuxtConfig({
       { code: 'en-US', file: 'en-US/index.ts', language: 'en-US', name: 'English' },
     ],
   },
+  image: {
+    domains: ['dxm.contentcenter.michelin.com'],
+  },
   pwa: {
     client: {
       installPrompt: true,

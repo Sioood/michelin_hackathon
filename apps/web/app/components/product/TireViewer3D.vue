@@ -11,6 +11,7 @@ type Tuple3 = [number, number, number]
 
 const props = defineProps<{
   category: ProductCategory
+  previewSeed: string
   rangeName: string
 }>()
 
@@ -94,11 +95,12 @@ function onPointerUp(event: PointerEvent) {
     :aria-label="`Visuel produit ${rangeName}`"
   >
     <div class="viewer-grid relative min-h-[22rem] sm:min-h-[28rem]">
-      <div
-        v-if="!is3dView"
-        class="relative z-10 flex h-[22rem] items-center justify-center sm:h-[28rem]"
-      >
-        <CatalogueProductTireVisual :category="category" class="viewer-image" />
+      <div v-if="!is3dView" class="relative z-10 h-[22rem] sm:h-[28rem]">
+        <CatalogueProductTireVisual
+          :category="category"
+          :preview-seed="previewSeed"
+          class="viewer-image size-full"
+        />
       </div>
 
       <div
@@ -184,7 +186,9 @@ function onPointerUp(event: PointerEvent) {
 }
 
 .viewer-image :deep(.product-visual) {
+  height: 100%;
   min-height: 100%;
+  width: 100%;
   background: transparent;
 }
 </style>

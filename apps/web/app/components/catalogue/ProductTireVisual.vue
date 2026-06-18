@@ -1,32 +1,59 @@
 <script setup lang="ts">
 import type { ProductCategory } from '~/utils/catalogue'
 
-withDefaults(
+import { getTirePreviewImage } from '~/utils/tire-preview'
+
+
+const props = withDefaults(
   defineProps<{
     category: ProductCategory
+    previewSeed?: string
     size?: 'default' | 'compact'
   }>(),
   {
+    previewSeed: undefined,
     size: 'default',
   },
+)
+
+const previewSrc = computed(() =>
+  props.previewSeed ? getTirePreviewImage(props.previewSeed) : null,
 )
 </script>
 
 <template>
   <div
-    class="product-visual grid size-full place-items-center overflow-hidden"
-    :class="size === 'compact' ? 'min-h-0' : 'min-h-44'"
+    class="product-visual overflow-hidden"
+    :class="[
+      previewSrc ? 'product-visual--photo relative' : 'grid place-items-center',
+      size === 'compact' ? 'min-h-0' : 'min-h-44',
+    ]"
     :data-category="category"
     :data-size="size"
   >
-    <div class="tire-visual" aria-hidden="true">
+    <NuxtImg
+      v-if="previewSrc"
+      fill
+      :src="previewSrc"
+      :alt="`Pneu ${category}`"
+      class="mx-auto h-full object-cover"
+      loading="lazy"
+      format="webp"
+      sizes="(max-width: 640px) 100vw, 420px"
+    />
+    <div v-else class="tire-visual" aria-hidden="true">
       <span />
     </div>
   </div>
 </template>
 
 <style scoped>
-.product-visual {
+.product-visual--photo {
+  background: #ffffff;
+  border-bottom: 1px solid var(--color-neutral-border-subtle);
+}
+
+.product-visual:not(.product-visual--photo) {
   background:
     radial-gradient(
       circle at 70% 20%,
@@ -41,7 +68,7 @@ withDefaults(
     );
 }
 
-.product-visual[data-category='road'] {
+.product-visual:not(.product-visual--photo)[data-category='road'] {
   background:
     radial-gradient(
       circle at 75% 20%,
@@ -56,7 +83,7 @@ withDefaults(
     );
 }
 
-.product-visual[data-category='mtb'] {
+.product-visual:not(.product-visual--photo)[data-category='mtb'] {
   background:
     radial-gradient(
       circle at 75% 20%,
@@ -71,7 +98,7 @@ withDefaults(
     );
 }
 
-.product-visual[data-category='gravel'] {
+.product-visual:not(.product-visual--photo)[data-category='gravel'] {
   background:
     radial-gradient(
       circle at 75% 20%,
