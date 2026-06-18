@@ -24,6 +24,16 @@ const orderId = computed(() => {
   return typeof value === 'string' ? Number(value) : null
 })
 
+const crossSellProductId = computed(() => {
+  const installation = garage.currentBike.value?.tireInstallations[0]
+  if (installation?.productId !== undefined) {
+    return installation.productId
+  }
+
+  const selected = Number(productSelection.value[0])
+  return Number.isFinite(selected) && selected > 0 ? selected : null
+})
+
 const positionItems: SelectItem[] = [
   { label: 'Avant et arrière', value: 'both' },
   { label: 'Avant', value: 'front' },
@@ -381,6 +391,12 @@ onMounted(async () => {
             </div>
           </aside>
         </div>
+
+        <CommerceCrossSellCarousel
+          class="mt-10"
+          :product-id="crossSellProductId"
+          title="Accessoires recommandés pour ce vélo"
+        />
       </template>
     </section>
   </main>

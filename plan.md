@@ -9,17 +9,17 @@
 
 ## Progression globale
 
-| Phase | Description                        | Points | Statut    |
-| ----- | ---------------------------------- | ------ | --------- |
-| P0    | Fondations backend (NestJS)        | ~47    | ✅        |
-| P1    | E-commerce frontend (Nuxt)         | ~43    | ✅        |
-| P2    | Recherche IA + questionnaire       | ~43    | ✅        |
-| P3    | Garage virtuel                     | ~43    | ✅        |
-| P4    | Fidélité, cross-sell, gamification | ~58    | 🔄 API ✅ |
-| P5    | Contenu produit enrichi            | ~32    | ⬜        |
-| P6    | Michelin Riders Club               | ~52    | ⬜        |
-| P7    | Polish & innovation (stretch)      | ~40    | ⬜        |
-| DOC   | Documentation sans code            | ~9     | ⬜        |
+| Phase | Description                        | Points | Statut |
+| ----- | ---------------------------------- | ------ | ------ |
+| P0    | Fondations backend (NestJS)        | ~47    | ✅     |
+| P1    | E-commerce frontend (Nuxt)         | ~43    | ✅     |
+| P2    | Recherche IA + questionnaire       | ~43    | ✅     |
+| P3    | Garage virtuel                     | ~43    | ✅     |
+| P4    | Fidélité, cross-sell, gamification | ~58    | ✅     |
+| P5    | Contenu produit enrichi            | ~32    | ⬜     |
+| P6    | Michelin Riders Club               | ~52    | ⬜     |
+| P7    | Polish & innovation (stretch)      | ~40    | ⬜     |
+| DOC   | Documentation sans code            | ~9     | ⬜     |
 
 **Cible hackathon** : ~120–150 points (P0 → P1 → P2 → P3 → P4 partiel)
 
@@ -593,22 +593,22 @@ sequenceDiagram
 
 ### Web
 
-- [ ] **P4-09** · WEB · 3 pts — `CrossSellCarousel` sur PDP + panier + garage
+- [x] **P4-09** · WEB · 3 pts — `CrossSellCarousel` sur PDP + panier + garage
   - Fichiers : `apps/web/app/components/commerce/CrossSellCarousel.vue`
 
-- [ ] **P4-10** · WEB · 3 pts — Widget points fidélité header + `/account/loyalty`
+- [x] **P4-10** · WEB · 3 pts — Widget points fidélité header + `/account/loyalty`
   - Fichiers : `apps/web/app/components/loyalty/`, `apps/web/app/pages/account/loyalty.vue`
 
-- [ ] **P4-11** · WEB · 5 pts — Page `/roulette` + composant `RouletteWheel`
+- [x] **P4-11** · WEB · 5 pts — Page `/roulette` + composant `RouletteWheel`
   - Fichiers : `apps/web/app/pages/roulette.vue`
 
-- [ ] **P4-12** · WEB · 3 pts — Composant saisie code promo / QR
+- [x] **P4-12** · WEB · 3 pts — Composant saisie code promo / QR
   - Fichiers : `apps/web/app/components/loyalty/RedeemCodeForm.vue`
 
-- [ ] **P4-13** · WEB · 3 pts — Parrainage : lien `/register?ref=CODE`
+- [x] **P4-13** · WEB · 3 pts — Parrainage : lien `/register?ref=CODE`
   - Fichiers : `apps/web/app/pages/register.vue`
 
-**Phase 4 complète** : [ ]
+**Phase 4 complète** : [x]
 
 ---
 
