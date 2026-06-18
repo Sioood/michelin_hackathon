@@ -2,17 +2,17 @@ import type { Product } from './product'
 
 export type BikeType = 'city' | 'e-bike' | 'gravel' | 'mtb' | 'road'
 export type TirePosition = 'both' | 'front' | 'rear'
-export type GarageReminderReason = 'age' | 'distance'
+type GarageReminderReason = 'age' | 'distance'
 export type GarageReminderSeverity = 'due' | 'ok' | 'soon'
 
-export interface GarageReminder {
+interface GarageReminder {
   installationId: number
   message: string
   reason: GarageReminderReason
   severity: GarageReminderSeverity
 }
 
-export interface TireInstallation {
+interface TireInstallation {
   bikeId: number
   currentDistanceKm: number
   distanceKmAtInstall: number

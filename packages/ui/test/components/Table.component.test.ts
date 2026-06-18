@@ -137,7 +137,7 @@ describe('UITable (assembled)', () => {
           const table = useUITable({
             columns,
             data,
-            getRowId: (row) => row.id,
+            getRowId: (row: { id: unknown }) => row.id,
             stateModels: { rowSelection },
           })
 

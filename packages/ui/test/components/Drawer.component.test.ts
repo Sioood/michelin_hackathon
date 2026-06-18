@@ -95,6 +95,7 @@ describe('UIDrawer', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'DrawerProviderTest',
+
         components: { UIDrawer },
         setup() {
           const drawer = useDrawer()
@@ -115,6 +116,7 @@ describe('UIDrawer', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'DrawerProviderPropsTest',
+
         components: { UIDrawer },
         setup() {
           const drawer = useDrawer()
@@ -136,6 +138,7 @@ describe('UIDrawer', () => {
 
     const Controlled = defineComponent({
       name: 'DrawerVModelOpenTest',
+
       components: { UIDrawer },
       setup() {
         return { open }

@@ -53,15 +53,16 @@ export default defineNuxtConfig({
     },
     manifest: {
       background_color: '#ffffff',
-      description: 'MichelinHackaton application',
+      description: 'Michelin Bicycle — bike tyre catalogue and tools',
       display: 'standalone',
-      name: 'MichelinHackaton App',
-      short_name: 'MichelinHackaton',
+      name: 'Michelin Bicycle',
+      short_name: 'Michelin Bicycle',
       theme_color: '#111827',
     },
     registerType: 'prompt',
     workbox: {
       globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
+      navigateFallback: null,
       runtimeCaching: [
         {
           // Keep dynamic API responses fresh while still leveraging cache on flaky networks.
@@ -145,8 +146,8 @@ export default defineNuxtConfig({
     strict: true,
   },
   site: {
-    description: 'Welcome to Nuxt Essentials!',
-    name: 'Nuxt Essentials',
+    description: 'Michelin Bicycle — bike tyre catalogue and tools',
+    name: 'Michelin Bicycle',
     url: 'https://nuxt-essentials.com',
   },
   vite: {

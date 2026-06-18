@@ -56,7 +56,10 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    volumes:
+      - api_uploads:/app/uploads
     restart: unless-stopped
 
 volumes:
   postgres_data: {}
+  api_uploads: {}

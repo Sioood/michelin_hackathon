@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import type { Product, ProductCategory } from '~/types/product'
 import type { AiSearchResponse, QuestionnaireAnswers, SearchTerrain } from '~/types/search'
 import type { SelectItem } from '~ui/app/components/Form/Select/index.vue'

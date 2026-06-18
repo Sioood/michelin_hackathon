@@ -35,7 +35,7 @@ function categoryPriceOffset(product: ProductSeed): number {
   return Math.round(weightOffset / 10) * 10 + tubelessOffset + eBikeOffset + premiumOffset
 }
 
-export function createProStats(product: ProductSeed): ProductProStats {
+function createProStats(product: ProductSeed): ProductProStats {
   const techScore =
     product.technologies.length +
     product.rubberTechnologies.length +

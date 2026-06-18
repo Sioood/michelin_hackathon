@@ -82,6 +82,7 @@ describe('Tooltip', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TooltipProviderTest',
+
         components: { Tooltip },
         setup() {
           const tooltip = useTooltip({ openDelay: 500 })

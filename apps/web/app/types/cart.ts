@@ -1,6 +1,6 @@
 import type { Product } from './product'
 
-export interface CartItem {
+interface CartItem {
   id: number
   product: Product
   productId: number
@@ -15,13 +15,4 @@ export interface Cart {
   items: CartItem[]
   totalCents: number
   userId: number | null
-}
-
-export interface AddCartItemInput {
-  productId: number
-  quantity: number
-}
-
-export interface UpdateCartItemInput {
-  quantity: number
 }

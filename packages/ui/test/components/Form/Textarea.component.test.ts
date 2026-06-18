@@ -126,6 +126,7 @@ describe('UIFormTextarea', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TextareaRefTest',
+
         components: { Textarea },
         setup() {
           return { componentRef }
@@ -149,6 +150,7 @@ describe('UIFormTextarea', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TextareaFocusTest',
+
         components: { Textarea },
         setup() {
           return { componentRef }

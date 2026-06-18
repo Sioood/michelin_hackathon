@@ -42,7 +42,7 @@ COPY scripts/docker-dev-entrypoint.sh /usr/local/bin/michelin_hackaton-docker-de
 RUN chmod +x /usr/local/bin/michelin_hackaton-docker-dev-entrypoint.sh
 # Do not use a cache-only store mount here: node_modules symlinks must resolve in the final image/volume.
 RUN mkdir -p /pnpm/store \
-  && pnpm install --frozen-lockfile
+  && pnpm install --frozen-lockfile --ignore-scripts
 ENV NODE_ENV=development
 EXPOSE 3000
 ENTRYPOINT ["michelin_hackaton-docker-dev-entrypoint.sh"]
