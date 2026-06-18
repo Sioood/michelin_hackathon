@@ -1,8 +1,10 @@
 <template>
   <NuxtPwaAssets />
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <NuxtPwaAssets />
+  <NuxtPage />
+  <UIToast />
+  <UIPwaNotifier />
+  <GarageReminderNotifier />
   <UIToast />
   <UIPwaNotifier />
 </template>

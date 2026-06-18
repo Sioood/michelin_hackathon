@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { createResolver } from '@nuxt/kit'
+import { templateCompilerOptions } from '@tresjs/core'
 
 const { resolve } = createResolver(import.meta.url)
 
@@ -18,10 +19,6 @@ const apiOrigin =
   'http://localhost:3001'
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  extends: [resolve('../../packages/ui')],
-
   app: {
     head: {
       link: [
@@ -33,7 +30,10 @@ export default defineNuxtConfig({
       ],
     },
   },
+  compatibilityDate: '2025-07-15',
   css: [resolve('./app/assets/css/main.css')],
+  devtools: { enabled: true },
+  extends: [resolve('../../packages/ui')],
   i18n: {
     defaultLocale: 'fr-FR',
     locales: [
@@ -77,12 +77,44 @@ export default defineNuxtConfig({
       lang: 'fr',
       name: 'Michelin Bicycle',
       short_name: 'Michelin Bicycle',
+      shortcuts: [
+        {
+          description: 'Suivre les rappels de remplacement pneus',
+          name: 'Garage',
+          short_name: 'Garage',
+          url: '/garage',
+        },
+      ],
       start_url: '/',
       theme_color: '#111827',
     },
     workbox: {
-      // SSR apps do not precache `/`; Workbox would throw non-precached-url otherwise.
       navigateFallback: null,
+      runtimeCaching: [
+        {
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'api-network-first',
+            expiration: {
+              maxAgeSeconds: 60 * 60,
+              maxEntries: 100,
+            },
+            networkTimeoutSeconds: 10,
+          },
+          urlPattern: '/api/.*',
+        },
+        {
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'garage-reminders',
+            expiration: {
+              maxAgeSeconds: 60 * 30,
+              maxEntries: 30,
+            },
+          },
+          urlPattern: new RegExp(`^${apiOrigin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/garage/`),
+        },
+      ],
     },
   },
   runtimeConfig: {
@@ -94,7 +126,12 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: {
-        'connect-src': ["'self'", apiOrigin],
+        'connect-src': ["'self'", apiOrigin, 'https:'],
+        'script-src': ["'self'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'wasm-unsafe-eval'"],
+        'worker-src': ["'self'", 'blob:'],
+      },
+      permissionsPolicy: {
+        notifications: ['self'],
       },
     },
   },
@@ -111,4 +148,7 @@ export default defineNuxtConfig({
         },
       }
     : undefined,
+  vue: {
+    compilerOptions: templateCompilerOptions.template.compilerOptions,
+  },
 })

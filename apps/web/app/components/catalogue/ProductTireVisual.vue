@@ -14,7 +14,7 @@ withDefaults(
 
 <template>
   <div
-    class="product-visual grid place-items-center overflow-hidden"
+    class="product-visual grid size-full place-items-center overflow-hidden"
     :class="size === 'compact' ? 'min-h-0' : 'min-h-44'"
     :data-category="category"
     :data-size="size"

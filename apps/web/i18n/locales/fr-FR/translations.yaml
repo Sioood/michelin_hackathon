@@ -17,6 +17,7 @@ catalogue:
     technologies: 'Technologies'
     garage: 'Garage'
     ridersClub: 'Riders Club'
+    b2b: 'Revendeurs'
   tools:
     label: 'Outils'
     findTyre: 'Trouver mon pneu'
