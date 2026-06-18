@@ -25,6 +25,8 @@ FROM deps AS builder
 COPY --from=prepare /app/out/full/ .
 RUN --mount=type=cache,id=turbo,target=/app/.turbo \
   pnpm exec turbo build --filter=@michelin_hackaton/api --only
+RUN pnpm deploy --filter=@michelin_hackaton/api --prod --legacy /app/deploy
+RUN cp -r apps/api/dist /app/deploy/dist
 
 FROM base AS development
 WORKDIR /app
@@ -45,10 +47,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 RUN addgroup --system --gid 1001 nodejs \
-  && adduser --system --uid 1001 nestjs
-COPY --from=deps --chown=nestjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/apps/api/package.json ./package.json
+  && adduser --system --uid 1001 nestjs \
+  && mkdir -p /app/uploads/community \
+  && chown -R nestjs:nodejs /app/uploads
+COPY --from=builder --chown=nestjs:nodejs /app/deploy ./
 USER nestjs
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
