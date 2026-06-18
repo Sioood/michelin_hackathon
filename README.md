@@ -13,7 +13,7 @@ A production-ready Nuxt 4 monorepo for Michelin hackathon app.
 
 | Layer         | Technology                                                           |
 | ------------- | -------------------------------------------------------------------- |
-| Framework     | Nuxt 4 (Vue 3, Nitro)                                                |
+| Framework     | Nuxt 4 (Vue 3, Nitro), NestJS                                        |
 | Styling       | Tailwind CSS v4, CVA, tailwind-merge                                 |
 | UI Primitives | Ark UI (`@ark-ui/vue`)                                               |
 | Forms         | TanStack Form + Zod v4                                               |
@@ -29,6 +29,7 @@ A production-ready Nuxt 4 monorepo for Michelin hackathon app.
 ```
 .
 ├── apps/
+│   ├── api/                    # NestJS API application
 │   └── web/                    # Main Nuxt application
 ├── packages/
 │   ├── ui/                     # UI component library (Ark UI + CVA)

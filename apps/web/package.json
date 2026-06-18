@@ -14,6 +14,7 @@
     "lint:eslint": "pnpm exec eslint .",
     "format": "pnpm exec oxfmt --write .",
     "format:check": "pnpm exec oxfmt --check .",
+    "pretest:e2e": "playwright install chromium",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "i18n:coverage": "pnpm exec michelin_hackaton-i18n-coverage -f ./i18n/locales",

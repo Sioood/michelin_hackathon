@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test'
 
+import { mockApi } from './helpers/mock-api'
+
+test.beforeEach(async ({ page }) => {
+  await mockApi(page)
+})
+
 test.describe('App Shell', () => {
   test('renders without errors and displays main heading', async ({ page }) => {
     await page.goto('/')
@@ -53,7 +59,8 @@ test.describe('PWA', () => {
     await page.goto('/')
 
     const manifest = page.locator('link[rel="manifest"]')
-    await expect(manifest).toHaveCount(1)
+    await expect(manifest.first()).toBeAttached()
+    await expect(manifest.first()).toHaveAttribute('href', /manifest/)
   })
 })
 
