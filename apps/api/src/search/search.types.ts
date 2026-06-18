@@ -2,6 +2,7 @@ import type { ProductCategory } from '../products/product.model'
 import type { ProductDto } from '../products/products.service'
 
 export type SearchTerrain = 'CITY' | 'GRAVEL' | 'MIXED' | 'MTB' | 'ROAD'
+export type SearchSource = 'heuristic' | 'mistral' | 'questionnaire'
 
 export interface SearchFilters {
   category?: ProductCategory
@@ -22,13 +23,19 @@ export interface SearchResponse {
   explanation: string
   filters: SearchFilters
   results: SearchResult[]
+  source: SearchSource
   suggestedSlugs: string[]
 }
 
-export interface LlmSearchPlan {
+export interface SearchPlan {
   explanation: string
   filters: SearchFilters
+  source: SearchSource
   suggestedSlugs: string[]
+}
+
+export interface LlmSearchPlan extends Omit<SearchPlan, 'source'> {
+  source: Exclude<SearchSource, 'questionnaire'>
 }
 
 export interface QuestionnaireAnswers {

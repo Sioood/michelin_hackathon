@@ -10,9 +10,9 @@ import { LLM_PROVIDER, type LlmProvider } from './llm.provider'
 import { productMatchesSearchTerrain } from './terrain-map'
 
 import type {
-  LlmSearchPlan,
   QuestionnaireAnswers,
   SearchFilters,
+  SearchPlan,
   SearchResponse,
   SearchResult,
 } from './search.types'
@@ -32,6 +32,7 @@ export class SearchService {
     return this.createResponse({
       explanation: plan.explanation,
       filters,
+      source: plan.source,
       suggestedSlugs: plan.suggestedSlugs,
     })
   }
@@ -43,6 +44,7 @@ export class SearchService {
       {
         explanation: this.createQuestionnaireExplanation(filters),
         filters,
+        source: 'questionnaire',
         suggestedSlugs: [],
       },
       answers.priority,
@@ -78,7 +80,7 @@ export class SearchService {
   }
 
   private async createResponse(
-    plan: LlmSearchPlan,
+    plan: SearchPlan,
     priority?: QuestionnaireAnswers['priority'],
   ): Promise<SearchResponse> {
     const apiFilters = this.toProductFilters(plan.filters)
@@ -92,6 +94,7 @@ export class SearchService {
       explanation: plan.explanation,
       filters: plan.filters,
       results,
+      source: plan.source,
       suggestedSlugs:
         plan.suggestedSlugs.length > 0
           ? plan.suggestedSlugs

@@ -60,6 +60,14 @@ function submitScore(challengeId: number) {
     </div>
 
     <div class="grid gap-4 lg:grid-cols-2">
+      <div
+        v-if="challenges.length === 0"
+        class="rounded-md border border-neutral-border-subtle bg-neutral-surface-default p-5 text-center lg:col-span-2"
+      >
+        <Icon name="tabler:trophy-off" class="mx-auto size-8 text-neutral-text-subtle" />
+        <p class="txt-sm mt-3 text-neutral-text-subtle">Aucun challenge actif pour le moment.</p>
+      </div>
+
       <UICard
         v-for="challenge in challenges"
         :key="challenge.id"

@@ -19,6 +19,9 @@ Schema attendu:
 Contraintes:
 - Omet les champs incertains.
 - category doit rester un univers catalogue, pas un usage libre.
-- search doit garder les termes importants de la demande.
-- suggestedSlugs peut etre vide.
+- search ne doit contenir que les noms de gamme ou caractéristiques libres qui ne sont pas déjà
+  représentés par category, terrain, diameter, tubelessReady ou eBikeReady.
+- Omet search si la demande est entièrement représentée par les autres filtres.
+- Ne mets jamais les mots génériques "pneu", "pneus", "Michelin" ou "vélo" dans search.
+- suggestedSlugs doit toujours etre vide: le backend choisira uniquement des slugs existants.
 `

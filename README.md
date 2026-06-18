@@ -76,6 +76,32 @@ Default local ports:
 - Web: `http://localhost:3000`
 - API: `http://localhost:3001`
 
+### Optional Mistral-assisted search
+
+The product search works in two modes:
+
+- Without an API key, the API uses a local keyword-based heuristic and makes no external request.
+- With a Mistral API key, the API asks Mistral to turn the user's request into structured
+  catalogue filters. Any API or parsing error automatically falls back to the local heuristic.
+
+Create a free Mistral Studio account, generate an API key, then copy the API environment example:
+
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
+Set the following values in `apps/api/.env`:
+
+```dotenv
+MISTRAL_API_KEY=your-secret-api-key
+MISTRAL_MODEL=ministral-3b-2512
+MISTRAL_BASE_URL=https://api.mistral.ai/v1
+```
+
+Only `MISTRAL_API_KEY` is required. The model and base URL shown above are the defaults. Keep the
+key empty to force the non-AI mode. Never expose this key through a `NUXT_PUBLIC_*` variable or
+commit `apps/api/.env`.
+
 ## Available Scripts
 
 ### Root (Turborepo orchestrated)

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 
 import { searchSystemPrompt } from './prompts/search.prompt'
 
@@ -36,17 +36,61 @@ const terrainKeywords: Array<{ keywords: string[]; terrain: SearchTerrain }> = [
   { keywords: ['route', 'asphalte', 'road'], terrain: 'ROAD' },
 ]
 
+const genericSearchWords = new Set([
+  'a',
+  'ai',
+  'avec',
+  'besoin',
+  'bicyclette',
+  'cherche',
+  'compatible',
+  'd',
+  'de',
+  'des',
+  'du',
+  'en',
+  'je',
+  'l',
+  'la',
+  'le',
+  'les',
+  'michelin',
+  'mon',
+  'pour',
+  'pneu',
+  'pneus',
+  'recherche',
+  'souhaite',
+  'un',
+  'une',
+  'velo',
+  'voudrais',
+  'veux',
+])
+
+const interpretedSearchWords = new Set(
+  [
+    ...categoryKeywords.flatMap((item) => item.keywords),
+    ...terrainKeywords.flatMap((item) => item.keywords),
+    'bike',
+    'electrique',
+    'tubeless',
+    'vae',
+  ].flatMap((keyword) => tokenizeSearchText(keyword)),
+)
+
 @Injectable()
-export class OpenAiLlmProvider implements LlmProvider {
+export class MistralLlmProvider implements LlmProvider {
   private readonly apiKey: string | null
   private readonly baseUrl: string
+  private readonly logger = new Logger(MistralLlmProvider.name)
   private readonly model: string
 
   constructor() {
-    const apiKey = process.env.OPENAI_API_KEY
-    this.apiKey = apiKey === undefined || apiKey.length === 0 ? null : apiKey
-    this.baseUrl = process.env.OPENAI_BASE_URL ?? 'https://api.openai.com/v1'
-    this.model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini'
+    this.apiKey = readOptionalEnvironmentVariable('MISTRAL_API_KEY')
+    this.baseUrl =
+      readOptionalEnvironmentVariable('MISTRAL_BASE_URL') ?? 'https://api.mistral.ai/v1'
+    this.model = readOptionalEnvironmentVariable('MISTRAL_MODEL') ?? 'ministral-3b-2512'
   }
 
   async createSearchPlan(query: string): Promise<LlmSearchPlan> {
@@ -73,6 +117,9 @@ export class OpenAiLlmProvider implements LlmProvider {
       })
 
       if (!response.ok) {
+        this.logger.warn(
+          `Mistral request failed with status ${response.status}; using local fallback.`,
+        )
         return createHeuristicSearchPlan(query)
       }
 
@@ -80,11 +127,14 @@ export class OpenAiLlmProvider implements LlmProvider {
       const content = completion.choices?.[0]?.message?.content
 
       if (content === undefined || content.length === 0) {
+        this.logger.warn('Mistral returned an empty response; using local fallback.')
         return createHeuristicSearchPlan(query)
       }
 
       return normalizeSearchPlan(JSON.parse(content) as unknown, query)
-    } catch {
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : 'unknown error'
+      this.logger.warn(`Mistral response could not be used (${reason}); using local fallback.`)
       return createHeuristicSearchPlan(query)
     }
   }
@@ -92,7 +142,7 @@ export class OpenAiLlmProvider implements LlmProvider {
 
 function createHeuristicSearchPlan(query: string): LlmSearchPlan {
   const normalizedQuery = normalizeText(query)
-  const filters: SearchFilters = { search: query.trim() }
+  const filters: SearchFilters = {}
   const categoryMatch = categoryKeywords.find((item) =>
     item.keywords.some((keyword) => normalizedQuery.includes(keyword)),
   )
@@ -126,9 +176,15 @@ function createHeuristicSearchPlan(query: string): LlmSearchPlan {
     filters.eBikeReady = true
   }
 
+  const residualSearch = createResidualSearch(query)
+  if (residualSearch !== undefined) {
+    filters.search = residualSearch
+  }
+
   return {
     explanation: 'Sélection construite à partir des mots-clés de votre demande.',
     filters,
+    source: 'heuristic',
     suggestedSlugs: [],
   }
 }
@@ -140,14 +196,11 @@ function normalizeSearchPlan(input: unknown, fallbackQuery: string): LlmSearchPl
     typeof record.explanation === 'string' && record.explanation.trim().length > 0
       ? record.explanation.trim()
       : 'Sélection construite à partir de votre demande.'
-  const suggestedSlugs = Array.isArray(record.suggestedSlugs)
-    ? record.suggestedSlugs.filter((slug): slug is string => typeof slug === 'string')
-    : []
-
   return {
     explanation,
     filters,
-    suggestedSlugs,
+    source: 'mistral',
+    suggestedSlugs: [],
   }
 }
 
@@ -175,10 +228,15 @@ function normalizeFilters(input: unknown, fallbackQuery: string): SearchFilters 
     filters.eBikeReady = record.eBikeReady
   }
 
-  filters.search =
+  const searchInput =
     typeof record.search === 'string' && record.search.trim().length > 0
-      ? record.search.trim()
-      : fallbackQuery.trim()
+      ? record.search
+      : fallbackQuery
+  const residualSearch = createResidualSearch(searchInput)
+
+  if (residualSearch !== undefined) {
+    filters.search = residualSearch
+  }
 
   return filters
 }
@@ -214,4 +272,28 @@ function normalizeText(value: string): string {
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase()
+}
+
+function createResidualSearch(value: string): string | undefined {
+  const residualWords = tokenizeSearchText(value).filter(
+    (word) =>
+      !genericSearchWords.has(word) &&
+      !interpretedSearchWords.has(word) &&
+      !/^(?:20|24|26|27\.5|29|650|700)$/u.test(word),
+  )
+  const residualSearch = residualWords.join(' ').trim()
+
+  return residualSearch.length === 0 ? undefined : residualSearch
+}
+
+function tokenizeSearchText(value: string): string[] {
+  return normalizeText(value)
+    .replace(/[^\p{Letter}\p{Number}.]+/gu, ' ')
+    .split(/\s+/u)
+    .filter((word) => word.length > 0)
+}
+
+function readOptionalEnvironmentVariable(name: string): string | null {
+  const value = process.env[name]?.trim()
+  return value === undefined || value.length === 0 ? null : value
 }
