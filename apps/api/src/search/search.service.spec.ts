@@ -79,9 +79,63 @@ describe('SearchService', () => {
       category: 'e-bike',
       diameter: '700',
       eBikeReady: true,
-      search: 'competition performance',
       terrain: 'GRAVEL',
       tubelessReady: true,
     })
+  })
+
+  it('ignores negative capability flags in questionnaire filters', () => {
+    const productsService = { findAll: jest.fn() } as unknown as ProductsService
+    const llmProvider = { createSearchPlan: jest.fn() } as unknown as LlmProvider
+    const service = new SearchService(productsService, llmProvider)
+
+    expect(
+      service.createFiltersFromQuestionnaire({
+        category: 'gravel',
+        diameter: '700',
+        eBikeReady: false,
+        terrain: 'GRAVEL',
+        tubelessReady: false,
+      }),
+    ).toEqual({
+      category: 'gravel',
+      diameter: '700',
+      terrain: 'GRAVEL',
+    })
+  })
+
+  it('returns questionnaire recommendations for gravel answers', async () => {
+    const gravelProduct = {
+      category: 'gravel',
+      designation: '40-622 (700X40C) POWER GRAVEL BLACK',
+      eBikeReady: true,
+      rangeName: 'MICHELIN POWER GRAVEL COMPETITION LINE',
+      slug: 'power-gravel-700',
+      terrainTypes: ['ASPHALT', 'OFFROAD HARD PACKED', 'OFFROAD MIXED'],
+      tubelessReady: true,
+      webDiameterInch: null,
+      webDiameterMm: '700',
+    } as ProductDto
+
+    const findAll = jest.fn<Promise<ProductDto[]>, [unknown]>().mockResolvedValue([gravelProduct])
+    const productsService = { findAll } as unknown as ProductsService
+    const llmProvider = { createSearchPlan: jest.fn() } as unknown as LlmProvider
+    const service = new SearchService(productsService, llmProvider)
+
+    const response = await service.searchWithQuestionnaire({
+      category: 'gravel',
+      diameter: '700',
+      priority: 'performance',
+      terrain: 'GRAVEL',
+      tubelessReady: true,
+    })
+
+    expect(findAll).toHaveBeenCalledWith({
+      category: 'gravel',
+      diameter: '700',
+      terrain: 'GRAVEL',
+    })
+    expect(response.results).toHaveLength(1)
+    expect(response.results[0]?.product.slug).toBe('power-gravel-700')
   })
 })

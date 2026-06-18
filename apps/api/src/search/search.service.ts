@@ -1,8 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common'
 
+import {
+  productMatchesDiameterVariants,
+  normalizeDiameterVariants,
+} from '../products/diameter-variants'
 import { ProductsService } from '../products/products.service'
 
 import { LLM_PROVIDER, type LlmProvider } from './llm.provider'
+import { productMatchesSearchTerrain } from './terrain-map'
 
 import type {
   LlmSearchPlan,
@@ -34,11 +39,14 @@ export class SearchService {
   async searchWithQuestionnaire(answers: QuestionnaireAnswers): Promise<SearchResponse> {
     const filters = this.createFiltersFromQuestionnaire(answers)
 
-    return this.createResponse({
-      explanation: this.createQuestionnaireExplanation(filters),
-      filters,
-      suggestedSlugs: [],
-    })
+    return this.createResponse(
+      {
+        explanation: this.createQuestionnaireExplanation(filters),
+        filters,
+        suggestedSlugs: [],
+      },
+      answers.priority,
+    )
   }
 
   createFiltersFromQuestionnaire(answers: QuestionnaireAnswers): SearchFilters {
@@ -58,28 +66,27 @@ export class SearchService {
       filters.diameter = answers.diameter.trim()
     }
 
-    if (answers.tubelessReady !== undefined) {
-      filters.tubelessReady = answers.tubelessReady
+    if (answers.eBikeReady === true) {
+      filters.eBikeReady = true
     }
 
-    if (answers.eBikeReady !== undefined) {
-      filters.eBikeReady = answers.eBikeReady
-    }
-
-    if (answers.priority !== undefined) {
-      filters.search = this.priorityToSearch(answers.priority)
+    if (answers.tubelessReady === true) {
+      filters.tubelessReady = true
     }
 
     return filters
   }
 
-  private async createResponse(plan: LlmSearchPlan): Promise<SearchResponse> {
+  private async createResponse(
+    plan: LlmSearchPlan,
+    priority?: QuestionnaireAnswers['priority'],
+  ): Promise<SearchResponse> {
     const apiFilters = this.toProductFilters(plan.filters)
     const products = await this.productsService.findAll(apiFilters)
     const filteredProducts = products.filter((product) =>
       this.productMatches(product, plan.filters),
     )
-    const results = this.rankProducts(filteredProducts, plan.filters)
+    const results = this.rankProducts(filteredProducts, plan.filters, priority)
 
     return {
       explanation: plan.explanation,
@@ -110,18 +117,22 @@ export class SearchService {
   }
 
   private productMatches(product: ProductDto, filters: SearchFilters): boolean {
-    if (filters.tubelessReady !== undefined && product.tubelessReady !== filters.tubelessReady) {
+    if (filters.tubelessReady === true && !product.tubelessReady) {
       return false
     }
 
-    if (filters.eBikeReady !== undefined && product.eBikeReady !== filters.eBikeReady) {
+    if (filters.eBikeReady === true && !product.eBikeReady) {
       return false
     }
 
     return true
   }
 
-  private rankProducts(products: ProductDto[], filters: SearchFilters): SearchResult[] {
+  private rankProducts(
+    products: ProductDto[],
+    filters: SearchFilters,
+    priority?: QuestionnaireAnswers['priority'],
+  ): SearchResult[] {
     return products
       .map((product) => {
         const matchReasons: string[] = []
@@ -132,15 +143,17 @@ export class SearchService {
           matchReasons.push('Univers de pratique correspondant')
         }
 
-        if (filters.terrain !== undefined && product.terrainTypes.includes(filters.terrain)) {
+        if (
+          filters.terrain !== undefined &&
+          productMatchesSearchTerrain(product.terrainTypes, filters.terrain)
+        ) {
           score += 2
           matchReasons.push('Terrain compatible')
         }
 
         if (
           filters.diameter !== undefined &&
-          (product.webDiameterMm === filters.diameter ||
-            product.webDiameterInch === filters.diameter)
+          productMatchesDiameterVariants(product, normalizeDiameterVariants(filters.diameter))
         ) {
           score += 2
           matchReasons.push('Diametre demande')
@@ -156,6 +169,8 @@ export class SearchService {
           matchReasons.push('Compatible e-bike')
         }
 
+        score += this.priorityScore(product, priority)
+
         if (matchReasons.length === 0) {
           matchReasons.push('Référence proche de votre recherche')
         }
@@ -170,14 +185,33 @@ export class SearchService {
       .slice(0, 24)
   }
 
-  private priorityToSearch(priority: NonNullable<QuestionnaireAnswers['priority']>): string {
+  private priorityScore(
+    product: ProductDto,
+    priority: QuestionnaireAnswers['priority'] | undefined,
+  ): number {
+    if (priority === undefined) {
+      return 0
+    }
+
+    const haystack = [
+      product.rangeName,
+      product.designation,
+      product.headline,
+      product.description,
+      product.segment,
+      ...(product.useCases ?? []),
+      ...(product.technologies ?? []),
+    ]
+      .join(' ')
+      .toLowerCase()
+
     switch (priority) {
       case 'comfort':
-        return 'comfort'
+        return haystack.includes('comfort') || haystack.includes('touring') ? 2 : 0
       case 'durability':
-        return 'reinforced protection'
+        return haystack.includes('shield') || haystack.includes('protection') ? 2 : 0
       case 'performance':
-        return 'competition performance'
+        return haystack.includes('racing') || haystack.includes('competition') ? 2 : 0
     }
   }
 
