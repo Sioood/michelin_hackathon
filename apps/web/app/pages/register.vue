@@ -60,6 +60,11 @@ const cart = useCartStore()
 const api = useApi()
 const errorMessage = ref('')
 
+const referralCode = computed(() => {
+  const value = route.query.ref
+  return typeof value === 'string' && value.trim().length > 0 ? value.trim() : undefined
+})
+
 const redirectTo = computed(() => {
   const { redirect } = route.query
   return typeof redirect === 'string' && redirect.startsWith('/') ? redirect : '/'
@@ -100,6 +105,7 @@ async function submit(values: RegisterValues) {
       firstName: values.firstName.trim() || undefined,
       lastName: values.lastName.trim() || undefined,
       password: values.password,
+      referralCode: referralCode.value,
     })
     await cart.load()
     await navigateTo(redirectTo.value)
@@ -125,6 +131,14 @@ async function submit(values: RegisterValues) {
       <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-6' }">
         <h2 class="txt-h4 font-black">Inscription</h2>
         <p class="txt-base mt-2 text-neutral-text-subtle">Quelques informations suffisent.</p>
+
+        <UIAlert
+          v-if="referralCode"
+          class="mt-5"
+          intent="success"
+          :title="$t('loyalty.register.referralTitle')"
+          :description="$t('loyalty.register.referralDescription', { code: referralCode })"
+        />
 
         <UIAlert
           v-if="errorMessage"

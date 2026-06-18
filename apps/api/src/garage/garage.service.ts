@@ -116,6 +116,7 @@ export class GarageService {
 
   async remove(userId: number, bikeId: number): Promise<void> {
     const bike = await this.findBikeModel(userId, bikeId)
+    await this.tireInstallationModel.destroy({ where: { bikeId } })
     await bike.destroy()
   }
 

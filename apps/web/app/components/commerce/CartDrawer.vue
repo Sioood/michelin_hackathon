@@ -9,6 +9,8 @@ const open = computed({
   },
 })
 
+const crossSellProductId = computed(() => cart.cart?.items[0]?.productId ?? null)
+
 const checkoutTarget = computed(() =>
   auth.isAuthenticated ? '/checkout' : `/login?redirect=${encodeURIComponent('/checkout')}`,
 )
@@ -117,6 +119,13 @@ onMounted(() => {
         </div>
       </article>
     </div>
+
+    <CommerceCrossSellCarousel
+      v-if="!cart.isEmpty"
+      :product-id="crossSellProductId"
+      compact
+      title="À ajouter avec votre panier"
+    />
 
     <template v-if="!cart.isEmpty" #footer>
       <div class="w-full">

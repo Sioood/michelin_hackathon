@@ -59,6 +59,7 @@ onMounted(() => {
           to="/trouver-mon-pneu"
           class="hidden sm:inline-flex"
         />
+        <LoyaltyPointsBadge />
         <UIButton
           v-if="auth.isAuthenticated"
           :text="auth.displayName"

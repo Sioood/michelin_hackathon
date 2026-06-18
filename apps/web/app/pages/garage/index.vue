@@ -9,7 +9,6 @@ const route = useRoute()
 const name = ref('')
 const brand = ref('')
 const model = ref('')
-const wheelDiameter = ref('')
 const annualDistanceKm = ref('2500')
 const selectedType = ref<string[]>(['road'])
 const createError = ref('')
@@ -21,6 +20,16 @@ const bikeTypes: Array<{ label: string; value: BikeType }> = [
   { label: 'E-bike', value: 'e-bike' },
   { label: 'Ville', value: 'city' },
 ]
+
+const diameterItems: SelectItem[] = [
+  { label: '700c — route / gravel', value: '700' },
+  { label: '650b / 27,5" — gravel / VTT', value: '27.5' },
+  { label: '29" — VTT', value: '29' },
+  { label: '28" — ville / trekking', value: '28' },
+  { label: '26" — VTT ancien', value: '26' },
+]
+
+const selectedDiameter = ref<string[]>(['700'])
 
 const typeItems = computed<SelectItem[]>(() => bikeTypes)
 
@@ -70,18 +79,29 @@ async function createBike() {
     model: model.value.trim() || undefined,
     name: trimmedName,
     type,
-    wheelDiameter: wheelDiameter.value.trim() || undefined,
+    wheelDiameter: selectedDiameter.value[0] || undefined,
   }
 
   const bike = await garage.createBike(input)
   name.value = ''
   brand.value = ''
   model.value = ''
-  wheelDiameter.value = ''
+  selectedDiameter.value = ['700']
   annualDistanceKm.value = '2500'
   await navigateTo(
     `/garage/${bike.id}${checkoutOrderId.value ? `?orderId=${checkoutOrderId.value}` : ''}`,
   )
+}
+
+async function deleteBike(bikeId: number, event: Event) {
+  event.preventDefault()
+  event.stopPropagation()
+
+  if (!globalThis.confirm('Supprimer ce vélo du garage ?')) {
+    return
+  }
+
+  await garage.removeBike(bikeId)
 }
 
 onMounted(async () => {
@@ -177,6 +197,15 @@ onMounted(async () => {
               <div class="text-left md:text-right">
                 <p class="txt-h4 font-black">{{ bike.tireInstallations.length }}</p>
                 <p class="txt-caption text-neutral-text-subtle">montage(s)</p>
+                <UIButton
+                  class="mt-3"
+                  text="Supprimer"
+                  intent="error"
+                  variant="ghost"
+                  size="sm"
+                  leading-icon="tabler:trash"
+                  @click="deleteBike(bike.id, $event)"
+                />
               </div>
             </div>
             <p v-if="primaryReminder(bike)" class="txt-caption mt-4 text-neutral-text-subtle">
@@ -203,9 +232,18 @@ onMounted(async () => {
               <UIFormInput v-model="model" label="Modèle" placeholder="Crosshill" />
             </div>
             <div class="grid gap-4 sm:grid-cols-2">
-              <UIFormInput v-model="wheelDiameter" label="Diamètre" placeholder="700, 29..." />
+              <UIFormSelect
+                v-model="selectedDiameter"
+                :items="diameterItems"
+                label="Diamètre roues"
+                placeholder="Choisir"
+              />
               <UIFormInput v-model="annualDistanceKm" label="Km/an" type="number" min="0" />
             </div>
+            <p class="txt-caption text-neutral-text-subtle">
+              Route et gravel : 700. VTT 29" : saisir 29. Le diamètre affine les suggestions de
+              pneus.
+            </p>
             <UIAlert
               v-if="createError"
               intent="error"

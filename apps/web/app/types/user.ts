@@ -20,4 +20,5 @@ export interface LoginInput {
 export interface RegisterInput extends LoginInput {
   firstName?: string
   lastName?: string
+  referralCode?: string
 }

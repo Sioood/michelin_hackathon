@@ -12,6 +12,12 @@ allowBuilds:
   unrs-resolver: true
   vue-demi: true
 
+# pnpm 11 prompts before purging stale node_modules; non-TTY contexts (husky, Docker) abort without this.
+confirmModulesPurge: false
+
+# pnpm 11 defaults to auto-install on `pnpm exec` / `pnpm run` (breaks husky when node_modules is stale).
+verifyDepsBeforeRun: warn
+
 catalog:
   '@ark-ui/vue': ^5.36.2
   '@internationalized/date': 3.12.0

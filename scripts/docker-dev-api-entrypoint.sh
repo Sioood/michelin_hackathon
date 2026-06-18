@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
+export CI=true
 cd /app
 
-# Materialize Linux native optional deps inside the container-mounted node_modules volume.
-CI=true pnpm install --frozen-lockfile
+pnpm install --frozen-lockfile --ignore-scripts
 
 exec "$@"
