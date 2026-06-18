@@ -1,6 +1,7 @@
 import type { Product, ProductCategory } from './product'
 
 export type SearchTerrain = 'CITY' | 'GRAVEL' | 'MIXED' | 'MTB' | 'ROAD'
+export type SearchSource = 'heuristic' | 'mistral' | 'questionnaire'
 
 interface SearchFilters {
   category?: ProductCategory
@@ -21,6 +22,7 @@ export interface AiSearchResponse {
   explanation: string
   filters: SearchFilters
   results: SearchResult[]
+  source: SearchSource
   suggestedSlugs: string[]
 }
 

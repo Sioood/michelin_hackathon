@@ -51,8 +51,10 @@ export function useCommunity() {
       page.value = feed.page
       pageCount.value = feed.pageCount
       total.value = feed.total
+      return true
     } catch (error) {
       errorMessage.value = api.getErrorMessage(error)
+      return false
     } finally {
       pending.value = false
     }
@@ -63,8 +65,13 @@ export function useCommunity() {
       return
     }
 
+    const previousPage = page.value
     page.value += 1
-    await loadFeed({ append: true })
+    const loaded = await loadFeed({ append: true })
+
+    if (!loaded) {
+      page.value = previousPage
+    }
   }
 
   async function createPost(input: CreateCommunityPostInput): Promise<CommunityPost> {
@@ -100,15 +107,23 @@ export function useCommunity() {
   }
 
   async function loadChallenges() {
-    challenges.value = await api.request<CommunityChallenge[]>('/community/challenges')
+    try {
+      challenges.value = await api.request<CommunityChallenge[]>('/community/challenges')
+    } catch (error) {
+      errorMessage.value = api.getErrorMessage(error)
+    }
   }
 
   async function loadLeaderboard(challengeId: number) {
-    leaderboards.value = {
-      ...leaderboards.value,
-      [challengeId]: await api.request<ChallengeLeaderboardEntry[]>(
-        `/community/challenges/${challengeId}/leaderboard`,
-      ),
+    try {
+      leaderboards.value = {
+        ...leaderboards.value,
+        [challengeId]: await api.request<ChallengeLeaderboardEntry[]>(
+          `/community/challenges/${challengeId}/leaderboard`,
+        ),
+      }
+    } catch (error) {
+      errorMessage.value = api.getErrorMessage(error)
     }
   }
 
@@ -134,7 +149,7 @@ export function useCommunity() {
       return mediaUrl
     }
 
-    return `${config.public.apiBaseUrl}${mediaUrl}`
+    return `${config.public.apiBaseUrl.replace(/\/$/u, '')}/${mediaUrl.replace(/^\//u, '')}`
   }
 
   return {

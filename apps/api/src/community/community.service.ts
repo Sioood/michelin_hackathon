@@ -7,10 +7,11 @@ import {
   OnModuleInit,
 } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
+import { Op } from 'sequelize'
 
 import { User } from '../users/user.model'
 
-import { communityChallengeSeeds } from './challenges/challenges.seed'
+import { createCommunityChallengeSeeds } from './challenges/challenges.seed'
 import { CommunityChallengeEntry } from './challenges/community-challenge-entry.model'
 import { CommunityChallenge } from './challenges/community-challenge.model'
 import { CommunityPost } from './community-post.model'
@@ -59,13 +60,13 @@ export class CommunityService implements OnModuleInit {
   private readonly challengeEntryModel!: typeof CommunityChallengeEntry
 
   async onModuleInit(): Promise<void> {
-    const challengeCount = await this.challengeModel.count()
+    const challenges = await this.challengeModel.findAll()
 
-    if (challengeCount > 0) {
+    if (challenges.some((challenge) => challenge.endsAt >= new Date())) {
       return
     }
 
-    await this.challengeModel.bulkCreate(communityChallengeSeeds)
+    await this.challengeModel.bulkCreate(createCommunityChallengeSeeds())
   }
 
   async findFeed(query: CommunityFeedQueryDto): Promise<CommunityFeedDto> {
@@ -92,8 +93,19 @@ export class CommunityService implements OnModuleInit {
   }
 
   async createPost(userId: number, input: CreateCommunityPostDto): Promise<CommunityPostDto> {
+    if (input.type === 'challenge' && input.challengeId === undefined) {
+      throw new BadRequestException('A challenge publication must select a challenge')
+    }
+
+    if (input.type !== 'challenge' && input.challengeId !== undefined) {
+      throw new BadRequestException('Only challenge publications can select a challenge')
+    }
+
     if (input.challengeId !== undefined) {
-      await this.findChallenge(input.challengeId)
+      const challenge = await this.findChallenge(input.challengeId)
+      if (!this.isChallengeActive(challenge)) {
+        throw new BadRequestException('Challenge is not active')
+      }
     }
 
     const post = await this.postModel.create({
@@ -156,6 +168,7 @@ export class CommunityService implements OnModuleInit {
     const challenges = await this.challengeModel.findAll({
       include: [CommunityChallengeEntry],
       order: [['endsAt', 'ASC']],
+      where: { endsAt: { [Op.gte]: new Date() } },
     })
 
     return challenges.map((challenge) => this.toChallengeDto(challenge))
@@ -167,9 +180,7 @@ export class CommunityService implements OnModuleInit {
     input: JoinChallengeDto,
   ): Promise<ChallengeLeaderboardEntryDto> {
     const challenge = await this.findChallenge(challengeId)
-    const now = new Date()
-
-    if (challenge.startsAt > now || challenge.endsAt < now) {
+    if (!this.isChallengeActive(challenge)) {
       throw new BadRequestException('Challenge is not active')
     }
 
@@ -245,6 +256,11 @@ export class CommunityService implements OnModuleInit {
     }
 
     return challenge
+  }
+
+  private isChallengeActive(challenge: CommunityChallenge): boolean {
+    const now = new Date()
+    return challenge.startsAt <= now && challenge.endsAt >= now
   }
 
   private toPostDto(post: CommunityPost): CommunityPostDto {

@@ -1,4 +1,4 @@
-import { IsIn, IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator'
+import { IsIn, IsInt, IsOptional, IsString, MaxLength, Min, MinLength } from 'class-validator'
 
 import type { CommunityPostType } from '../community-post.model'
 
@@ -10,10 +10,12 @@ export class CreateCommunityPostDto {
 
   @IsString()
   @MaxLength(140)
+  @MinLength(3)
   declare title: string
 
   @IsString()
   @MaxLength(3000)
+  @MinLength(3)
   declare body: string
 
   @IsOptional()

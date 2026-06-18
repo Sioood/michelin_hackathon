@@ -84,8 +84,9 @@ export class CommunityController {
 
   @Get('uploads/:filename')
   @Header('Cache-Control', 'public, max-age=86400')
-  getUpload(@Param('filename') filename: string, @Res() response: Response): void {
-    this.uploadService.getReadStream(filename).pipe(response)
+  async getUpload(@Param('filename') filename: string, @Res() response: Response): Promise<void> {
+    const stream = await this.uploadService.getReadStream(filename)
+    stream.pipe(response)
   }
 
   @Get('challenges')
