@@ -128,21 +128,83 @@ async function startCheckout() {
           </UIStepsContent>
 
           <UIStepsContent :index="2" class="w-full">
-            <div class="mt-6 w-full">
-              <h2 class="txt-h4 font-black">Paiement Stripe</h2>
-              <p class="txt-base mt-2 max-w-2xl text-neutral-text-subtle">
-                Une session Stripe Checkout sera créée depuis le panier actif.
-              </p>
-              <UIButton
-                class="mt-6"
-                text="Payer avec Stripe"
-                intent="primary"
-                size="lg"
-                leading-icon="tabler:credit-card"
-                :disabled="cart.isEmpty || checkoutPending"
-                :state="checkoutPending ? 'loading' : 'default'"
-                @click="startCheckout"
-              />
+            <div class="mt-6 grid w-full gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.8fr)]">
+              <div>
+                <h2 class="txt-h4 font-black">Paiement Stripe</h2>
+                <p class="txt-base mt-2 max-w-2xl text-neutral-text-subtle">
+                  Une session Stripe Checkout sera créée depuis le panier actif.
+                </p>
+                <UIButton
+                  class="mt-6"
+                  text="Payer avec Stripe"
+                  intent="primary"
+                  size="lg"
+                  leading-icon="tabler:credit-card"
+                  :disabled="cart.isEmpty || checkoutPending"
+                  :state="checkoutPending ? 'loading' : 'default'"
+                  @click="startCheckout"
+                />
+              </div>
+
+              <aside
+                aria-label="Terminal Stripe de démonstration"
+                class="overflow-hidden rounded-md border border-neutral-border-default bg-neutral-surface-default shadow-md"
+              >
+                <div
+                  class="flex items-center justify-between gap-3 border-b border-neutral-border-subtle bg-neutral-surface-strong px-5 py-4"
+                >
+                  <div class="flex items-center gap-3">
+                    <span
+                      class="flex size-9 items-center justify-center rounded-md bg-[#635bff] text-white"
+                    >
+                      <Icon name="tabler:brand-stripe" class="size-6" />
+                    </span>
+                    <div>
+                      <p class="txt-label font-black">Terminal Stripe</p>
+                      <p class="txt-caption text-neutral-text-subtle">Mode test</p>
+                    </div>
+                  </div>
+                  <UIBadge label="Démo" intent="primary" size="sm" />
+                </div>
+
+                <div class="space-y-4 p-5">
+                  <div>
+                    <p class="txt-caption font-bold text-neutral-text-subtle">Numéro de carte</p>
+                    <div
+                      class="mt-1 flex items-center justify-between gap-3 rounded-md border border-neutral-border-default bg-neutral-bg-default px-3 py-3"
+                    >
+                      <span class="txt-label font-mono font-black tracking-wider">
+                        4242 4242 4242 4242
+                      </span>
+                      <Icon name="tabler:brand-visa" class="size-7 text-neutral-text-strong" />
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <p class="txt-caption font-bold text-neutral-text-subtle">Expiration</p>
+                      <p
+                        class="txt-label mt-1 rounded-md border border-neutral-border-default bg-neutral-bg-default px-3 py-3 font-mono font-black"
+                      >
+                        12 / 34
+                      </p>
+                    </div>
+                    <div>
+                      <p class="txt-caption font-bold text-neutral-text-subtle">CVC</p>
+                      <p
+                        class="txt-label mt-1 rounded-md border border-neutral-border-default bg-neutral-bg-default px-3 py-3 font-mono font-black"
+                      >
+                        123
+                      </p>
+                    </div>
+                  </div>
+
+                  <p class="txt-caption text-neutral-text-subtle">
+                    Carte de test Stripe uniquement. Aucun débit réel ne sera effectué en mode
+                    démonstration.
+                  </p>
+                </div>
+              </aside>
             </div>
           </UIStepsContent>
         </UISteps>

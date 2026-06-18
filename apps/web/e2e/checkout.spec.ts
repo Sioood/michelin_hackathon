@@ -160,6 +160,9 @@ test('login, add tyre to cart, and start checkout', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Finaliser la commande' })).toBeVisible()
   await page.getByRole('button', { name: 'Continuer' }).click()
   await page.getByRole('button', { name: 'Continuer' }).click()
+  await expect(page.getByLabel('Terminal Stripe de démonstration')).toContainText(
+    '4242 4242 4242 4242',
+  )
   await page.getByRole('button', { name: 'Payer avec Stripe' }).click()
 
   await expect(page).toHaveURL('/checkout/success?orderId=42')
