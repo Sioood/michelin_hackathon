@@ -128,26 +128,8 @@ async function addToCart() {
           <h1 class="txt-h1 mt-5 font-black">{{ product.rangeName }}</h1>
           <p class="txt-lg mt-4 max-w-3xl text-neutral-text-subtle">{{ product.description }}</p>
 
-          <div class="mt-8 grid gap-4 md:grid-cols-3">
-            <UICard
-              v-for="stat in [
-                { label: 'Victoires pro', value: product.proStats.victories },
-                { label: 'Podiums', value: product.proStats.podiums },
-                { label: 'Stock', value: product.stock },
-              ]"
-              :key="stat.label"
-              intent="neutral"
-              variant="subtle"
-              :card-base-ui="{ body: 'rounded-md p-4' }"
-            >
-              <p class="txt-h4 font-black">{{ stat.value }}</p>
-              <p class="txt-caption mt-1 text-neutral-text-subtle">{{ stat.label }}</p>
-            </UICard>
-          </div>
-
           <section class="mt-10">
             <h2 class="txt-h3 font-black">Technologies</h2>
-            <p class="txt-base mt-2 text-neutral-text-subtle">{{ product.proStats.highlight }}</p>
             <div class="mt-4 flex flex-wrap gap-2">
               <UIChip
                 v-for="technology in allTechnologies"
@@ -156,9 +138,15 @@ async function addToCart() {
                 intent="primary"
                 variant="subtle"
               />
+              <p v-if="allTechnologies.length === 0" class="txt-base text-neutral-text-subtle">
+                Aucune technologie renseignée pour cette référence.
+              </p>
             </div>
           </section>
 
+          <ProductProStats :stats="product.proStats" />
+
+          <ProductReviews v-if="product.id !== undefined" :product-id="product.id" />
           <CommerceCrossSellCarousel
             v-if="product.id !== undefined"
             class="mt-10"
