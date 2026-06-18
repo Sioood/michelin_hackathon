@@ -9,7 +9,7 @@ import { Cart } from './cart.model'
 
 import type { PublicUserDto } from '../users/users.service'
 
-export interface CartLineDto {
+interface CartLineDto {
   id: number
   product: Product
   productId: number

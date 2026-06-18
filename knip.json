@@ -6,7 +6,12 @@
     "apps/web": {
       "entry": ["i18n/locales/**/*.ts"],
       "project": ["app/**/*.{ts,vue}", "i18n/**/*.ts"],
-      "ignoreDependencies": ["@michelin_hackaton/ui", "vue", "vue-router"]
+      "ignoreDependencies": ["@michelin_hackaton/ui", "vue-router"]
+    },
+    "apps/api": {
+      "entry": ["src/main.ts"],
+      "project": ["src/**/*.ts"],
+      "ignoreDependencies": ["pg", "pg-hstore"]
     },
     "packages/config/oxlint": {
       "entry": [

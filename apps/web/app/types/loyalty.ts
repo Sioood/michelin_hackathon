@@ -1,6 +1,6 @@
-export type LoyaltyRewardType = 'discount_fixed' | 'discount_percent' | 'free_shipping'
+type LoyaltyRewardType = 'discount_fixed' | 'discount_percent' | 'free_shipping'
 
-export type LoyaltyTransactionType =
+type LoyaltyTransactionType =
   | 'purchase'
   | 'promo_redeem'
   | 'referral_bonus'
@@ -9,7 +9,7 @@ export type LoyaltyTransactionType =
   | 'roulette'
   | 'signup_bonus'
 
-export interface PendingDiscount {
+interface PendingDiscount {
   createdAt: string
   id: string
   source: 'reward' | 'roulette'
@@ -18,7 +18,7 @@ export interface PendingDiscount {
   value: number
 }
 
-export interface LoyaltyReward {
+interface LoyaltyReward {
   description: string
   id: string
   name: string
@@ -27,7 +27,7 @@ export interface LoyaltyReward {
   value: number
 }
 
-export interface LoyaltyTransaction {
+interface LoyaltyTransaction {
   amount: number
   createdAt?: string
   description: string
@@ -60,9 +60,9 @@ export interface RedeemRewardResult {
   pointsSpent: number
 }
 
-export type RoulettePrizeType = 'discount_percent' | 'points'
+type RoulettePrizeType = 'discount_percent' | 'points'
 
-export interface RoulettePrize {
+interface RoulettePrize {
   amount: number
   label: string
   type: RoulettePrizeType
