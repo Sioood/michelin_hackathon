@@ -13,6 +13,7 @@ catalogue:
     catalogue: 'Catalogue'
     technologies: 'Technologies'
     garage: 'Garage'
+    ridersClub: 'Riders Club'
   tools:
     label: 'Tools'
     findTyre: 'Find my tyre'

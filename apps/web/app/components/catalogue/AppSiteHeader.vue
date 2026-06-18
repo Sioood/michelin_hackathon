@@ -12,6 +12,7 @@ const navItems = [
   { href: '/#catalogue', labelKey: 'catalogue.nav.catalogue' },
   { href: '/#technologies', labelKey: 'catalogue.nav.technologies' },
   { href: '/garage', labelKey: 'catalogue.nav.garage' },
+  { href: '/riders-club', labelKey: 'catalogue.nav.ridersClub' },
 ] as const
 
 const toolItems = [
