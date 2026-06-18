@@ -13,6 +13,11 @@ catalogue:
     catalogue: 'Catalogue'
     technologies: 'Technologies'
     garage: 'Garage'
+  tools:
+    label: 'Outils'
+    findTyre: 'Trouver mon pneu'
+    compare: 'Comparer les pneus'
+    pressure: 'Calculer la pression'
   hero:
     badge: 'Vélo route, gravel, VTT, ville et e-bike'
     title: 'Trouvez le pneu vélo adapté à votre pratique'

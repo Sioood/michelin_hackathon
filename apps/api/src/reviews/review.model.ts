@@ -1,11 +1,4 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 
 import { Product } from '../products/product.model'
 import { User } from '../users/user.model'
@@ -51,7 +44,11 @@ export class Review
   @Column({ allowNull: false, type: DataType.INTEGER })
   declare userId: number
 
-  @Column({ allowNull: false, type: DataType.INTEGER })
+  @Column({
+    allowNull: false,
+    type: DataType.INTEGER,
+    validate: { max: 5, min: 1 },
+  })
   declare rating: number
 
   @Column(DataType.STRING(160))

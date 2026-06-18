@@ -61,8 +61,24 @@ export class ProductsService implements OnModuleInit {
 
   async findBySlugs(slugs: string[]): Promise<ProductDto[]> {
     const products = await this.productModel.findAll({ where: { slug: slugs } })
+    const productsBySlug = new Map(
+      products.map((product) => [product.slug, product.toJSON<ProductDto>()]),
+    )
+    const missingSlugs = slugs.filter((slug) => !productsBySlug.has(slug))
 
-    return products.map((product) => product.toJSON<ProductDto>())
+    if (missingSlugs.length > 0) {
+      throw new NotFoundException(`Products not found: ${missingSlugs.join(', ')}`)
+    }
+
+    return slugs.map((slug) => {
+      const product = productsBySlug.get(slug)
+
+      if (product === undefined) {
+        throw new NotFoundException(`Product not found: ${slug}`)
+      }
+
+      return product
+    })
   }
 
   async findModelById(id: number): Promise<Product> {

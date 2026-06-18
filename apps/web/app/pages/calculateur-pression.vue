@@ -6,9 +6,9 @@ import {
   type SurfaceType,
 } from '~/utils/pressure-calculator'
 
-const riderWeight = ref(75)
-const bikeWeight = ref(10)
-const tireWidth = ref(28)
+const riderWeight = ref('75')
+const bikeWeight = ref('10')
+const tireWidth = ref('28')
 const bikeType = ref<BikeType>('road')
 const surface = ref<SurfaceType>('asphalt')
 const tubeless = ref(false)
@@ -16,7 +16,7 @@ const tubeless = ref(false)
 const result = ref<PressureResult | null>(null)
 const error = ref('')
 
-const bikeTypeOptions = [
+const bikeTypeOptions: Array<{ label: string; value: BikeType }> = [
   { label: 'Route', value: 'road' },
   { label: 'Gravel', value: 'gravel' },
   { label: 'VTT', value: 'mtb' },
@@ -24,7 +24,7 @@ const bikeTypeOptions = [
   { label: 'Ville', value: 'city' },
 ]
 
-const surfaceOptions = [
+const surfaceOptions: Array<{ label: string; value: SurfaceType }> = [
   { label: 'Asphalte', value: 'asphalt' },
   { label: 'Gravel', value: 'gravel' },
   { label: 'Mixte', value: 'mixed' },
@@ -48,14 +48,24 @@ function calculate() {
     return
   }
 
-  result.value = calculatePressure({
-    bikeType: bikeType.value,
-    bikeWeightKg: Number.isFinite(bike) ? bike : 10,
-    riderWeightKg: weight,
-    surface: surface.value,
-    tireWidthMm: width,
-    tubeless: tubeless.value,
-  })
+  if (!Number.isFinite(bike) || bike < 5 || bike > 50) {
+    error.value = 'Poids du vélo invalide (5–50 kg).'
+    return
+  }
+
+  try {
+    result.value = calculatePressure({
+      bikeType: bikeType.value,
+      bikeWeightKg: bike,
+      riderWeightKg: weight,
+      surface: surface.value,
+      tireWidthMm: width,
+      tubeless: tubeless.value,
+    })
+  } catch (calculationError) {
+    error.value =
+      calculationError instanceof Error ? calculationError.message : 'Calcul impossible.'
+  }
 }
 
 function reset() {
@@ -86,8 +96,13 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
         terrain.
       </p>
 
-      <UICard class="mt-8" intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-6' }">
-        <div class="space-y-6">
+      <UICard
+        class="mt-8"
+        intent="neutral"
+        variant="default"
+        :card-base-ui="{ body: 'rounded-md p-6' }"
+      >
+        <form class="space-y-6" @submit.prevent="calculate">
           <div class="grid gap-6 sm:grid-cols-2">
             <UIFormNumberInput
               v-model="riderWeight"
@@ -100,7 +115,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
               v-model="bikeWeight"
               label="Poids vélo (kg)"
               :min="5"
-              :max="30"
+              :max="50"
               :step="0.5"
             />
           </div>
@@ -116,42 +131,31 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
 
           <div>
             <p class="txt-label mb-2 font-bold">Type de vélo</p>
-            <UISegmentGroup
-              v-model="bikeType"
-              :options="bikeTypeOptions"
-              intent="primary"
-            />
+            <UISegmentGroup v-model="bikeType" :options="bikeTypeOptions" intent="primary" />
           </div>
 
           <div>
             <p class="txt-label mb-2 font-bold">Type de surface</p>
-            <UISegmentGroup
-              v-model="surface"
-              :options="surfaceOptions"
-              intent="primary"
-            />
+            <UISegmentGroup v-model="surface" :options="surfaceOptions" intent="primary" />
           </div>
 
           <div class="flex items-center gap-3">
             <UISwitch v-model="tubeless" label="Pneu tubeless" />
           </div>
 
-          <UIAlert
-            v-if="error"
-            intent="error"
-            :title="error"
-          />
+          <UIAlert v-if="error" intent="error" :title="error" />
 
           <div class="flex gap-3">
             <UIButton
+              type="submit"
               text="Calculer"
               intent="primary"
               size="lg"
               leading-icon="tabler:calculator"
-              @click="calculate"
             />
             <UIButton
               v-if="result !== null"
+              type="button"
               text="Réinitialiser"
               intent="neutral"
               variant="ghost"
@@ -159,7 +163,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
               @click="reset"
             />
           </div>
-        </div>
+        </form>
       </UICard>
 
       <Transition
@@ -172,9 +176,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
 
           <div class="mt-4 grid gap-4 sm:grid-cols-2">
             <UICard intent="primary" variant="subtle" :card-base-ui="{ body: 'rounded-md p-6' }">
-              <p class="txt-caption font-bold text-primary-text-default uppercase">
-                Pneu avant
-              </p>
+              <p class="txt-caption font-bold text-primary-text-default uppercase">Pneu avant</p>
               <p class="txt-h1 mt-2 font-black text-primary-text-default">
                 {{ result.frontBar }} bar
               </p>
@@ -182,9 +184,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
             </UICard>
 
             <UICard intent="primary" variant="subtle" :card-base-ui="{ body: 'rounded-md p-6' }">
-              <p class="txt-caption font-bold text-primary-text-default uppercase">
-                Pneu arrière
-              </p>
+              <p class="txt-caption font-bold text-primary-text-default uppercase">Pneu arrière</p>
               <p class="txt-h1 mt-2 font-black text-primary-text-default">
                 {{ result.rearBar }} bar
               </p>
@@ -201,8 +201,8 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
           />
 
           <p class="txt-caption mt-4 text-neutral-text-subtle">
-            Ces valeurs sont indicatives. Ajustez selon votre ressenti et vérifiez les préconisations
-            du fabricant de votre pneu.
+            Ces valeurs sont indicatives. Ajustez selon votre ressenti et vérifiez les
+            préconisations du fabricant de votre pneu.
           </p>
         </div>
       </Transition>

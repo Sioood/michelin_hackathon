@@ -18,10 +18,14 @@ export class ProductsController {
     if (!slugs || slugs.trim().length === 0) {
       throw new BadRequestException('slugs query param is required')
     }
-    const slugList = slugs.split(',').map((s) => s.trim()).filter(Boolean)
-    if (slugList.length < 2 || slugList.length > 4) {
-      throw new BadRequestException('Provide between 2 and 4 slugs')
+    const slugList = slugs
+      .split(',')
+      .map((slug) => slug.trim())
+      .filter(Boolean)
+    if (slugList.length !== 2 || new Set(slugList).size !== 2) {
+      throw new BadRequestException('Provide exactly 2 distinct slugs')
     }
+
     return this.productsService.findBySlugs(slugList)
   }
 

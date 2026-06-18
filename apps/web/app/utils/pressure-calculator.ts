@@ -8,6 +8,8 @@
  * - Tubeless can run ~10-15% lower pressure
  */
 
+import { assertNever } from '~nuxt-essentials/app/utils/assert-never'
+
 export type BikeType = 'city' | 'e-bike' | 'gravel' | 'mtb' | 'road'
 export type SurfaceType = 'asphalt' | 'gravel' | 'mixed' | 'trail'
 
@@ -30,6 +32,9 @@ export interface PressureResult {
 }
 
 const BAR_TO_PSI = 14.5038
+const MAX_PRESSURE_BAR = 9
+const MIN_PRESSURE_BAR = 0.8
+const REFERENCE_TOTAL_WEIGHT_KG = 80
 
 /** Base pressure tables by tire width (mm) for road/pavement */
 const BASE_PRESSURE_BY_WIDTH: Array<{ maxWidth: number; baseBar: number }> = [
@@ -62,6 +67,8 @@ function surfaceMultiplier(surface: SurfaceType): number {
       return 0.82
     case 'trail':
       return 0.75
+    default:
+      return assertNever(surface)
   }
 }
 
@@ -77,7 +84,13 @@ function bikeTypeMultiplier(bikeType: BikeType): number {
       return 0.85
     case 'city':
       return 0.95
+    default:
+      return assertNever(bikeType)
   }
+}
+
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.min(Math.max(value, minimum), maximum)
 }
 
 function round1(value: number): number {
@@ -86,27 +99,21 @@ function round1(value: number): number {
 
 export function calculatePressure(input: PressureInput): PressureResult {
   const bikeWeightKg = input.bikeWeightKg ?? 10
+  validateInput(input, bikeWeightKg)
+
   const totalWeightKg = input.riderWeightKg + bikeWeightKg
   const surface = input.surface ?? 'asphalt'
 
   const baseBar = getBaseBar(input.tireWidthMm)
-
-  // Weight scaling: reference total weight is 80 kg, scale linearly
-  const weightFactor = totalWeightKg / 80
-
-  // Rear tire carries ~60% of total weight, front ~40%
-  const rearWeightFactor = weightFactor * 0.6 * (80 / (totalWeightKg * 0.6))
-  const frontWeightFactor = weightFactor * 0.4 * (80 / (totalWeightKg * 0.4))
-
   const surfMult = surfaceMultiplier(surface)
   const bikeMult = bikeTypeMultiplier(input.bikeType)
   const tubelessFactor = input.tubeless === true ? 0.88 : 1.0
-
-  const rearBar = round1(baseBar * weightFactor * surfMult * bikeMult * tubelessFactor)
-  const frontBar = round1(rearBar * 0.9)
-
-  void rearWeightFactor
-  void frontWeightFactor
+  const weightFactor = totalWeightKg / REFERENCE_TOTAL_WEIGHT_KG
+  const commonMultiplier = weightFactor * surfMult * bikeMult * tubelessFactor
+  const rearBar = round1(clamp(baseBar * commonMultiplier, MIN_PRESSURE_BAR, MAX_PRESSURE_BAR))
+  const frontBar = round1(
+    clamp(baseBar * commonMultiplier * 0.9, MIN_PRESSURE_BAR, MAX_PRESSURE_BAR),
+  )
 
   const note = buildNote(input, surface)
 
@@ -116,6 +123,30 @@ export function calculatePressure(input: PressureInput): PressureResult {
     note,
     rearBar,
     rearPsi: round1(rearBar * BAR_TO_PSI),
+  }
+}
+
+function validateInput(input: PressureInput, bikeWeightKg: number): void {
+  assertRange({
+    label: 'Le poids du cycliste',
+    maximum: 200,
+    minimum: 30,
+    value: input.riderWeightKg,
+  })
+  assertRange({ label: 'Le poids du vélo', maximum: 50, minimum: 5, value: bikeWeightKg })
+  assertRange({ label: 'La largeur du pneu', maximum: 130, minimum: 18, value: input.tireWidthMm })
+}
+
+interface RangeConstraint {
+  label: string
+  maximum: number
+  minimum: number
+  value: number
+}
+
+function assertRange({ label, maximum, minimum, value }: RangeConstraint): void {
+  if (!Number.isFinite(value) || value < minimum || value > maximum) {
+    throw new RangeError(`${label} doit être compris entre ${minimum} et ${maximum}.`)
   }
 }
 
@@ -136,8 +167,10 @@ function buildNote(input: PressureInput, surface: SurfaceType): string {
     case 'mixed':
       parts.push('Sol mixte : compromis route/off-road.')
       break
-    default:
+    case 'asphalt':
       break
+    default:
+      assertNever(surface)
   }
 
   if (input.riderWeightKg > 90) {

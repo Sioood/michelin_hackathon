@@ -13,6 +13,11 @@ catalogue:
     catalogue: 'Catalogue'
     technologies: 'Technologies'
     garage: 'Garage'
+  tools:
+    label: 'Tools'
+    findTyre: 'Find my tyre'
+    compare: 'Compare tyres'
+    pressure: 'Calculate pressure'
   hero:
     badge: 'Road, gravel, MTB, city and e-bike'
     title: 'Find the bike tyre that fits your ride'

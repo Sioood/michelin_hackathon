@@ -41,6 +41,31 @@ defineProps<{
         <div class="mt-8">
           <SearchAiSearchBar redirect-on-search />
         </div>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <UIButton
+            to="/trouver-mon-pneu"
+            :text="$t('catalogue.tools.findTyre')"
+            intent="secondary"
+            leading-icon="tabler:sparkles"
+            class="shadow-lg shadow-black/20"
+          />
+          <UIButton
+            to="/comparer"
+            :text="$t('catalogue.tools.compare')"
+            intent="neutral"
+            variant="subtle"
+            leading-icon="tabler:arrows-diff"
+            class="border-white/80! bg-white/95! text-primary-text-strong! shadow-lg shadow-black/20 hover:border-secondary-border-default! hover:bg-secondary-fill-default! hover:text-secondary-text-inverse!"
+          />
+          <UIButton
+            to="/calculateur-pression"
+            :text="$t('catalogue.tools.pressure')"
+            intent="neutral"
+            variant="subtle"
+            leading-icon="tabler:gauge"
+            class="border-white/35! bg-primary-bg-inverse/75! text-primary-text-inverse! shadow-lg shadow-black/20 backdrop-blur hover:border-white! hover:bg-white! hover:text-primary-text-strong!"
+          />
+        </div>
         <div class="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
           <UICard
             v-for="stat in stats"
