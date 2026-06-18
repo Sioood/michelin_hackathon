@@ -9,17 +9,17 @@
 
 ## Progression globale
 
-| Phase | Description                        | Points | Statut |
-| ----- | ---------------------------------- | ------ | ------ |
-| P0    | Fondations backend (NestJS)        | ~47    | ✅     |
-| P1    | E-commerce frontend (Nuxt)         | ~43    | ✅     |
-| P2    | Recherche IA + questionnaire       | ~43    | ✅     |
-| P3    | Garage virtuel                     | ~43    | ✅     |
-| P4    | Fidélité, cross-sell, gamification | ~58    | ⬜     |
-| P5    | Contenu produit enrichi            | ~32    | ⬜     |
-| P6    | Michelin Riders Club               | ~52    | ⬜     |
-| P7    | Polish & innovation (stretch)      | ~40    | ⬜     |
-| DOC   | Documentation sans code            | ~9     | ⬜     |
+| Phase | Description                        | Points | Statut    |
+| ----- | ---------------------------------- | ------ | --------- |
+| P0    | Fondations backend (NestJS)        | ~47    | ✅        |
+| P1    | E-commerce frontend (Nuxt)         | ~43    | ✅        |
+| P2    | Recherche IA + questionnaire       | ~43    | ✅        |
+| P3    | Garage virtuel                     | ~43    | ✅        |
+| P4    | Fidélité, cross-sell, gamification | ~58    | 🔄 API ✅ |
+| P5    | Contenu produit enrichi            | ~32    | ⬜        |
+| P6    | Michelin Riders Club               | ~52    | ⬜        |
+| P7    | Polish & innovation (stretch)      | ~40    | ⬜        |
+| DOC   | Documentation sans code            | ~9     | ⬜        |
 
 **Cible hackathon** : ~120–150 points (P0 → P1 → P2 → P3 → P4 partiel)
 
@@ -567,28 +567,28 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P4-01** · API · 5 pts — Modèle `LoyaltyAccount` + `LoyaltyTransaction`
+- [x] **P4-01** · API · 5 pts — Modèle `LoyaltyAccount` + `LoyaltyTransaction`
   - Fichiers : `apps/api/src/loyalty/`
 
-- [ ] **P4-02** · API · 5 pts — +100 pts inscription, -20% 1ère commande (coupon Stripe)
+- [x] **P4-02** · API · 5 pts — +100 pts inscription, -20% 1ère commande (coupon Stripe)
   - Fichiers : `apps/api/src/loyalty/welcome.service.ts`
 
-- [ ] **P4-03** · API · 3 pts — Points à l'achat (1 pt/€) via webhook commande
+- [x] **P4-03** · API · 3 pts — Points à l'achat (1 pt/€) via webhook commande
   - Fichiers : `apps/api/src/loyalty/`
 
-- [ ] **P4-04** · API · 5 pts — Catalogue récompenses + échange points
+- [x] **P4-04** · API · 5 pts — Catalogue récompenses + échange points
   - Fichiers : `apps/api/src/loyalty/rewards.seed.ts`
 
-- [ ] **P4-05** · API · 5 pts — Module `CrossSell` : règles chambre à air, pneu complémentaire
+- [x] **P4-05** · API · 5 pts — Module `CrossSell` : règles chambre à air, pneu complémentaire
   - Fichiers : `apps/api/src/cross-sell/`
 
-- [ ] **P4-06** · API · 5 pts — `POST /loyalty/redeem-code` — codes QR / emballage
-  - Fichiers : `apps/api/src/loyalty/redeem.controller.ts`
+- [x] **P4-06** · API · 5 pts — `POST /loyalty/redeem-code` — codes QR / emballage
+  - Fichiers : `apps/api/src/loyalty/loyalty.controller.ts`
 
-- [ ] **P4-07** · API · 5 pts — Roulette backend : 1 spin/jour, gains points ou %
+- [x] **P4-07** · API · 5 pts — Roulette backend : 1 spin/jour, gains points ou %
   - Fichiers : `apps/api/src/games/roulette/`
 
-- [ ] **P4-08** · API · 8 pts — Parrainage : code unique, +pts parrain/filleul
+- [x] **P4-08** · API · 8 pts — Parrainage : code unique, +pts parrain/filleul
   - Fichiers : `apps/api/src/loyalty/referral.service.ts`
 
 ### Web

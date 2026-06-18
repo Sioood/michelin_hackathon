@@ -94,6 +94,12 @@ export class OrdersService {
     })
   }
 
+  async countPaidOrdersForUser(userId: number): Promise<number> {
+    return this.orderModel.count({
+      where: { status: 'paid', userId },
+    })
+  }
+
   async findForUser(userId: number, orderId: number): Promise<Order> {
     const order = await this.orderModel.findOne({
       include: [{ include: [Product], model: OrderItem }],
