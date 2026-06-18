@@ -57,6 +57,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -78,6 +79,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -98,6 +100,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -118,6 +121,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -138,6 +142,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -158,6 +163,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -178,6 +184,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -198,6 +205,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -221,6 +229,7 @@ describe('Tour', () => {
       const wrapper = await mountSuspended(
         defineComponent({
           name: 'TourTestHarness',
+
           components: { Tour },
           setup() {
             const tour = useTour({ steps })
@@ -245,6 +254,7 @@ describe('Tour', () => {
       const wrapper = await mountSuspended(
         defineComponent({
           name: 'TourTestHarness',
+
           components: { Tour },
           setup() {
             const tour = useTour({ steps })
@@ -266,6 +276,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -286,6 +297,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps: stepsWithDismiss })
@@ -310,6 +322,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps: stepsWithPrevLast })
@@ -334,6 +347,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -358,6 +372,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -395,6 +410,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -418,6 +434,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -441,6 +458,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -465,6 +483,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -488,6 +507,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -511,6 +531,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -534,6 +555,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -557,6 +579,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })
@@ -580,6 +603,7 @@ describe('Tour', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TourTestHarness',
+
         components: { Tour },
         setup() {
           const tour = useTour({ steps })

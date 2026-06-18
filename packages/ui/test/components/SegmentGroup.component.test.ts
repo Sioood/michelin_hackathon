@@ -158,6 +158,7 @@ describe('UISegmentGroup', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'SegmentGroupProviderTest',
+
         components: { UISegmentGroup },
         setup() {
           const segmentGroup = useSegmentGroup()
@@ -181,6 +182,7 @@ describe('UISegmentGroup', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'SegmentGroupProviderAsChildTest',
+
         components: { UISegmentGroup },
         setup() {
           const segmentGroup = useSegmentGroup()
@@ -202,6 +204,7 @@ describe('UISegmentGroup', () => {
 
     const Controlled = defineComponent({
       name: 'SegmentGroupVModelUpdateTest',
+
       components: { UISegmentGroup },
       setup() {
         return { model }

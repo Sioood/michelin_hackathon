@@ -532,6 +532,7 @@ describe('UISteps triggers with asChild', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'NextTriggerAsChildHarness',
+
         components: { UIStepsNextTrigger, UIStepsRoot },
         setup() {
           return () =>
@@ -554,6 +555,7 @@ describe('UISteps triggers with asChild', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'PrevTriggerAsChildHarness',
+
         components: { UIStepsPrevTrigger, UIStepsRoot },
         setup() {
           return () =>
@@ -576,6 +578,7 @@ describe('UISteps triggers with asChild', () => {
     const wrapper = await mountSuspended(
       defineComponent({
         name: 'TriggerAsChildHarness',
+
         components: { UIStepsItem, UIStepsRoot, UIStepsTrigger },
         setup() {
           return () =>
