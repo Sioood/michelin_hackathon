@@ -46,7 +46,9 @@ async function addToCart() {
     <NuxtLink :to="productUrl" class="flex min-w-0 flex-1 flex-col text-inherit no-underline">
       <CatalogueProductTireVisual
         :category="product.category"
+        :preview-seed="product.slug"
         :size="compact ? 'compact' : 'default'"
+        class="w-full"
       />
       <div class="flex min-w-0 flex-1 flex-col p-5 pb-0">
         <div class="flex items-start justify-between gap-3">

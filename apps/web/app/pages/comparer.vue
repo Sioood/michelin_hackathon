@@ -287,7 +287,8 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
               >
                 <CatalogueProductTireVisual
                   :category="product.category"
-                  class="mx-auto h-24 w-24"
+                  :preview-seed="product.slug"
+                  class="mx-auto size-24"
                 />
                 <UIBadge
                   :label="categoryLabels[product.category]"
