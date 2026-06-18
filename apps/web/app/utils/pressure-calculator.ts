@@ -28,7 +28,7 @@ export interface PressureResult {
   rearBar: number
   frontPsi: number
   rearPsi: number
-  note: string
+  noteKeys: string[]
 }
 
 const BAR_TO_PSI = 14.5038
@@ -115,12 +115,12 @@ export function calculatePressure(input: PressureInput): PressureResult {
     clamp(baseBar * commonMultiplier * 0.9, MIN_PRESSURE_BAR, MAX_PRESSURE_BAR),
   )
 
-  const note = buildNote(input, surface)
+  const noteKeys = buildNoteKeys(input, surface)
 
   return {
     frontBar,
     frontPsi: round1(frontBar * BAR_TO_PSI),
-    note,
+    noteKeys,
     rearBar,
     rearPsi: round1(rearBar * BAR_TO_PSI),
   }
@@ -150,22 +150,22 @@ function assertRange({ label, maximum, minimum, value }: RangeConstraint): void 
   }
 }
 
-function buildNote(input: PressureInput, surface: SurfaceType): string {
+function buildNoteKeys(input: PressureInput, surface: SurfaceType): string[] {
   const parts: string[] = []
 
   if (input.tubeless === true) {
-    parts.push('Tubeless : pression réduite de ~12 % pour plus de confort et moins de crevaisons.')
+    parts.push('pressure.notes.tubeless')
   }
 
   switch (surface) {
     case 'gravel':
-      parts.push('Surface gravel : pression abaissée pour meilleure adhérence et absorption.')
+      parts.push('pressure.notes.gravel')
       break
     case 'trail':
-      parts.push('Trail/VTT : faible pression pour grip maximal en tout-terrain.')
+      parts.push('pressure.notes.trail')
       break
     case 'mixed':
-      parts.push('Sol mixte : compromis route/off-road.')
+      parts.push('pressure.notes.mixed')
       break
     case 'asphalt':
       break
@@ -174,10 +174,10 @@ function buildNote(input: PressureInput, surface: SurfaceType): string {
   }
 
   if (input.riderWeightKg > 90) {
-    parts.push('Poids élevé : augmentez légèrement si vous ressentez un manque de rigidité.')
+    parts.push('pressure.notes.heavy')
   } else if (input.riderWeightKg < 60) {
-    parts.push('Poids léger : vous pouvez baisser légèrement pour plus de confort.')
+    parts.push('pressure.notes.light')
   }
 
-  return parts.length > 0 ? parts.join(' ') : 'Valeurs indicatives — ajustez selon votre ressenti.'
+  return parts.length > 0 ? parts : ['pressure.notes.default']
 }

@@ -6,6 +6,7 @@ import {
   type SurfaceType,
 } from '~/utils/pressure-calculator'
 
+const { t } = useI18n()
 const riderWeight = ref('75')
 const bikeWeight = ref('10')
 const tireWidth = ref('28')
@@ -16,20 +17,22 @@ const tubeless = ref(false)
 const result = ref<PressureResult | null>(null)
 const error = ref('')
 
-const bikeTypeOptions: Array<{ label: string; value: BikeType }> = [
-  { label: 'Route', value: 'road' },
-  { label: 'Gravel', value: 'gravel' },
-  { label: 'VTT', value: 'mtb' },
-  { label: 'E-bike', value: 'e-bike' },
-  { label: 'Ville', value: 'city' },
-]
+const bikeTypeOptions = computed<Array<{ label: string; value: BikeType }>>(() => [
+  { label: t('garage.bikeTypes.road'), value: 'road' },
+  { label: t('garage.bikeTypes.gravel'), value: 'gravel' },
+  { label: t('garage.bikeTypes.mtb'), value: 'mtb' },
+  { label: t('garage.bikeTypes.eBike'), value: 'e-bike' },
+  { label: t('garage.bikeTypes.city'), value: 'city' },
+])
 
-const surfaceOptions: Array<{ label: string; value: SurfaceType }> = [
-  { label: 'Asphalte', value: 'asphalt' },
-  { label: 'Gravel', value: 'gravel' },
-  { label: 'Mixte', value: 'mixed' },
-  { label: 'Trail', value: 'trail' },
-]
+const surfaceOptions = computed<Array<{ label: string; value: SurfaceType }>>(() => [
+  { label: t('pressure.surfaces.asphalt'), value: 'asphalt' },
+  { label: t('pressure.surfaces.gravel'), value: 'gravel' },
+  { label: t('pressure.surfaces.mixed'), value: 'mixed' },
+  { label: t('pressure.surfaces.trail'), value: 'trail' },
+])
+
+const pressureNote = computed(() => result.value?.noteKeys.map((key) => t(key)).join(' ') ?? '')
 
 function calculate() {
   error.value = ''
@@ -39,17 +42,17 @@ function calculate() {
   const width = Number(tireWidth.value)
 
   if (!Number.isFinite(weight) || weight < 30 || weight > 200) {
-    error.value = 'Poids cavalier invalide (30–200 kg).'
+    error.value = t('pressure.invalidRiderWeight')
     return
   }
 
   if (!Number.isFinite(width) || width < 18 || width > 130) {
-    error.value = 'Largeur de pneu invalide (18–130 mm).'
+    error.value = t('pressure.invalidTireWidth')
     return
   }
 
   if (!Number.isFinite(bike) || bike < 5 || bike > 50) {
-    error.value = 'Poids du vélo invalide (5–50 kg).'
+    error.value = t('pressure.invalidBikeWeight')
     return
   }
 
@@ -64,7 +67,7 @@ function calculate() {
     })
   } catch (calculationError) {
     error.value =
-      calculationError instanceof Error ? calculationError.message : 'Calcul impossible.'
+      calculationError instanceof Error ? calculationError.message : t('pressure.impossible')
   }
 }
 
@@ -73,7 +76,7 @@ function reset() {
   error.value = ''
 }
 
-useHead({ title: 'Calculateur de pression pneus — Michelin' })
+useHead({ title: t('pressure.headTitle') })
 </script>
 
 <template>
@@ -83,17 +86,16 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
     <section class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <UIButton
         to="/"
-        text="Retour au catalogue"
+        :text="$t('pressure.back')"
         intent="neutral"
         variant="ghost"
         leading-icon="tabler:arrow-left"
         class="mb-6"
       />
 
-      <h1 class="txt-h1 font-black">Calculateur de pression pneus</h1>
+      <h1 class="txt-h1 font-black">{{ $t('pressure.title') }}</h1>
       <p class="txt-lg mt-3 text-neutral-text-subtle">
-        Obtenez une recommandation de pression avant et arrière adaptée à votre profil et à votre
-        terrain.
+        {{ $t('pressure.description') }}
       </p>
 
       <UICard
@@ -106,14 +108,14 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
           <div class="grid gap-6 sm:grid-cols-2">
             <UIFormNumberInput
               v-model="riderWeight"
-              label="Poids cavalier (kg)"
+              :label="$t('pressure.riderWeight')"
               :min="30"
               :max="200"
               :step="1"
             />
             <UIFormNumberInput
               v-model="bikeWeight"
-              label="Poids vélo (kg)"
+              :label="$t('pressure.bikeWeight')"
               :min="5"
               :max="50"
               :step="0.5"
@@ -122,15 +124,15 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
 
           <UIFormNumberInput
             v-model="tireWidth"
-            label="Largeur de pneu (mm)"
+            :label="$t('pressure.tireWidth')"
             :min="18"
             :max="130"
             :step="1"
-            helper-text="Ex : 25 mm route, 40 mm gravel, 57 mm VTT"
+            :helper-text="$t('pressure.tireWidthHelp')"
           />
 
           <div class="w-full min-w-0">
-            <p class="txt-label mb-2 font-bold">Type de vélo</p>
+            <p class="txt-label mb-2 font-bold">{{ $t('pressure.bikeType') }}</p>
             <UISegmentGroup
               v-model="bikeType"
               :options="bikeTypeOptions"
@@ -142,7 +144,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
           </div>
 
           <div class="w-full min-w-0">
-            <p class="txt-label mb-2 font-bold">Type de surface</p>
+            <p class="txt-label mb-2 font-bold">{{ $t('pressure.surfaceType') }}</p>
             <UISegmentGroup
               v-model="surface"
               :options="surfaceOptions"
@@ -154,7 +156,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
           </div>
 
           <div class="flex items-center gap-3">
-            <UISwitch v-model="tubeless" label="Pneu tubeless" />
+            <UISwitch v-model="tubeless" :label="$t('pressure.tubeless')" />
           </div>
 
           <UIAlert v-if="error" intent="error" :title="error" />
@@ -162,7 +164,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
           <div class="flex gap-3">
             <UIButton
               type="submit"
-              text="Calculer"
+              :text="$t('pressure.calculate')"
               intent="primary"
               size="lg"
               leading-icon="tabler:calculator"
@@ -170,7 +172,7 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
             <UIButton
               v-if="result !== null"
               type="button"
-              text="Réinitialiser"
+              :text="$t('pressure.reset')"
               intent="neutral"
               variant="ghost"
               size="lg"
@@ -186,11 +188,13 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
         enter-to-class="opacity-100 translate-y-0"
       >
         <div v-if="result !== null" class="mt-8">
-          <h2 class="txt-h3 font-black">Résultat</h2>
+          <h2 class="txt-h3 font-black">{{ $t('pressure.result') }}</h2>
 
           <div class="mt-4 grid gap-4 sm:grid-cols-2">
             <UICard intent="primary" variant="subtle" :card-base-ui="{ body: 'rounded-md p-6' }">
-              <p class="txt-caption font-bold text-primary-text-default uppercase">Pneu avant</p>
+              <p class="txt-caption font-bold text-primary-text-default uppercase">
+                {{ $t('pressure.frontTyre') }}
+              </p>
               <p class="txt-h1 mt-2 font-black text-primary-text-default">
                 {{ result.frontBar }} bar
               </p>
@@ -198,7 +202,9 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
             </UICard>
 
             <UICard intent="primary" variant="subtle" :card-base-ui="{ body: 'rounded-md p-6' }">
-              <p class="txt-caption font-bold text-primary-text-default uppercase">Pneu arrière</p>
+              <p class="txt-caption font-bold text-primary-text-default uppercase">
+                {{ $t('pressure.rearTyre') }}
+              </p>
               <p class="txt-h1 mt-2 font-black text-primary-text-default">
                 {{ result.rearBar }} bar
               </p>
@@ -207,16 +213,15 @@ useHead({ title: 'Calculateur de pression pneus — Michelin' })
           </div>
 
           <UIAlert
-            v-if="result.note"
+            v-if="pressureNote"
             class="mt-4"
             intent="info"
-            title="Conseil Michelin"
-            :description="result.note"
+            :title="$t('pressure.adviceTitle')"
+            :description="pressureNote"
           />
 
           <p class="txt-caption mt-4 text-neutral-text-subtle">
-            Ces valeurs sont indicatives. Ajustez selon votre ressenti et vérifiez les
-            préconisations du fabricant de votre pneu.
+            {{ $t('pressure.disclaimer') }}
           </p>
         </div>
       </Transition>

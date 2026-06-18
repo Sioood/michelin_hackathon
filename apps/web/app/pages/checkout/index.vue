@@ -4,12 +4,17 @@ import type { CheckoutSession } from '~/types/order'
 const auth = useAuthStore()
 const cart = useCartStore()
 const api = useApi()
+const { t } = useI18n()
 const step = ref(0)
 const errorMessage = ref('')
 const checkoutPending = ref(false)
 
-const steps = ['Panier', 'Livraison', 'Paiement']
-const progressValue = computed(() => Math.round(((step.value + 1) / steps.length) * 100))
+const steps = computed(() => [
+  t('checkout.steps.cart'),
+  t('checkout.steps.delivery'),
+  t('checkout.steps.payment'),
+])
+const progressValue = computed(() => Math.round(((step.value + 1) / steps.value.length) * 100))
 
 onMounted(async () => {
   if (!auth.isAuthenticated) {
@@ -44,10 +49,10 @@ async function startCheckout() {
     <section class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <UIBadge label="Checkout sécurisé" intent="primary" size="sm" />
-          <h1 class="txt-h1 mt-4 font-black">Finaliser la commande</h1>
+          <UIBadge :label="$t('checkout.badge')" intent="primary" size="sm" />
+          <h1 class="txt-h1 mt-4 font-black">{{ $t('checkout.title') }}</h1>
           <p class="txt-lg mt-3 max-w-2xl text-neutral-text-subtle">
-            Vérifiez votre panier, confirmez la livraison puis basculez vers Stripe Checkout.
+            {{ $t('checkout.description') }}
           </p>
         </div>
         <p class="txt-h4 font-black">{{ formatPrice(cart.totalCents) }}</p>
@@ -57,7 +62,7 @@ async function startCheckout() {
         v-if="errorMessage"
         class="mt-6"
         intent="error"
-        title="Checkout indisponible"
+        :title="$t('checkout.errorTitle')"
         :description="errorMessage"
       />
 
@@ -85,11 +90,16 @@ async function startCheckout() {
                 name="tabler:shopping-cart-off"
                 class="mx-auto size-10 text-neutral-text-subtle"
               />
-              <h2 class="txt-h4 mt-4 font-black">Panier vide</h2>
+              <h2 class="txt-h4 mt-4 font-black">{{ $t('checkout.emptyTitle') }}</h2>
               <p class="txt-base mt-2 text-neutral-text-subtle">
-                Ajoutez au moins un pneu avant de payer.
+                {{ $t('checkout.emptyDescription') }}
               </p>
-              <UIButton class="mt-5" to="/#catalogue" text="Voir le catalogue" intent="primary" />
+              <UIButton
+                class="mt-5"
+                to="/#catalogue"
+                :text="$t('common.seeCatalogue')"
+                intent="primary"
+              />
             </div>
 
             <div v-else class="mt-6 w-full divide-y divide-neutral-border-subtle">
@@ -112,16 +122,15 @@ async function startCheckout() {
           <UIStepsContent :index="1" class="w-full">
             <div class="mt-6 grid w-full gap-4 md:grid-cols-2">
               <UICard intent="neutral" variant="subtle" :card-base-ui="{ body: 'rounded-md p-4' }">
-                <h2 class="txt-h5 font-black">Livraison démo</h2>
+                <h2 class="txt-h5 font-black">{{ $t('checkout.demoDeliveryTitle') }}</h2>
                 <p class="txt-base mt-2 text-neutral-text-subtle">
-                  Adresse rattachée à votre compte client. La phase hackathon garde Stripe comme
-                  source de paiement.
+                  {{ $t('checkout.demoDeliveryDescription') }}
                 </p>
               </UICard>
               <UICard intent="neutral" variant="subtle" :card-base-ui="{ body: 'rounded-md p-4' }">
-                <h2 class="txt-h5 font-black">Disponibilité</h2>
+                <h2 class="txt-h5 font-black">{{ $t('checkout.availabilityTitle') }}</h2>
                 <p class="txt-base mt-2 text-neutral-text-subtle">
-                  Les stocks sont réservés au moment de la confirmation Stripe.
+                  {{ $t('checkout.availabilityDescription') }}
                 </p>
               </UICard>
             </div>
@@ -129,13 +138,13 @@ async function startCheckout() {
 
           <UIStepsContent :index="2" class="w-full">
             <div class="mt-6 w-full">
-              <h2 class="txt-h4 font-black">Paiement Stripe</h2>
+              <h2 class="txt-h4 font-black">{{ $t('checkout.stripeTitle') }}</h2>
               <p class="txt-base mt-2 max-w-2xl text-neutral-text-subtle">
-                Une session Stripe Checkout sera créée depuis le panier actif.
+                {{ $t('checkout.stripeDescription') }}
               </p>
               <UIButton
                 class="mt-6"
-                text="Payer avec Stripe"
+                :text="$t('checkout.payWithStripe')"
                 intent="primary"
                 size="lg"
                 leading-icon="tabler:credit-card"
@@ -150,14 +159,14 @@ async function startCheckout() {
         <UIProgress
           class="mt-6 w-full"
           :model-value="progressValue"
-          label="Progression"
+          :label="$t('checkout.progress')"
           intent="primary"
         />
 
         <div class="mt-6 flex w-full justify-between gap-3">
           <UIButton
             type="button"
-            text="Retour"
+            :text="$t('common.back')"
             intent="neutral"
             variant="subtle"
             leading-icon="tabler:arrow-left"
@@ -167,7 +176,7 @@ async function startCheckout() {
           <UIButton
             v-if="step < steps.length - 1"
             type="button"
-            text="Continuer"
+            :text="$t('common.continue')"
             intent="primary"
             trailing-icon="tabler:arrow-right"
             :disabled="cart.isEmpty"

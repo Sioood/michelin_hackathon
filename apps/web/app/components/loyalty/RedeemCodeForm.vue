@@ -9,21 +9,22 @@ const emit = defineEmits<{
   redeemed: [message: string]
 }>()
 
+const { t } = useI18n()
 const schema = z.object({
-  code: z.string().min(4, 'Code trop court'),
+  code: z.string().min(4, t('loyalty.redeem.codeTooShort')),
 })
 
 type RedeemValues = z.infer<typeof schema>
 
-const fields: SchemaFieldsMap<RedeemValues> = {
+const fields = computed<SchemaFieldsMap<RedeemValues>>(() => ({
   code: {
     as: UIFormInput,
     props: {
-      label: 'Code promo ou QR',
+      label: t('loyalty.redeem.codeLabel'),
       placeholder: 'MICHQR100',
     },
   },
-}
+}))
 
 const layout: SchemaFormLayout<keyof RedeemValues & string>[] = ['code']
 const defaultValues: RedeemValues = { code: '' }
@@ -47,14 +48,14 @@ async function submit(values: RedeemValues) {
       v-if="loyalty.errorMessage.value"
       class="mt-4"
       intent="error"
-      title="Code invalide"
+      :title="$t('loyalty.redeem.invalidTitle')"
       :description="loyalty.errorMessage.value"
     />
     <UIAlert
       v-if="successMessage"
       class="mt-4"
       intent="success"
-      title="Points crédités"
+      :title="$t('loyalty.redeem.successTitle')"
       :description="successMessage"
     />
 

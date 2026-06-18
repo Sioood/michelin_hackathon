@@ -12,14 +12,15 @@ const emit = defineEmits<{
 
 const auth = useAuthStore()
 const community = useCommunity()
+const { t } = useI18n()
 
-const typeLabels: Record<CommunityPostType, string> = {
-  challenge: 'Challenge',
-  opinion: 'Avis',
-  photo: 'Photo',
-  test: 'Test',
-  video: 'Video',
-}
+const typeLabels = computed<Record<CommunityPostType, string>>(() => ({
+  challenge: t('community.postTypes.challenge'),
+  opinion: t('community.postTypes.opinion'),
+  photo: t('community.postTypes.photo'),
+  test: t('community.postTypes.test'),
+  video: t('community.postTypes.video'),
+}))
 
 const createdAt = computed(() =>
   new Intl.DateTimeFormat('fr-FR', {
@@ -34,7 +35,7 @@ const isVideo = computed(
 const isAuthor = computed(() => auth.user?.id === props.post.userId)
 
 function askReportReason() {
-  const reason = globalThis.prompt?.('Raison du signalement')?.trim()
+  const reason = globalThis.prompt?.(t('community.card.reportReason'))?.trim()
 
   if (reason !== undefined && reason.length >= 3) {
     emit('report', props.post, reason)
@@ -58,7 +59,9 @@ function askReportReason() {
           <h3 class="txt-h4 mt-2 font-black text-neutral-text-strong">
             {{ post.title }}
           </h3>
-          <p class="txt-sm mt-1 text-neutral-text-subtle">par {{ post.userDisplayName }}</p>
+          <p class="txt-sm mt-1 text-neutral-text-subtle">
+            {{ $t('community.card.by', { name: post.userDisplayName }) }}
+          </p>
         </div>
 
         <div class="flex shrink-0 items-center gap-2">
@@ -66,7 +69,7 @@ function askReportReason() {
             v-if="isAuthor"
             type="button"
             icon="tabler:eye-off"
-            aria-label="Masquer"
+            :aria-label="$t('community.card.hide')"
             intent="neutral"
             variant="ghost"
             size="sm"
@@ -76,7 +79,7 @@ function askReportReason() {
             v-else-if="auth.isAuthenticated"
             type="button"
             icon="tabler:flag"
-            aria-label="Signaler"
+            :aria-label="$t('community.card.report')"
             intent="neutral"
             variant="ghost"
             size="sm"

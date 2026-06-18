@@ -10,38 +10,40 @@ const emit = defineEmits<{
   spin: []
 }>()
 
-const segments = [
+const { t } = useI18n()
+
+const segments = computed(() => [
   {
     fill: 'var(--color-primary-fill-default)',
-    label: '10 points',
+    label: t('loyalty.roulette.segments.points10'),
     textFill: 'var(--color-primary-text-inverse)',
   },
   {
     fill: 'var(--color-secondary-fill-default)',
-    label: '25 points',
+    label: t('loyalty.roulette.segments.points25'),
     textFill: 'var(--color-primary-text-default)',
   },
   {
     fill: 'var(--color-accent-fill-default)',
-    label: '50 points',
+    label: t('loyalty.roulette.segments.points50'),
     textFill: 'var(--color-accent-text-inverse)',
   },
   {
     fill: 'var(--color-success-fill-default)',
-    label: '100 points',
+    label: t('loyalty.roulette.segments.points100'),
     textFill: 'var(--color-success-text-inverse)',
   },
   {
     fill: 'var(--color-warning-fill-default)',
-    label: '5% de réduction',
+    label: t('loyalty.roulette.segments.discount5'),
     textFill: 'var(--color-primary-text-default)',
   },
   {
     fill: 'var(--color-error-fill-default)',
-    label: '10% de réduction',
+    label: t('loyalty.roulette.segments.discount10'),
     textFill: 'var(--color-error-text-inverse)',
   },
-] as const
+])
 
 const rotation = ref(0)
 const lastResult = ref<RouletteSpinResult | null>(null)
@@ -50,7 +52,7 @@ const isAnimating = ref(false)
 const wheelSize = 200
 const wheelCenter = wheelSize / 2
 const wheelRadius = 96
-const segmentAngle = 360 / segments.length
+const segmentAngle = computed(() => 360 / segments.value.length)
 
 function polarToCartesian(radius: number, angleDeg: number) {
   const radians = ((angleDeg - 90) * Math.PI) / 180
@@ -75,7 +77,7 @@ function describeSlice(startAngle: number, endAngle: number) {
 }
 
 function labelPosition(index: number) {
-  const angle = index * segmentAngle + segmentAngle / 2
+  const angle = index * segmentAngle.value + segmentAngle.value / 2
   const point = polarToCartesian(62, angle)
 
   return {
@@ -86,10 +88,10 @@ function labelPosition(index: number) {
 }
 
 function spinToLabel(label: string) {
-  const targetIndex = segments.findIndex((segment) => segment.label === label)
+  const targetIndex = segments.value.findIndex((segment) => segment.label === label)
   const index = targetIndex >= 0 ? targetIndex : 0
   const extraTurns = 4 * 360
-  const targetRotation = extraTurns + (360 - index * segmentAngle - segmentAngle / 2)
+  const targetRotation = extraTurns + (360 - index * segmentAngle.value - segmentAngle.value / 2)
   rotation.value = targetRotation
 }
 
@@ -130,7 +132,7 @@ defineExpose({ onSpinComplete })
           class="size-full origin-center transition-transform duration-[3000ms] ease-out"
           :style="{ transform: `rotate(${rotation}deg)` }"
           role="img"
-          aria-label="Roulette Michelin"
+          :aria-label="$t('loyalty.roulette.aria')"
         >
           <g>
             <path
@@ -190,6 +192,6 @@ defineExpose({ onSpinComplete })
 svg text {
   font-family: inherit;
   font-size: 9px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 </style>

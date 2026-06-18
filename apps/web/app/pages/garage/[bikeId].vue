@@ -9,6 +9,7 @@ const auth = useAuthStore()
 const route = useRoute()
 const garage = useGarage()
 const api = useApi()
+const { t } = useI18n()
 
 const productSelection = ref<string[]>([])
 const positionSelection = ref<string[]>(['both'])
@@ -47,11 +48,11 @@ const crossSellProductId = computed(() => {
   return Number.isFinite(selected) && selected > 0 ? selected : null
 })
 
-const positionItems: SelectItem[] = [
-  { label: 'Avant et arrière', value: 'both' },
-  { label: 'Avant', value: 'front' },
-  { label: 'Arrière', value: 'rear' },
-]
+const positionItems = computed<SelectItem[]>(() => [
+  { label: t('garage.positions.both'), value: 'both' },
+  { label: t('garage.positions.front'), value: 'front' },
+  { label: t('garage.positions.rear'), value: 'rear' },
+])
 
 const productItems = computed<SelectItem[]>(() =>
   garage.suggestions.value
@@ -87,7 +88,7 @@ function reminderIntent(severity: GarageReminderSeverity) {
 }
 
 function positionLabel(position: TirePosition): string {
-  return positionItems.find((item) => item.value === position)?.label ?? position
+  return positionItems.value.find((item) => item.value === position)?.label ?? position
 }
 
 async function refreshSuggestions() {
@@ -136,7 +137,7 @@ async function saveDiameter() {
   const [diameter] = selectedDiameter.value
 
   if (!diameter) {
-    profileError.value = 'Choisissez un diamètre pour affiner les suggestions.'
+    profileError.value = t('garage.detail.profileIncompleteDescription')
     return
   }
 
@@ -145,7 +146,7 @@ async function saveDiameter() {
 }
 
 async function deleteBike() {
-  if (!globalThis.confirm('Supprimer ce vélo du garage ?')) {
+  if (!globalThis.confirm(t('garage.confirmDeleteBike'))) {
     return
   }
 
@@ -162,7 +163,7 @@ async function installSelectedTire() {
   const sourceItem = order.value?.items?.find((item) => item.id === selectedItemId)
 
   if (!Number.isFinite(productId) || productId <= 0) {
-    checkoutError.value = 'Sélectionnez un pneu à ajouter.'
+    checkoutError.value = t('garage.detail.selectTyre')
     return
   }
 
@@ -187,7 +188,7 @@ async function installFromOrder() {
   const item = order.value?.items?.find((entry) => entry.id === itemId)
 
   if (!item || item.id === undefined || orderId.value === null) {
-    checkoutError.value = 'Sélectionnez un pneu de la commande.'
+    checkoutError.value = t('garage.detail.selectOrderTyre')
     return
   }
 
@@ -242,7 +243,7 @@ onMounted(async () => {
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <UIButton
         to="/garage"
-        text="Retour au garage"
+        :text="$t('garage.detail.back')"
         intent="neutral"
         variant="subtle"
         leading-icon="tabler:arrow-left"
@@ -252,20 +253,20 @@ onMounted(async () => {
         v-if="garage.pending.value && !garage.currentBike.value"
         class="mt-8"
         intent="primary"
-        label="Chargement du vélo..."
+        :label="$t('garage.loadingBike')"
       />
       <UIAlert
         v-else-if="garage.errorMessage.value && !garage.currentBike.value"
         class="mt-8"
         intent="error"
-        title="Vélo indisponible"
+        :title="$t('garage.bikeUnavailableTitle')"
         :description="garage.errorMessage.value"
       />
 
       <template v-else-if="garage.currentBike.value">
         <div class="mt-8 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
           <div>
-            <UIBadge label="Garage virtuel" intent="primary" size="sm" />
+            <UIBadge :label="$t('garage.badge')" intent="primary" size="sm" />
             <h1 class="txt-h1 mt-4 font-black">{{ garage.currentBike.value.name }}</h1>
             <p class="txt-lg mt-3 text-neutral-text-subtle">
               {{
@@ -275,20 +276,20 @@ onMounted(async () => {
                   garage.currentBike.value.wheelDiameter,
                 ]
                   .filter(Boolean)
-                  .join(' · ') || 'Profil vélo'
+                  .join(' · ') || $t('garage.detail.bikeProfile')
               }}
             </p>
           </div>
           <div class="flex flex-wrap gap-2">
             <UIButton
-              text="Actualiser les suggestions"
+              :text="$t('garage.detail.refreshSuggestions')"
               intent="neutral"
               variant="subtle"
               leading-icon="tabler:refresh"
               @click="refreshSuggestions"
             />
             <UIButton
-              text="Supprimer le vélo"
+              :text="$t('garage.detail.deleteBike')"
               intent="error"
               variant="subtle"
               leading-icon="tabler:trash"
@@ -301,22 +302,22 @@ onMounted(async () => {
           v-if="garage.errorMessage.value"
           class="mt-6"
           intent="error"
-          title="Action impossible"
+          :title="$t('garage.detail.actionImpossible')"
           :description="garage.errorMessage.value"
         />
 
         <div class="mt-8 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)]">
           <div class="grid content-start gap-4">
-            <h2 class="txt-h3 font-black">Pneus montés</h2>
+            <h2 class="txt-h3 font-black">{{ $t('garage.detail.mountedTyres') }}</h2>
 
             <div
               v-if="garage.currentBike.value.tireInstallations.length === 0"
               class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-8 text-center"
             >
               <Icon name="tabler:circle-off" class="mx-auto size-10 text-neutral-text-subtle" />
-              <h3 class="txt-h4 mt-4 font-black">Aucun pneu enregistré</h3>
+              <h3 class="txt-h4 mt-4 font-black">{{ $t('garage.detail.emptyTyresTitle') }}</h3>
               <p class="txt-base mt-2 text-neutral-text-subtle">
-                Ajoutez un pneu pour activer les rappels de remplacement.
+                {{ $t('garage.detail.emptyTyresDescription') }}
               </p>
             </div>
 
@@ -340,9 +341,9 @@ onMounted(async () => {
                       v-if="installation.reminder"
                       :label="
                         installation.reminder.severity === 'due'
-                          ? 'À remplacer'
+                          ? $t('garage.detail.statusDue')
                           : installation.reminder.severity === 'soon'
-                            ? 'À surveiller'
+                            ? $t('garage.detail.statusSoon')
                             : 'OK'
                       "
                       :intent="reminderIntent(installation.reminder.severity)"
@@ -362,11 +363,15 @@ onMounted(async () => {
 
               <div class="mt-4 grid gap-3 text-sm text-neutral-text-subtle sm:grid-cols-3">
                 <p>
-                  <span class="font-bold text-neutral-text-default">Installé</span><br />
+                  <span class="font-bold text-neutral-text-default">
+                    {{ $t('garage.detail.installed') }}</span
+                  ><br />
                   {{ new Date(installation.installedAt).toLocaleDateString('fr-FR') }}
                 </p>
                 <p>
-                  <span class="font-bold text-neutral-text-default">Distance</span><br />
+                  <span class="font-bold text-neutral-text-default">
+                    {{ $t('garage.detail.distance') }}</span
+                  ><br />
                   {{ installation.currentDistanceKm - installation.distanceKmAtInstall }} km
                 </p>
                 <p>
@@ -389,7 +394,7 @@ onMounted(async () => {
                   @click="updateDistance(installation.id, installation.currentDistanceKm)"
                 />
                 <UIButton
-                  text="Retirer"
+                  :text="$t('garage.detail.remove')"
                   intent="error"
                   variant="subtle"
                   size="sm"
@@ -404,26 +409,27 @@ onMounted(async () => {
             <div
               class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-5"
             >
-              <h2 class="txt-h4 font-black">Profil du vélo</h2>
+              <h2 class="txt-h4 font-black">{{ $t('garage.detail.profileTitle') }}</h2>
               <p class="txt-caption mt-2 text-neutral-text-subtle">
-                Type : {{ garage.currentBike.value.type }}. Le diamètre filtre les pneus
-                compatibles.
+                {{
+                  $t('garage.detail.profileDescription', { type: garage.currentBike.value.type })
+                }}
               </p>
               <div class="mt-4 grid gap-4">
                 <UIFormSelect
                   v-model="selectedDiameter"
                   :items="diameterItems"
-                  label="Diamètre roues"
-                  placeholder="Choisir"
+                  :label="$t('garage.fields.diameter')"
+                  :placeholder="$t('garage.fields.choose')"
                 />
                 <UIAlert
                   v-if="profileError"
                   intent="error"
-                  title="Profil incomplet"
+                  :title="$t('garage.detail.profileIncompleteTitle')"
                   :description="profileError"
                 />
                 <UIButton
-                  text="Enregistrer le diamètre"
+                  :text="$t('garage.detail.saveDiameter')"
                   intent="neutral"
                   variant="subtle"
                   leading-icon="tabler:device-floppy"
@@ -437,57 +443,61 @@ onMounted(async () => {
               class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-5"
               @submit.prevent="installSelectedTire"
             >
-              <h2 class="txt-h4 font-black">Ajouter un pneu conseillé</h2>
+              <h2 class="txt-h4 font-black">{{ $t('garage.detail.addSuggestedTyre') }}</h2>
               <UIAlert
                 v-if="productItems.length === 0 && !garage.pending.value"
                 class="mt-4"
                 intent="warning"
-                title="Aucune suggestion"
-                description="Enregistrez le diamètre du vélo (700 pour route/gravel, 29 pour VTT), puis actualisez. Si le problème persiste, redémarrez l’API."
+                :title="$t('garage.detail.noSuggestionTitle')"
+                :description="$t('garage.detail.noSuggestionDescription')"
               />
               <div class="mt-5 grid gap-4">
                 <UIFormSelect
                   v-model="productSelection"
                   :items="productItems"
-                  label="Pneu"
-                  placeholder="Choisir une référence"
-                  empty-text="Aucune suggestion"
+                  :label="$t('garage.detail.tyre')"
+                  :placeholder="$t('garage.detail.tyrePlaceholder')"
+                  :empty-text="$t('garage.detail.noSuggestion')"
                   :ui="{ valueText: 'min-w-0 truncate' }"
                 />
-                <UIFormSelect v-model="positionSelection" :items="positionItems" label="Position" />
+                <UIFormSelect
+                  v-model="positionSelection"
+                  :items="positionItems"
+                  :label="$t('garage.detail.position')"
+                />
                 <div class="grid gap-4 sm:grid-cols-2">
                   <UIFormInput
                     v-model="distanceKmAtInstall"
-                    label="Km pose"
+                    :label="$t('garage.detail.installKm')"
                     type="number"
                     min="0"
                   />
                   <UIFormInput
                     v-model="currentDistanceKm"
-                    label="Km actuel"
+                    :label="$t('garage.detail.currentKm')"
                     type="number"
                     min="0"
                   />
                 </div>
                 <UIFormDatePicker
                   v-model="installedAt"
-                  label="Date de pose"
+                  :label="$t('garage.detail.installedAt')"
                   selection-mode="single"
                 />
                 <UIFormInput
                   v-model="notes"
-                  label="Notes"
-                  placeholder="Usage hiver, chambre neuve..."
+                  :label="$t('garage.detail.notes')"
+                  :placeholder="$t('garage.detail.notesPlaceholder')"
                 />
                 <UIAlert
                   v-if="checkoutError"
                   intent="error"
-                  title="Montage incomplet"
+                  :title="$t('garage.detail.incompleteInstallTitle')"
                   :description="checkoutError"
                 />
                 <UIButton
                   type="submit"
-                  text="Ajouter au garage"
+                  :text="$t('garage.detail.addToGarage')"
                   intent="primary"
                   leading-icon="tabler:plus"
                   :disabled="garage.pending.value"
@@ -499,18 +509,24 @@ onMounted(async () => {
               v-if="order"
               class="rounded-md border border-success-border-default bg-success-surface-default p-5"
             >
-              <UIBadge label="Commande récente" intent="success" size="sm" />
-              <h2 class="txt-h4 mt-3 font-black">Ajouter depuis la commande #{{ order.id }}</h2>
+              <UIBadge :label="$t('garage.detail.recentOrder')" intent="success" size="sm" />
+              <h2 class="txt-h4 mt-3 font-black">
+                {{ $t('garage.detail.addFromOrder', { id: order.id }) }}
+              </h2>
               <div class="mt-5 grid gap-4">
                 <UIFormSelect
                   v-model="selectedOrderItem"
                   :items="orderItemOptions"
-                  label="Pneu acheté"
-                  placeholder="Choisir un article"
+                  :label="$t('garage.detail.purchasedTyre')"
+                  :placeholder="$t('garage.detail.purchasedTyrePlaceholder')"
                 />
-                <UIFormSelect v-model="positionSelection" :items="positionItems" label="Position" />
+                <UIFormSelect
+                  v-model="positionSelection"
+                  :items="positionItems"
+                  :label="$t('garage.detail.position')"
+                />
                 <UIButton
-                  text="Ranger cette commande"
+                  :text="$t('garage.detail.storeOrder')"
                   intent="success"
                   leading-icon="tabler:archive"
                   :disabled="garage.pending.value"
@@ -524,7 +540,7 @@ onMounted(async () => {
         <CommerceCrossSellCarousel
           class="mt-10"
           :product-id="crossSellProductId"
-          title="Accessoires recommandés pour ce vélo"
+          :title="$t('garage.detail.recommendedAccessories')"
         />
       </template>
     </section>

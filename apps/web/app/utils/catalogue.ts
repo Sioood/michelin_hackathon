@@ -15,14 +15,14 @@ export type CategoryBadgeIntent =
   | 'warning'
 
 export const categoryLabels: Record<CategoryFilter, string> = {
-  all: 'Tous les pneus',
-  'commuting-tour': 'Ville & trekking',
-  'e-bike': 'E-bike',
-  gravel: 'Gravel',
-  'inner-tubes': 'Chambres à air',
-  kids: 'Junior',
-  mtb: 'VTT',
-  road: 'Route',
+  all: 'catalogue.categories.all',
+  'commuting-tour': 'catalogue.categories.commutingTour',
+  'e-bike': 'catalogue.categories.eBike',
+  gravel: 'catalogue.categories.gravel',
+  'inner-tubes': 'catalogue.categories.innerTubes',
+  kids: 'catalogue.categories.kids',
+  mtb: 'catalogue.categories.mtb',
+  road: 'catalogue.categories.road',
 }
 
 export const categoryOrder: CategoryFilter[] = [

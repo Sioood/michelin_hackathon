@@ -10,13 +10,15 @@ const props = withDefaults(
   {
     compact: false,
     productId: null,
-    title: 'Complétez votre équipement',
+    title: undefined,
   },
 )
 
 const config = useRuntimeConfig()
+const { t } = useI18n()
 const products = ref<Product[]>([])
 const pending = ref(false)
+const sectionTitle = computed(() => props.title ?? t('crossSell.defaultTitle'))
 
 async function loadCrossSell(productId: number) {
   pending.value = true
@@ -50,12 +52,14 @@ watch(
   <section v-if="pending || products.length > 0" class="grid gap-4">
     <div class="flex items-end justify-between gap-3">
       <div>
-        <p class="txt-caption font-bold text-neutral-text-subtle uppercase">Ventes croisées</p>
-        <h2 :class="compact ? 'txt-h5' : 'txt-h3'" class="mt-1 font-black">{{ title }}</h2>
+        <p class="txt-caption font-bold text-neutral-text-subtle uppercase">
+          {{ $t('crossSell.eyebrow') }}
+        </p>
+        <h2 :class="compact ? 'txt-h5' : 'txt-h3'" class="mt-1 font-black">{{ sectionTitle }}</h2>
       </div>
     </div>
 
-    <UIProgress v-if="pending" intent="primary" size="sm" label="Chargement des suggestions..." />
+    <UIProgress v-if="pending" intent="primary" size="sm" :label="$t('crossSell.loading')" />
 
     <UICarousel
       v-else-if="products.length > 0"

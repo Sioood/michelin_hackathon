@@ -7,6 +7,7 @@ import { formatPrice } from '~/utils/commerce'
 const route = useRoute()
 const router = useRouter()
 const api = useApi()
+const { t } = useI18n()
 
 const initialSlugA = typeof route.query.a === 'string' ? route.query.a : ''
 const initialSlugB = typeof route.query.b === 'string' ? route.query.b : ''
@@ -22,7 +23,7 @@ const catalogueError = ref('')
 
 const productItems = computed(() =>
   catalogue.value.map((product) => ({
-    group: `${categoryLabels[product.category]} · ${product.rangeName}`,
+    group: `${t(categoryLabels[product.category])} · ${product.rangeName}`,
     label: product.designation,
     value: product.slug,
   })),
@@ -35,8 +36,7 @@ async function loadCatalogue() {
   try {
     catalogue.value = await api.request<Product[]>('/products')
   } catch {
-    catalogueError.value =
-      'Impossible de charger le catalogue. Vérifiez que le service API est disponible.'
+    catalogueError.value = t('compare.catalogueError')
   } finally {
     catalogueLoading.value = false
   }
@@ -47,12 +47,12 @@ async function compare() {
   const [slugB] = selectionB.value
 
   if (slugA === undefined || slugB === undefined) {
-    error.value = 'Veuillez sélectionner deux pneus à comparer.'
+    error.value = t('compare.selectTwo')
     return
   }
 
   if (slugA === slugB) {
-    error.value = 'Veuillez choisir deux pneus différents.'
+    error.value = t('compare.selectDifferent')
     return
   }
 
@@ -67,7 +67,7 @@ async function compare() {
       query: { slugs: `${slugA},${slugB}` },
     })
   } catch {
-    error.value = 'Impossible de comparer ces références pour le moment.'
+    error.value = t('compare.compareError')
   } finally {
     loading.value = false
   }
@@ -81,61 +81,61 @@ interface SpecRow {
 
 const specRows: SpecRow[] = [
   {
-    format: (value) => categoryLabels[value as Product['category']],
+    format: (value) => t(categoryLabels[value as Product['category']]),
     getValue: (product) => product.category,
-    label: 'Catégorie',
+    label: t('compare.specs.category'),
   },
-  { getValue: (product) => product.designation, label: 'Désignation' },
+  { getValue: (product) => product.designation, label: t('compare.specs.designation') },
   {
     format: (value, product) => formatPrice(value as number, product.currency),
     getValue: (product) => product.priceCents,
-    label: 'Prix',
+    label: t('compare.specs.price'),
   },
   {
-    format: (value) => `${String(value)} unités`,
+    format: (value) => t('compare.units.stock', { count: value as number }),
     getValue: (product) => product.stock,
-    label: 'Stock',
+    label: t('compare.specs.stock'),
   },
-  { getValue: (product) => product.bead, label: 'Tringle' },
-  { getValue: (product) => product.fitting, label: 'Montage' },
-  { getValue: (product) => product.tpi, label: 'Carcasse (TPI)' },
+  { getValue: (product) => product.bead, label: t('compare.specs.bead') },
+  { getValue: (product) => product.fitting, label: t('compare.specs.fitting') },
+  { getValue: (product) => product.tpi, label: t('compare.specs.casing') },
   {
-    format: (value) => (typeof value === 'number' ? `${value} g` : 'N/D'),
+    format: (value) => (typeof value === 'number' ? `${value} g` : t('compare.units.unavailable')),
     getValue: (product) => product.weightG,
-    label: 'Poids',
+    label: t('compare.specs.weight'),
   },
   {
     format: formatPressure,
     getValue: (product) => product.minPressureBar,
-    label: 'Pression min.',
+    label: t('compare.specs.minPressure'),
   },
   {
     format: formatPressure,
     getValue: (product) => product.maxPressureBar,
-    label: 'Pression max.',
+    label: t('compare.specs.maxPressure'),
   },
   {
     format: formatBoolean,
     getValue: (product) => product.tubelessReady,
-    label: 'Tubeless Ready',
+    label: t('compare.specs.tubeless'),
   },
   {
     format: formatBoolean,
     getValue: (product) => product.eBikeReady,
-    label: 'E-bike Ready',
+    label: t('compare.specs.eBike'),
   },
   {
     format: formatBoolean,
     getValue: (product) => product.reflectiveStrip,
-    label: 'Bande réfléchissante',
+    label: t('compare.specs.reflective'),
   },
   {
     getValue: (product) => product.proStats.victories,
-    label: 'Victoires (données démo)',
+    label: t('compare.specs.victories'),
   },
   {
     getValue: (product) => product.proStats.podiums,
-    label: 'Podiums (données démo)',
+    label: t('compare.specs.podiums'),
   },
 ]
 
@@ -143,15 +143,17 @@ function getCell(product: Product, row: SpecRow): string {
   const value = row.getValue(product)
 
   if (row.format !== undefined) return row.format(value, product)
-  return value !== null && value !== undefined && String(value).length > 0 ? String(value) : 'N/D'
+  return value !== null && value !== undefined && String(value).length > 0
+    ? String(value)
+    : t('compare.units.unavailable')
 }
 
 function formatBoolean(value: unknown): string {
-  return value === true ? 'Oui' : 'Non'
+  return value === true ? t('compare.units.yes') : t('compare.units.no')
 }
 
 function formatPressure(value: unknown): string {
-  return typeof value === 'number' ? `${value} bar` : 'N/D'
+  return typeof value === 'number' ? `${value} bar` : t('compare.units.unavailable')
 }
 
 function isHighlighted(row: SpecRow): boolean {
@@ -184,7 +186,7 @@ onMounted(async () => {
   }
 })
 
-useHead({ title: 'Comparateur de pneus — Michelin' })
+useHead({ title: t('compare.headTitle') })
 </script>
 
 <template>
@@ -194,16 +196,16 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
     <section class="mx-auto max-w-6xl min-w-0 px-4 py-10 sm:px-6">
       <UIButton
         to="/"
-        text="Retour au catalogue"
+        :text="$t('common.backToCatalogue')"
         intent="neutral"
         variant="ghost"
         leading-icon="tabler:arrow-left"
         class="mb-6"
       />
 
-      <h1 class="txt-h1 font-black">Comparateur de pneus</h1>
+      <h1 class="txt-h1 font-black">{{ $t('compare.title') }}</h1>
       <p class="txt-lg mt-3 text-neutral-text-subtle">
-        Comparez deux pneus Michelin côte à côte pour faire le meilleur choix.
+        {{ $t('compare.description') }}
       </p>
 
       <UICard
@@ -224,8 +226,8 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
               v-model="selectionA"
               :items="productItems"
               :loading="catalogueLoading"
-              label="Pneu 1"
-              placeholder="Choisir une référence"
+              :label="$t('compare.tireA')"
+              :placeholder="$t('compare.chooseReference')"
               :show-clear="false"
               class="max-w-full"
               :ui="{ root: 'min-w-0 max-w-full', trigger: 'max-w-full', valueText: 'min-w-0' }"
@@ -236,8 +238,8 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
               v-model="selectionB"
               :items="productItems"
               :loading="catalogueLoading"
-              label="Pneu 2"
-              placeholder="Choisir une référence"
+              :label="$t('compare.tireB')"
+              :placeholder="$t('compare.chooseReference')"
               :show-clear="false"
               class="max-w-full"
               :ui="{ root: 'min-w-0 max-w-full', trigger: 'max-w-full', valueText: 'min-w-0' }"
@@ -246,7 +248,7 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
           <div class="flex shrink-0 items-end">
             <UIButton
               type="submit"
-              text="Comparer"
+              :text="$t('compare.submit')"
               intent="primary"
               leading-icon="tabler:arrows-diff"
               :loading="loading"
@@ -259,7 +261,7 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
           v-if="catalogueError"
           class="mt-4"
           intent="error"
-          title="Le catalogue est indisponible"
+          :title="$t('compare.catalogueErrorTitle')"
           :description="catalogueError"
         />
         <UIAlert v-else-if="error" class="mt-4" intent="error" :title="error" />
@@ -270,7 +272,7 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
         class="mt-10"
         intent="primary"
         size="sm"
-        label="Chargement de la comparaison..."
+        :label="$t('compare.loading')"
       />
 
       <div v-else-if="products.length >= 2" class="mt-10">
@@ -291,7 +293,7 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
                   class="mx-auto size-24"
                 />
                 <UIBadge
-                  :label="categoryLabels[product.category]"
+                  :label="$t(categoryLabels[product.category])"
                   :intent="getCategoryIntent(product.category)"
                   size="sm"
                   class="mt-3"
@@ -304,7 +306,7 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
                 <UIButton
                   class="mt-4 w-full"
                   :to="`/products/${product.slug}`"
-                  text="Voir le produit"
+                  :text="$t('compare.viewProduct')"
                   intent="primary"
                   variant="outline"
                   size="sm"
@@ -357,7 +359,7 @@ useHead({ title: 'Comparateur de pneus — Michelin' })
                 v-if="getTechnologies(product).length === 0"
                 class="txt-base text-neutral-text-subtle"
               >
-                Aucune technologie renseignée.
+                {{ $t('compare.noTechnology') }}
               </p>
             </div>
           </UICard>

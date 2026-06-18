@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { categoryLabels } from '~/utils/catalogue'
 
+const { t } = useI18n()
+
 useHead({
-  title: 'Admin Michelin',
+  title: t('admin.headTitle'),
 })
 
 const auth = useAuthStore()
@@ -11,9 +13,9 @@ const route = useRoute()
 
 const loginTarget = computed(() => `/login?redirect=${encodeURIComponent(route.fullPath)}`)
 const orderStatusLabels = {
-  paid: 'Payées',
-  pending: 'En attente',
-  shipped: 'Expédiées',
+  paid: t('admin.statusesLabels.paid'),
+  pending: t('admin.statusesLabels.pending'),
+  shipped: t('admin.statusesLabels.shipped'),
 }
 
 function formatDate(value: string): string {
@@ -37,17 +39,16 @@ onMounted(() => {
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div>
-          <UIBadge label="Back-office" intent="primary" size="sm" />
-          <h1 class="txt-h1 mt-4 font-black">Pilotage commandes & stocks</h1>
+          <UIBadge :label="$t('admin.badge')" intent="primary" size="sm" />
+          <h1 class="txt-h1 mt-4 font-black">{{ $t('admin.title') }}</h1>
           <p class="txt-lg mt-3 max-w-3xl text-neutral-text-subtle">
-            Vue synthétique pour suivre les ventes, les commandes récentes et les références à
-            réapprovisionner.
+            {{ $t('admin.description') }}
           </p>
         </div>
         <UIButton
           v-if="auth.isAuthenticated"
           type="button"
-          text="Actualiser"
+          :text="$t('common.update')"
           intent="primary"
           leading-icon="tabler:refresh"
           :disabled="admin.pending.value"
@@ -59,17 +60,17 @@ onMounted(() => {
       <div v-if="!auth.isAuthenticated" class="mt-8 max-w-xl">
         <UIAlert
           intent="info"
-          title="Connexion requise"
-          description="Le dashboard admin utilise les mêmes accès JWT que le reste de l'application."
+          :title="$t('admin.loginRequiredTitle')"
+          :description="$t('admin.loginRequiredDescription')"
         />
-        <UIButton class="mt-4" :to="loginTarget" text="Se connecter" intent="primary" />
+        <UIButton class="mt-4" :to="loginTarget" :text="$t('common.signIn')" intent="primary" />
       </div>
 
       <UIAlert
         v-else-if="admin.errorMessage.value"
         class="mt-8"
         intent="error"
-        title="Dashboard indisponible"
+        :title="$t('admin.unavailableTitle')"
         :description="admin.errorMessage.value"
       />
 
@@ -77,27 +78,35 @@ onMounted(() => {
         v-else-if="admin.pending.value || admin.overview.value === null"
         class="mt-10"
         intent="primary"
-        label="Chargement des indicateurs..."
+        :label="$t('admin.loading')"
       />
 
       <div v-else class="mt-8 space-y-8">
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-5' }">
-            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">CA payé</p>
+            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('admin.paidRevenue') }}
+            </p>
             <p class="txt-h3 mt-2 font-black">
               {{ formatPrice(admin.overview.value.orders.totalRevenueCents, 'EUR') }}
             </p>
           </UICard>
           <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-5' }">
-            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">Commandes</p>
+            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('admin.orders') }}
+            </p>
             <p class="txt-h3 mt-2 font-black">{{ admin.overview.value.orders.total }}</p>
           </UICard>
           <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-5' }">
-            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">Unités stock</p>
+            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('admin.stockUnits') }}
+            </p>
             <p class="txt-h3 mt-2 font-black">{{ admin.overview.value.stocks.totalUnits }}</p>
           </UICard>
           <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-5' }">
-            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">Alertes stock</p>
+            <p class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('admin.stockAlerts') }}
+            </p>
             <p class="txt-h3 mt-2 font-black">{{ admin.overview.value.stocks.lowStockCount }}</p>
           </UICard>
         </div>
@@ -106,8 +115,8 @@ onMounted(() => {
           <section class="min-w-0">
             <div class="flex items-center justify-between gap-4">
               <div>
-                <p class="txt-brand text-primary-text-default">Commandes</p>
-                <h2 class="txt-h3 mt-1 font-black">Dernières ventes</h2>
+                <p class="txt-brand text-primary-text-default">{{ $t('admin.orders') }}</p>
+                <h2 class="txt-h3 mt-1 font-black">{{ $t('admin.recentOrders') }}</h2>
               </div>
             </div>
 
@@ -118,7 +127,9 @@ onMounted(() => {
                 class="grid gap-3 border-b border-neutral-border-subtle bg-neutral-surface-default p-4 last:border-b-0 md:grid-cols-[1fr_auto_auto]"
               >
                 <div class="min-w-0">
-                  <p class="txt-label font-black">Commande #{{ order.id }}</p>
+                  <p class="txt-label font-black">
+                    {{ $t('admin.orderNumber', { id: order.id }) }}
+                  </p>
                   <p class="txt-sm mt-1 truncate text-neutral-text-subtle">
                     {{ order.customer }} · {{ formatDate(order.createdAt) }}
                   </p>
@@ -134,7 +145,7 @@ onMounted(() => {
                     {{ formatPrice(order.totalCents, order.currency) }}
                   </p>
                   <p class="txt-caption text-neutral-text-subtle">
-                    {{ order.itemCount }} article(s)
+                    {{ $t('admin.itemCount', { count: order.itemCount }) }}
                   </p>
                 </div>
               </div>
@@ -143,7 +154,7 @@ onMounted(() => {
 
           <aside class="min-w-0 space-y-6">
             <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-5' }">
-              <h2 class="txt-h5 font-black">Statuts</h2>
+              <h2 class="txt-h5 font-black">{{ $t('admin.statuses') }}</h2>
               <div class="mt-4 space-y-3">
                 <div
                   v-for="stat in admin.overview.value.orders.byStatus"
@@ -159,7 +170,7 @@ onMounted(() => {
             </UICard>
 
             <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-5' }">
-              <h2 class="txt-h5 font-black">Stocks bas</h2>
+              <h2 class="txt-h5 font-black">{{ $t('admin.lowStocks') }}</h2>
               <div class="mt-4 space-y-3">
                 <NuxtLink
                   v-for="product in admin.overview.value.stocks.lowStock"
@@ -171,7 +182,7 @@ onMounted(() => {
                     <div class="min-w-0">
                       <p class="txt-label truncate font-black">{{ product.rangeName }}</p>
                       <p class="txt-caption mt-1 text-neutral-text-subtle">
-                        {{ categoryLabels[product.category] }}
+                        {{ $t(categoryLabels[product.category]) }}
                       </p>
                     </div>
                     <UIBadge

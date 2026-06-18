@@ -13,6 +13,7 @@ const emit = defineEmits<{
 const auth = useAuthStore()
 const route = useRoute()
 const community = useCommunity()
+const { t } = useI18n()
 
 const typeSelection = ref<string[]>(['opinion'])
 const challengeSelection = ref<string[]>([])
@@ -23,13 +24,13 @@ const submitting = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
 
-const typeItems: SelectItem[] = [
-  { label: 'Avis', value: 'opinion' },
-  { label: 'Test terrain', value: 'test' },
-  { label: 'Photo', value: 'photo' },
-  { label: 'Video', value: 'video' },
-  { label: 'Challenge', value: 'challenge' },
-]
+const typeItems = computed<SelectItem[]>(() => [
+  { label: t('community.postTypes.opinion'), value: 'opinion' },
+  { label: t('community.postTypes.test'), value: 'test' },
+  { label: t('community.postTypes.photo'), value: 'photo' },
+  { label: t('community.postTypes.video'), value: 'video' },
+  { label: t('community.postTypes.challenge'), value: 'challenge' },
+])
 
 const challengeItems = computed<SelectItem[]>(() =>
   props.challenges.map((challenge) => ({
@@ -75,7 +76,7 @@ async function submitPost() {
     })
 
     emit('created', post)
-    successMessage.value = 'Publication ajoutee au Riders Club.'
+    successMessage.value = t('community.create.success')
     resetForm()
   } catch (error) {
     errorMessage.value = community.errorMessage.value || useApi().getErrorMessage(error)
@@ -94,22 +95,27 @@ async function submitPost() {
     <div class="p-5">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p class="txt-brand text-primary-text-default">Riders Club</p>
-          <h2 class="txt-h4 mt-1 font-black">Partager une sortie</h2>
+          <p class="txt-brand text-primary-text-default">{{ $t('community.create.eyebrow') }}</p>
+          <h2 class="txt-h4 mt-1 font-black">{{ $t('community.create.title') }}</h2>
         </div>
-        <UIBadge label="Communauté" intent="secondary" size="sm" variant="subtle" />
+        <UIBadge
+          :label="$t('community.create.badge')"
+          intent="secondary"
+          size="sm"
+          variant="subtle"
+        />
       </div>
 
       <div v-if="!auth.isAuthenticated" class="mt-5">
         <UIAlert
           intent="info"
-          title="Connexion requise"
-          description="Connectez-vous pour publier un retour terrain, une photo ou un challenge."
+          :title="$t('community.create.loginTitle')"
+          :description="$t('community.create.loginDescription')"
         />
         <UIButton
           class="mt-3"
           :to="loginTarget"
-          text="Se connecter"
+          :text="$t('community.create.login')"
           intent="primary"
           leading-icon="tabler:user"
         />
@@ -119,20 +125,20 @@ async function submitPost() {
         <UIFormSelect
           v-model="typeSelection"
           :items="typeItems"
-          label="Type de publication"
+          :label="$t('community.create.type')"
           :show-clear="false"
         />
         <UIFormInput
           v-model="title"
-          label="Titre"
-          placeholder="Ex. sortie gravel sous la pluie"
+          :label="$t('community.create.titleLabel')"
+          :placeholder="$t('community.create.titlePlaceholder')"
           maxlength="140"
           required
         />
         <UIFormTextarea
           v-model="body"
-          label="Message"
-          placeholder="Partagez le contexte, les sensations, le matériel utilise..."
+          :label="$t('community.create.message')"
+          :placeholder="$t('community.create.messagePlaceholder')"
           :rows="5"
           maxlength="3000"
           required
@@ -141,12 +147,15 @@ async function submitPost() {
           v-if="selectedType === 'challenge'"
           v-model="challengeSelection"
           :items="challengeItems"
-          label="Challenge associe"
-          placeholder="Choisir un challenge"
+          :label="$t('community.create.challenge')"
+          :placeholder="$t('community.create.challengePlaceholder')"
           :show-clear="false"
         />
 
-        <UIFormField label="Media" helper-text="Images JPG, PNG, WebP ou video MP4, 8 Mo maximum.">
+        <UIFormField
+          :label="$t('community.create.media')"
+          :helper-text="$t('community.create.mediaHelp')"
+        >
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,video/mp4"
@@ -158,7 +167,7 @@ async function submitPost() {
         <div class="flex flex-wrap items-center gap-3">
           <UIButton
             type="submit"
-            text="Publier"
+            :text="$t('community.create.publish')"
             intent="primary"
             leading-icon="tabler:send"
             :disabled="submitting"
@@ -166,7 +175,7 @@ async function submitPost() {
           />
           <UIButton
             type="button"
-            text="Reinitialiser"
+            :text="$t('community.create.reset')"
             intent="neutral"
             variant="ghost"
             :disabled="submitting"
@@ -177,7 +186,7 @@ async function submitPost() {
         <UIAlert
           v-if="errorMessage"
           intent="error"
-          title="Publication impossible"
+          :title="$t('community.create.errorTitle')"
           :description="errorMessage"
         />
         <UIAlert v-if="successMessage" intent="success" :title="successMessage" />

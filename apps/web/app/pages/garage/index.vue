@@ -5,6 +5,7 @@ import type { SelectItem } from '~ui/app/components/Form/Select/index.vue'
 const auth = useAuthStore()
 const garage = useGarage()
 const route = useRoute()
+const { t } = useI18n()
 
 const name = ref('')
 const brand = ref('')
@@ -13,13 +14,13 @@ const annualDistanceKm = ref('2500')
 const selectedType = ref<string[]>(['road'])
 const createError = ref('')
 
-const bikeTypes: Array<{ label: string; value: BikeType }> = [
-  { label: 'Route', value: 'road' },
-  { label: 'Gravel', value: 'gravel' },
-  { label: 'VTT', value: 'mtb' },
-  { label: 'E-bike', value: 'e-bike' },
-  { label: 'Ville', value: 'city' },
-]
+const bikeTypes = computed<Array<{ label: string; value: BikeType }>>(() => [
+  { label: t('garage.bikeTypes.road'), value: 'road' },
+  { label: t('garage.bikeTypes.gravel'), value: 'gravel' },
+  { label: t('garage.bikeTypes.mtb'), value: 'mtb' },
+  { label: t('garage.bikeTypes.eBike'), value: 'e-bike' },
+  { label: t('garage.bikeTypes.city'), value: 'city' },
+])
 
 const diameterItems: SelectItem[] = [
   { label: '700c — route / gravel', value: '700' },
@@ -31,7 +32,7 @@ const diameterItems: SelectItem[] = [
 
 const selectedDiameter = ref<string[]>(['700'])
 
-const typeItems = computed<SelectItem[]>(() => bikeTypes)
+const typeItems = computed<SelectItem[]>(() => bikeTypes.value)
 
 const checkoutOrderId = computed(() => {
   const value = route.query.orderId
@@ -39,7 +40,7 @@ const checkoutOrderId = computed(() => {
 })
 
 function typeLabel(type: BikeType): string {
-  return bikeTypes.find((item) => item.value === type)?.label ?? type
+  return bikeTypes.value.find((item) => item.value === type)?.label ?? type
 }
 
 function reminderIntent(severity: GarageReminderSeverity) {
@@ -69,7 +70,7 @@ async function createBike() {
   const distance = Number(annualDistanceKm.value)
 
   if (!trimmedName || type === undefined) {
-    createError.value = 'Nom et type de vélo sont requis.'
+    createError.value = t('garage.incompleteBikeDescription')
     return
   }
 
@@ -97,7 +98,7 @@ async function deleteBike(bikeId: number, event: Event) {
   event.preventDefault()
   event.stopPropagation()
 
-  if (!globalThis.confirm('Supprimer ce vélo du garage ?')) {
+  if (!globalThis.confirm(t('garage.confirmDeleteBike'))) {
     return
   }
 
@@ -121,16 +122,15 @@ onMounted(async () => {
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <UIBadge label="Garage virtuel" intent="primary" size="sm" />
-          <h1 class="txt-h1 mt-4 font-black">Mes vélos et mes pneus</h1>
+          <UIBadge :label="$t('garage.badge')" intent="primary" size="sm" />
+          <h1 class="txt-h1 mt-4 font-black">{{ $t('garage.title') }}</h1>
           <p class="txt-lg mt-3 max-w-3xl text-neutral-text-subtle">
-            Suivez les montages, recevez les rappels de remplacement et rachetez le bon pneu sans
-            repartir de zéro.
+            {{ $t('garage.description') }}
           </p>
         </div>
         <UIButton
           to="/#catalogue"
-          text="Voir le catalogue"
+          :text="$t('garage.catalogue')"
           intent="neutral"
           variant="subtle"
           leading-icon="tabler:search"
@@ -141,16 +141,21 @@ onMounted(async () => {
         v-if="checkoutOrderId"
         class="mt-6"
         intent="success"
-        title="Commande prête à être rangée"
-        description="Créez ou ouvrez un vélo, puis ajoutez les pneus de votre commande au garage."
+        :title="$t('garage.checkoutReadyTitle')"
+        :description="$t('garage.checkoutReadyDescription')"
       />
 
-      <UIProgress v-if="garage.pending.value" class="mt-8" intent="primary" label="Chargement..." />
+      <UIProgress
+        v-if="garage.pending.value"
+        class="mt-8"
+        intent="primary"
+        :label="$t('garage.loading')"
+      />
       <UIAlert
         v-else-if="garage.errorMessage.value"
         class="mt-8"
         intent="error"
-        title="Garage indisponible"
+        :title="$t('garage.unavailableTitle')"
         :description="garage.errorMessage.value"
       />
 
@@ -161,9 +166,9 @@ onMounted(async () => {
             class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-8 text-center"
           >
             <Icon name="tabler:bike-off" class="mx-auto size-10 text-neutral-text-subtle" />
-            <h2 class="txt-h4 mt-4 font-black">Aucun vélo dans le garage</h2>
+            <h2 class="txt-h4 mt-4 font-black">{{ $t('garage.emptyTitle') }}</h2>
             <p class="txt-base mt-2 text-neutral-text-subtle">
-              Ajoutez votre premier vélo pour associer vos pneus et suivre leur durée de vie.
+              {{ $t('garage.emptyDescription') }}
             </p>
           </div>
 
@@ -181,7 +186,9 @@ onMounted(async () => {
                   <UIBadge
                     v-if="primaryReminder(bike)"
                     :label="
-                      primaryReminder(bike)?.severity === 'due' ? 'À remplacer' : 'À surveiller'
+                      primaryReminder(bike)?.severity === 'due'
+                        ? $t('garage.detail.statusDue')
+                        : $t('garage.detail.statusSoon')
                     "
                     :intent="reminderIntent(primaryReminder(bike)!.severity)"
                     size="md"
@@ -190,16 +197,16 @@ onMounted(async () => {
                 <p class="txt-caption mt-1 text-neutral-text-subtle">
                   {{
                     [bike.brand, bike.model, bike.wheelDiameter].filter(Boolean).join(' · ') ||
-                    'Profil à compléter'
+                    $t('garage.profileMissing')
                   }}
                 </p>
               </div>
               <div class="text-left md:text-right">
                 <p class="txt-h4 font-black">{{ bike.tireInstallations.length }}</p>
-                <p class="txt-caption text-neutral-text-subtle">montage(s)</p>
+                <p class="txt-caption text-neutral-text-subtle">{{ $t('garage.installations') }}</p>
                 <UIButton
                   class="mt-3"
-                  text="Supprimer"
+                  :text="$t('garage.delete')"
                   intent="error"
                   variant="ghost"
                   size="sm"
@@ -218,41 +225,57 @@ onMounted(async () => {
           class="rounded-md border border-neutral-border-default bg-neutral-surface-default p-5"
           @submit.prevent="createBike"
         >
-          <h2 class="txt-h4 font-black">Ajouter un vélo</h2>
+          <h2 class="txt-h4 font-black">{{ $t('garage.addBike') }}</h2>
           <div class="mt-5 grid gap-4">
-            <UIFormInput v-model="name" label="Nom" placeholder="Gravel du quotidien" />
+            <UIFormInput
+              v-model="name"
+              :label="$t('garage.fields.name')"
+              :placeholder="$t('garage.fields.namePlaceholder')"
+            />
             <UIFormSelect
               v-model="selectedType"
               :items="typeItems"
-              label="Type"
-              placeholder="Choisir"
+              :label="$t('garage.fields.type')"
+              :placeholder="$t('garage.fields.choose')"
             />
             <div class="grid gap-4 sm:grid-cols-2">
-              <UIFormInput v-model="brand" label="Marque" placeholder="Lapierre" />
-              <UIFormInput v-model="model" label="Modèle" placeholder="Crosshill" />
+              <UIFormInput
+                v-model="brand"
+                :label="$t('garage.fields.brand')"
+                :placeholder="$t('garage.fields.brandPlaceholder')"
+              />
+              <UIFormInput
+                v-model="model"
+                :label="$t('garage.fields.model')"
+                :placeholder="$t('garage.fields.modelPlaceholder')"
+              />
             </div>
             <div class="grid gap-4 sm:grid-cols-2">
               <UIFormSelect
                 v-model="selectedDiameter"
                 :items="diameterItems"
-                label="Diamètre roues"
-                placeholder="Choisir"
+                :label="$t('garage.fields.diameter')"
+                :placeholder="$t('garage.fields.choose')"
               />
-              <UIFormInput v-model="annualDistanceKm" label="Km/an" type="number" min="0" />
+              <UIFormInput
+                v-model="annualDistanceKm"
+                :label="$t('garage.fields.annualDistance')"
+                type="number"
+                min="0"
+              />
             </div>
             <p class="txt-caption text-neutral-text-subtle">
-              Route et gravel : 700. VTT 29" : saisir 29. Le diamètre affine les suggestions de
-              pneus.
+              {{ $t('garage.diameterHelp') }}
             </p>
             <UIAlert
               v-if="createError"
               intent="error"
-              title="Vélo incomplet"
+              :title="$t('garage.incompleteBikeTitle')"
               :description="createError"
             />
             <UIButton
               type="submit"
-              text="Créer le vélo"
+              :text="$t('garage.createBike')"
               intent="primary"
               leading-icon="tabler:plus"
               :disabled="garage.pending.value"

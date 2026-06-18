@@ -18,13 +18,14 @@ const emit = defineEmits<{
 
 const auth = useAuthStore()
 const route = useRoute()
+const { t } = useI18n()
 const scores = ref<Record<number, string>>({})
 const notes = ref<Record<number, string>>({})
 
-const metricLabels: Record<CommunityChallengeMetric, string> = {
+const metricLabels = computed<Record<CommunityChallengeMetric, string>>(() => ({
   distance_km: 'km',
-  posts: 'publications',
-}
+  posts: t('community.challenges.metricPosts'),
+}))
 
 const loginTarget = computed(() => `/login?redirect=${encodeURIComponent(route.fullPath)}`)
 
@@ -47,13 +48,15 @@ function submitScore(challengeId: number) {
   <section class="space-y-4">
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p class="txt-brand text-secondary-text-default">Challenges</p>
-        <h2 class="txt-h3 mt-1 font-black">Classements riders</h2>
+        <p class="txt-brand text-secondary-text-default">
+          {{ $t('community.challenges.eyebrow') }}
+        </p>
+        <h2 class="txt-h3 mt-1 font-black">{{ $t('community.challenges.title') }}</h2>
       </div>
       <UIButton
         v-if="!auth.isAuthenticated"
         :to="loginTarget"
-        text="Participer"
+        :text="$t('community.challenges.participate')"
         intent="secondary"
         leading-icon="tabler:trophy"
       />
@@ -76,7 +79,9 @@ function submitScore(challengeId: number) {
               <p class="txt-sm mt-1 text-neutral-text-subtle">{{ challenge.description }}</p>
             </div>
             <UIBadge
-              :label="`${challenge.participantCount} participant${challenge.participantCount > 1 ? 's' : ''}`"
+              :label="
+                $t('community.challenges.participants', { count: challenge.participantCount })
+              "
               intent="accent"
               size="sm"
               variant="subtle"
@@ -84,8 +89,12 @@ function submitScore(challengeId: number) {
           </div>
 
           <p class="txt-caption text-neutral-text-subtle">
-            Jusqu'au {{ formatDate(challenge.endsAt) }} · score en
-            {{ metricLabels[challenge.metric] }}
+            {{
+              $t('community.challenges.until', {
+                date: formatDate(challenge.endsAt),
+                metric: metricLabels[challenge.metric],
+              })
+            }}
           </p>
 
           <div v-if="auth.isAuthenticated" class="grid gap-3 sm:grid-cols-[7rem_1fr_auto]">
@@ -94,19 +103,19 @@ function submitScore(challengeId: number) {
               type="number"
               min="0"
               step="1"
-              label="Score"
+              :label="$t('community.challenges.score')"
               placeholder="0"
             />
             <UIFormInput
               v-model="notes[challenge.id]"
-              label="Note"
-              placeholder="Sortie, velo, conditions..."
+              :label="$t('community.challenges.note')"
+              :placeholder="$t('community.challenges.notePlaceholder')"
               maxlength="180"
             />
             <div class="flex items-end">
               <UIButton
                 type="button"
-                text="Valider"
+                :text="$t('community.challenges.submit')"
                 intent="secondary"
                 :disabled="pending"
                 @click="submitScore(challenge.id)"
@@ -116,11 +125,11 @@ function submitScore(challengeId: number) {
 
           <div>
             <div class="mb-2 flex items-center justify-between gap-3">
-              <p class="txt-label font-bold">Top riders</p>
+              <p class="txt-label font-bold">{{ $t('community.challenges.topRiders') }}</p>
               <UIButton
                 type="button"
                 icon="tabler:refresh"
-                aria-label="Actualiser"
+                :aria-label="$t('community.challenges.refresh')"
                 intent="neutral"
                 variant="ghost"
                 size="sm"
@@ -148,7 +157,7 @@ function submitScore(challengeId: number) {
               v-if="(props.leaderboards[challenge.id] ?? []).length === 0"
               class="txt-sm rounded-md bg-neutral-bg-subtle px-3 py-3 text-neutral-text-subtle"
             >
-              Aucun score publie pour le moment.
+              {{ $t('community.challenges.emptyScores') }}
             </p>
           </div>
         </div>

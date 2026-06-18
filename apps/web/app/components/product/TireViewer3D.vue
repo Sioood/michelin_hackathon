@@ -92,7 +92,7 @@ function onPointerUp(event: PointerEvent) {
 <template>
   <section
     class="relative overflow-hidden rounded-md border border-neutral-border-subtle bg-neutral-bg-default"
-    :aria-label="`Visuel produit ${rangeName}`"
+    :aria-label="$t('product.details.visualLabel', { range: rangeName })"
   >
     <div class="viewer-grid relative min-h-[22rem] sm:min-h-[28rem]">
       <div v-if="!is3dView" class="relative z-10 h-[22rem] sm:h-[28rem]">
@@ -138,12 +138,12 @@ function onPointerUp(event: PointerEvent) {
           </TresCanvas>
 
           <div v-else class="grid h-full place-items-center bg-white">
-            <UIProgress intent="primary" size="sm" label="Chargement du viewer 3D..." />
+            <UIProgress intent="primary" size="sm" :label="$t('product.details.viewerLoading')" />
           </div>
 
           <template #fallback>
             <div class="grid h-full place-items-center bg-white">
-              <UIProgress intent="primary" size="sm" label="Chargement du viewer 3D..." />
+              <UIProgress intent="primary" size="sm" :label="$t('product.details.viewerLoading')" />
             </div>
           </template>
         </ClientOnly>
@@ -151,14 +151,16 @@ function onPointerUp(event: PointerEvent) {
         <p
           class="txt-caption pointer-events-none absolute right-24 bottom-3 left-4 text-neutral-text-subtle"
         >
-          Cliquez et faites glisser pour orienter le pneu
+          {{ $t('product.details.viewerHint') }}
         </p>
       </div>
 
       <button
         type="button"
         class="absolute right-4 bottom-4 z-20 flex size-16 flex-col items-center justify-center rounded-full bg-primary-fill-default text-primary-text-inverse shadow-lg transition-transform hover:scale-105 active:scale-95"
-        :aria-label="is3dView ? 'Afficher la vue image' : 'Afficher la vue 3D'"
+        :aria-label="
+          is3dView ? $t('product.details.showImageView') : $t('product.details.show3dView')
+        "
         @click="toggleView"
       >
         <Icon :name="is3dView ? 'tabler:photo' : 'tabler:rotate-3d'" class="size-7" />

@@ -21,37 +21,37 @@ onMounted(() => {
     <CatalogueAppSiteHeader />
 
     <section class="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
-      <UIBadge label="Commande lancée" intent="success" size="sm" />
-      <h1 class="txt-h1 mt-5 font-black">Merci, votre commande est en cours.</h1>
+      <UIBadge :label="$t('checkout.success.badge')" intent="success" size="sm" />
+      <h1 class="txt-h1 mt-5 font-black">{{ $t('checkout.success.title') }}</h1>
       <p class="txt-lg mt-4 text-neutral-text-subtle">
-        Stripe a pris le relais pour le paiement. L'historique sera mis à jour après confirmation du
-        webhook.
+        {{ $t('checkout.success.description') }}
       </p>
-      <p v-if="orderId" class="txt-label mt-4 font-black">Commande #{{ orderId }}</p>
+      <p v-if="orderId" class="txt-label mt-4 font-black">
+        {{ $t('checkout.success.orderNumber', { id: orderId }) }}
+      </p>
 
       <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <UIButton to="/account/orders" text="Voir mes commandes" intent="primary" />
+        <UIButton to="/account/orders" :text="$t('checkout.success.orders')" intent="primary" />
         <UIDialog
           v-model:open="garageDialogOpen"
-          title="Ajouter au garage"
-          description="Associez cette commande à un vélo pour activer les rappels de remplacement."
+          :title="$t('checkout.success.garageTitle')"
+          :description="$t('checkout.success.garageDescription')"
           intent="success"
           hide-trigger
         >
           <p class="txt-base text-neutral-text-default">
-            Le garage virtuel garde l'historique de vos montages, surveille l'âge et la distance
-            parcourue, puis prépare le réachat du bon pneu au bon moment.
+            {{ $t('checkout.success.garageBody') }}
           </p>
           <template #footer="{ dialog }">
             <UIButton
-              text="Plus tard"
+              :text="$t('checkout.success.later')"
               intent="neutral"
               variant="subtle"
               @click="dialog.setOpen(false)"
             />
             <UIButton
               :to="garageUrl"
-              text="Ranger la commande"
+              :text="$t('checkout.success.storeOrder')"
               intent="success"
               leading-icon="tabler:archive"
             />
@@ -59,11 +59,16 @@ onMounted(() => {
         </UIDialog>
         <UIButton
           :to="garageUrl"
-          text="Ajouter au garage"
+          :text="$t('checkout.success.addToGarage')"
           intent="success"
           leading-icon="tabler:archive"
         />
-        <UIButton to="/#catalogue" text="Continuer mes achats" intent="neutral" variant="subtle" />
+        <UIButton
+          to="/#catalogue"
+          :text="$t('checkout.success.continueShopping')"
+          intent="neutral"
+          variant="subtle"
+        />
       </div>
     </section>
   </main>

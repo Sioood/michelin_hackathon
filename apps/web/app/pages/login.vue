@@ -5,9 +5,11 @@ import type { SchemaFieldsMap, SchemaFormLayout } from '~ui/app/utils/Components
 
 import UIFormInput from '~ui/app/components/Form/Input.vue'
 
+const { t } = useI18n()
+
 const schema = z.object({
-  email: z.email('Adresse e-mail invalide'),
-  password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+  email: z.email(t('auth.validation.invalidEmail')),
+  password: z.string().min(8, t('auth.validation.passwordMin')),
 })
 
 type LoginValues = z.infer<typeof schema>
@@ -16,16 +18,16 @@ const fields: SchemaFieldsMap<LoginValues> = {
   email: {
     as: UIFormInput,
     props: {
-      label: 'Adresse e-mail',
-      placeholder: 'marie.dupont@example.com',
+      label: t('auth.fields.email'),
+      placeholder: t('auth.fields.emailPlaceholder'),
       type: 'email',
     },
   },
   password: {
     as: UIFormInput,
     props: {
-      label: 'Mot de passe',
-      placeholder: '8 caractères minimum',
+      label: t('auth.fields.password'),
+      placeholder: t('auth.fields.passwordPlaceholder'),
       type: 'password',
     },
   },
@@ -51,31 +53,28 @@ const registerLink = computed(() => `/register?redirect=${encodeURIComponent(red
 const loginCopy = computed(() => {
   if (redirectTo.value.startsWith('/checkout')) {
     return {
-      description:
-        'Retrouvez votre panier, lancez le checkout Stripe et suivez vos commandes depuis votre espace.',
-      title: 'Connectez-vous pour finaliser votre commande.',
+      description: t('auth.login.checkoutDescription'),
+      title: t('auth.login.checkoutTitle'),
     }
   }
 
   if (redirectTo.value.startsWith('/garage')) {
     return {
-      description:
-        'Votre garage est lié à votre compte pour conserver vos vélos, vos montages et vos rappels.',
-      title: 'Connectez-vous pour accéder à votre garage.',
+      description: t('auth.login.garageDescription'),
+      title: t('auth.login.garageTitle'),
     }
   }
 
   if (redirectTo.value.startsWith('/account/orders')) {
     return {
-      description: 'Retrouvez l’historique de vos achats et le suivi de vos commandes Michelin.',
-      title: 'Connectez-vous pour consulter vos commandes.',
+      description: t('auth.login.ordersDescription'),
+      title: t('auth.login.ordersTitle'),
     }
   }
 
   return {
-    description:
-      'Retrouvez votre panier, vos commandes et votre garage Michelin depuis un seul espace.',
-    title: 'Connectez-vous à votre espace Michelin.',
+    description: t('auth.login.defaultDescription'),
+    title: t('auth.login.defaultTitle'),
   }
 })
 
@@ -86,7 +85,7 @@ async function submit(values: LoginValues) {
   try {
     await auth.login(values)
     await cart.load()
-    successMessage.value = 'Session ouverte.'
+    successMessage.value = t('auth.login.successDescription')
     await navigateTo(redirectTo.value)
   } catch (error) {
     errorMessage.value = api.getErrorMessage(error)
@@ -100,7 +99,7 @@ async function submit(values: LoginValues) {
 
     <section class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_440px]">
       <div class="flex flex-col justify-center">
-        <UIBadge label="Compte Michelin" intent="primary" size="sm" />
+        <UIBadge :label="$t('auth.login.badge')" intent="primary" size="sm" />
         <h1 class="txt-h1 mt-4 max-w-3xl font-black">
           {{ loginCopy.title }}
         </h1>
@@ -110,21 +109,21 @@ async function submit(values: LoginValues) {
       </div>
 
       <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-6' }">
-        <h2 class="txt-h4 font-black">Connexion</h2>
-        <p class="txt-base mt-2 text-neutral-text-subtle">Accédez à votre espace client.</p>
+        <h2 class="txt-h4 font-black">{{ $t('auth.login.formTitle') }}</h2>
+        <p class="txt-base mt-2 text-neutral-text-subtle">{{ $t('auth.login.formDescription') }}</p>
 
         <UIAlert
           v-if="errorMessage"
           class="mt-5"
           intent="error"
-          title="Connexion impossible"
+          :title="$t('auth.login.errorTitle')"
           :description="errorMessage"
         />
         <UIAlert
           v-if="successMessage"
           class="mt-5"
           intent="success"
-          title="Connecté"
+          :title="$t('auth.login.successTitle')"
           :description="successMessage"
         />
 
@@ -141,7 +140,7 @@ async function submit(values: LoginValues) {
             <UIButton
               type="submit"
               class="w-full"
-              text="Se connecter"
+              :text="$t('auth.login.submit')"
               intent="primary"
               size="lg"
               :disabled="!canSubmit || isSubmitting"
@@ -151,8 +150,10 @@ async function submit(values: LoginValues) {
         </UIForm>
 
         <p class="txt-base mt-5 text-neutral-text-subtle">
-          Pas encore de compte ?
-          <UILink :to="registerLink" intent="primary" variant="ghost">Créer un compte</UILink>
+          {{ $t('auth.login.noAccount') }}
+          <UILink :to="registerLink" intent="primary" variant="ghost">
+            {{ $t('auth.login.createAccount') }}
+          </UILink>
         </p>
       </UICard>
     </section>

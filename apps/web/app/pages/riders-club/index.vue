@@ -2,8 +2,10 @@
 import type { CommunityPost, CommunityPostType } from '~/types/community'
 import type { SelectItem } from '~ui/app/components/Form/Select/index.vue'
 
+const { t } = useI18n()
+
 useHead({
-  title: 'Riders Club Michelin',
+  title: t('community.page.headTitle'),
 })
 
 const community = useCommunity()
@@ -12,14 +14,14 @@ const actionMessage = ref('')
 const actionError = ref('')
 const actionPending = ref(false)
 
-const typeItems: SelectItem[] = [
-  { label: 'Tous', value: 'all' },
-  { label: 'Avis', value: 'opinion' },
-  { label: 'Tests', value: 'test' },
-  { label: 'Photos', value: 'photo' },
-  { label: 'Videos', value: 'video' },
-  { label: 'Challenges', value: 'challenge' },
-]
+const typeItems = computed<SelectItem[]>(() => [
+  { label: t('community.postTypes.all'), value: 'all' },
+  { label: t('community.postTypes.opinion'), value: 'opinion' },
+  { label: t('community.postTypes.test'), value: 'test' },
+  { label: t('community.postTypes.photo'), value: 'photo' },
+  { label: t('community.postTypes.video'), value: 'video' },
+  { label: t('community.postTypes.challenge'), value: 'challenge' },
+])
 
 const selectedType = computed(() => (typeSelection.value[0] ?? 'all') as CommunityPostType | 'all')
 const hasMore = computed(() => community.page.value < community.pageCount.value)
@@ -29,7 +31,7 @@ async function refreshFeed() {
 }
 
 async function onPostCreated() {
-  actionMessage.value = 'Publication en ligne.'
+  actionMessage.value = t('community.page.postCreated')
   actionError.value = ''
   await refreshFeed()
 }
@@ -44,7 +46,7 @@ async function reportPost(post: CommunityPost, reason: string) {
     if (updated.hidden) {
       community.removePost(post.id)
     }
-    actionMessage.value = 'Signalement pris en compte.'
+    actionMessage.value = t('community.page.reportAccepted')
   } catch (error) {
     actionError.value = useApi().getErrorMessage(error)
   } finally {
@@ -60,7 +62,7 @@ async function hidePost(post: CommunityPost) {
   try {
     await community.hidePost(post.id)
     community.removePost(post.id)
-    actionMessage.value = 'Publication masquee.'
+    actionMessage.value = t('community.page.postHidden')
   } catch (error) {
     actionError.value = useApi().getErrorMessage(error)
   } finally {
@@ -75,7 +77,7 @@ async function joinChallenge(challengeId: number, score: number, note?: string) 
 
   try {
     await community.joinChallenge(challengeId, score, note)
-    actionMessage.value = 'Score enregistre.'
+    actionMessage.value = t('community.page.scoreSaved')
   } catch (error) {
     actionError.value = useApi().getErrorMessage(error)
   } finally {
@@ -106,10 +108,10 @@ onMounted(() => {
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div class="min-w-0">
-          <UIBadge label="Beta communautaire" intent="primary" size="sm" />
-          <h1 class="txt-h1 mt-4 font-black">Riders Club Michelin</h1>
+          <UIBadge :label="$t('community.page.badge')" intent="primary" size="sm" />
+          <h1 class="txt-h1 mt-4 font-black">{{ $t('community.page.title') }}</h1>
           <p class="txt-lg mt-3 max-w-3xl text-neutral-text-subtle">
-            Retours terrain, photos de sorties, tests pneus et challenges entre cyclistes.
+            {{ $t('community.page.description') }}
           </p>
         </div>
 
@@ -117,7 +119,7 @@ onMounted(() => {
           v-model="typeSelection"
           class="w-full shrink-0 sm:w-60"
           :items="typeItems"
-          label="Filtrer"
+          :label="$t('community.page.filter')"
           :show-clear="false"
         />
       </div>
@@ -132,21 +134,21 @@ onMounted(() => {
           <UIAlert
             v-if="actionError"
             intent="error"
-            title="Action impossible"
+            :title="$t('community.page.actionImpossible')"
             :description="actionError"
           />
           <UIAlert v-if="actionMessage" intent="success" :title="actionMessage" />
           <UIAlert
             v-if="community.errorMessage.value"
             intent="error"
-            title="Flux indisponible"
+            :title="$t('community.page.feedUnavailable')"
             :description="community.errorMessage.value"
           />
 
           <UIProgress
             v-if="community.pending.value && community.posts.value.length === 0"
             intent="primary"
-            label="Chargement du Riders Club..."
+            :label="$t('community.page.loading')"
           />
 
           <div
@@ -154,9 +156,9 @@ onMounted(() => {
             class="rounded-md bg-neutral-bg-subtle p-8 text-center"
           >
             <Icon name="tabler:message-circle" class="mx-auto size-10 text-neutral-text-subtle" />
-            <h2 class="txt-h4 mt-4 font-black">Aucune publication</h2>
+            <h2 class="txt-h4 mt-4 font-black">{{ $t('community.page.emptyTitle') }}</h2>
             <p class="txt-base mt-2 text-neutral-text-subtle">
-              Le filtre actuel ne contient pas encore de retour rider.
+              {{ $t('community.page.emptyDescription') }}
             </p>
           </div>
 
@@ -173,7 +175,7 @@ onMounted(() => {
           <div v-if="hasMore" class="flex justify-center pt-2">
             <UIButton
               type="button"
-              text="Charger plus"
+              :text="$t('community.page.loadMore')"
               intent="primary"
               variant="subtle"
               leading-icon="tabler:chevron-down"

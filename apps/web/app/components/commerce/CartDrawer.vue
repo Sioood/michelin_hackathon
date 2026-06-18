@@ -23,8 +23,8 @@ onMounted(() => {
 <template>
   <UIDrawer
     v-model:open="open"
-    title="Panier"
-    description="Vos pneus Michelin avant paiement"
+    :title="$t('cart.title')"
+    :description="$t('cart.description')"
     swipe-direction="end"
     size="lg"
     scrollable
@@ -37,13 +37,13 @@ onMounted(() => {
     <UIAlert
       v-if="cart.errorMessage"
       intent="error"
-      title="Panier indisponible"
+      :title="$t('cart.errorTitle')"
       :description="cart.errorMessage"
       icon="tabler:alert-circle"
     />
 
     <div v-if="cart.pending && cart.cart === null" class="py-8">
-      <UIProgress intent="primary" size="sm" label="Chargement du panier..." />
+      <UIProgress intent="primary" size="sm" :label="$t('cart.loading')" />
     </div>
 
     <div
@@ -51,13 +51,13 @@ onMounted(() => {
       class="flex flex-1 flex-col items-center justify-center py-12 text-center"
     >
       <Icon name="tabler:shopping-cart" class="size-10 text-neutral-text-subtle" />
-      <h2 class="txt-h5 mt-4 font-black">Votre panier est vide</h2>
+      <h2 class="txt-h5 mt-4 font-black">{{ $t('cart.emptyTitle') }}</h2>
       <p class="txt-base mt-2 max-w-xs text-neutral-text-subtle">
-        Ajoutez un pneu depuis le catalogue pour démarrer votre commande.
+        {{ $t('cart.emptyDescription') }}
       </p>
       <UIButton
         class="mt-6"
-        text="Voir le catalogue"
+        :text="$t('common.seeCatalogue')"
         intent="primary"
         to="/#catalogue"
         @click="cart.closeDrawer"
@@ -89,7 +89,7 @@ onMounted(() => {
             <UIButton
               type="button"
               icon="tabler:trash"
-              aria-label="Retirer du panier"
+              :aria-label="$t('cart.removeItem')"
               intent="error"
               variant="ghost"
               size="sm"
@@ -102,7 +102,7 @@ onMounted(() => {
               <UIButton
                 type="button"
                 icon="tabler:minus"
-                aria-label="Diminuer la quantité"
+                :aria-label="$t('cart.decreaseQuantity')"
                 intent="neutral"
                 variant="subtle"
                 size="sm"
@@ -114,7 +114,7 @@ onMounted(() => {
               <UIButton
                 type="button"
                 icon="tabler:plus"
-                aria-label="Augmenter la quantité"
+                :aria-label="$t('cart.increaseQuantity')"
                 intent="neutral"
                 variant="subtle"
                 size="sm"
@@ -131,18 +131,18 @@ onMounted(() => {
       v-if="!cart.isEmpty"
       :product-id="crossSellProductId"
       compact
-      title="À ajouter avec votre panier"
+      :title="$t('cart.crossSellTitle')"
     />
 
     <template v-if="!cart.isEmpty" #footer>
       <div class="w-full">
         <div class="mb-4 flex items-center justify-between">
-          <span class="txt-label text-neutral-text-subtle">Total</span>
+          <span class="txt-label text-neutral-text-subtle">{{ $t('cart.total') }}</span>
           <span class="txt-h5 font-black">{{ formatPrice(cart.totalCents) }}</span>
         </div>
         <UIButton
           class="w-full"
-          text="Passer au paiement"
+          :text="$t('cart.checkout')"
           intent="primary"
           size="lg"
           leading-icon="tabler:credit-card"

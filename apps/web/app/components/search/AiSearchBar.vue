@@ -22,6 +22,7 @@ const emit = defineEmits<{
   search: [query: string]
 }>()
 
+const { t } = useI18n()
 const query = defineModel<string>({ default: '' })
 
 function submit() {
@@ -51,19 +52,17 @@ function submit() {
         v-model="query"
         class="w-full min-w-0 flex-1"
         :debounce="0"
-        :placeholder="
-          compact ? 'Gravel tubeless...' : 'Ex: pneu gravel tubeless pour vélo électrique en 700'
-        "
+        :placeholder="compact ? t('search.bar.compactPlaceholder') : t('search.bar.placeholder')"
         size="md"
         intent="primary"
       />
       <UIButton
         type="submit"
-        :text="compact ? '' : 'Rechercher'"
+        :text="compact ? '' : $t('search.bar.submit')"
         :icon="compact ? 'tabler:sparkles' : undefined"
         :leading-icon="compact ? undefined : 'tabler:sparkles'"
         intent="secondary"
-        :aria-label="compact ? 'Recherche IA' : undefined"
+        :aria-label="compact ? $t('search.bar.aria') : undefined"
         :state="pending ? 'loading' : 'default'"
         :disabled="pending"
         :class="stacked ? 'w-full whitespace-nowrap' : 'shrink-0'"
@@ -74,7 +73,7 @@ function submit() {
     <UIAlert
       v-if="response?.explanation && !compact"
       intent="info"
-      title="Suggestion IA"
+      :title="$t('search.bar.suggestionTitle')"
       :description="response.explanation"
       icon="tabler:sparkles"
     />

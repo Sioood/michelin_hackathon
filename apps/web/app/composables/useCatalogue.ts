@@ -56,7 +56,7 @@ export function useCatalogue(products: Ref<Product[]>) {
         category === 'all'
           ? products.value.length
           : products.value.filter((product) => product.category === category).length,
-      label: categoryLabels[category],
+      label: t(categoryLabels[category]),
     })),
   )
 

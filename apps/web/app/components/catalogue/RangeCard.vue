@@ -5,6 +5,8 @@ const props = defineProps<{
   range: FeaturedRange
 }>()
 
+const { t } = useI18n()
+
 const rangeLink = computed(() => ({
   hash: '#catalogue',
   path: '/',
@@ -18,8 +20,8 @@ const rangeLink = computed(() => ({
     class="block h-full w-full max-w-full min-w-0 rounded-md transition hover:-translate-y-1 hover:shadow-lg"
   >
     <UICard
-      :tag="`${range.count} variantes`"
-      :subtitle="categoryLabels[range.category]"
+      :tag="$t('catalogue.ranges.variants', { count: range.count })"
+      :subtitle="t(categoryLabels[range.category])"
       :title="range.rangeName"
       :description="range.headline"
       :element-intent="getCategoryCardIntent(range.category)"

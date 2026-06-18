@@ -18,7 +18,7 @@ async function reorder() {
 
 <template>
   <UIButton
-    text="Racheter"
+    :text="$t('garage.reorder')"
     intent="primary"
     size="sm"
     leading-icon="tabler:shopping-cart-plus"

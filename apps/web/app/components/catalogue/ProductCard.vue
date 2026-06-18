@@ -14,6 +14,7 @@ const props = withDefaults(
 )
 
 const cart = useCartStore()
+const { t } = useI18n()
 const productUrl = computed(() => `/products/${props.product.slug}`)
 const canAddToCart = computed(() => props.product.id !== undefined && props.product.stock > 0)
 
@@ -54,7 +55,7 @@ async function addToCart() {
         <div class="flex items-start justify-between gap-3">
           <div class="min-w-0 flex-1">
             <UIBadge
-              :label="categoryLabels[product.category]"
+              :label="t(categoryLabels[product.category])"
               :intent="getCategoryIntent(product.category)"
               size="sm"
               variant="subtle"
@@ -81,29 +82,43 @@ async function addToCart() {
 
         <dl class="mt-5 grid grid-cols-2 gap-3 text-sm">
           <div class="border-t border-neutral-border-subtle pt-3">
-            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">Dimension</dt>
+            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('catalogue.productCard.dimension') }}
+            </dt>
             <dd class="txt-label mt-1 font-black">
-              {{ product.webDiameterMm ?? product.webDiameterInch ?? 'N/A' }}
+              {{
+                product.webDiameterMm ??
+                product.webDiameterInch ??
+                $t('catalogue.productCard.unavailable')
+              }}
               <span v-if="product.webWidthMm">x {{ product.webWidthMm }}</span>
             </dd>
           </div>
           <div class="border-t border-neutral-border-subtle pt-3">
-            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">Poids</dt>
+            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('catalogue.productCard.weight') }}
+            </dt>
             <dd class="txt-label mt-1 font-black">
-              {{ product.weightG ? `${product.weightG} g` : 'N/A' }}
+              {{
+                product.weightG ? `${product.weightG} g` : $t('catalogue.productCard.unavailable')
+              }}
             </dd>
           </div>
           <div class="border-t border-neutral-border-subtle pt-3">
-            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">Pression</dt>
+            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('catalogue.productCard.pressure') }}
+            </dt>
             <dd class="txt-label mt-1 font-black">
               <template v-if="product.minPressureBar && product.maxPressureBar">
                 {{ product.minPressureBar }}-{{ product.maxPressureBar }} bar
               </template>
-              <template v-else>N/A</template>
+              <template v-else>{{ $t('catalogue.productCard.unavailable') }}</template>
             </dd>
           </div>
           <div class="border-t border-neutral-border-subtle pt-3">
-            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">CAI</dt>
+            <dt class="txt-caption font-bold text-neutral-text-subtle uppercase">
+              {{ $t('catalogue.productCard.cai') }}
+            </dt>
             <dd class="txt-label mt-1 font-black">{{ product.cai }}</dd>
           </div>
         </dl>
@@ -111,21 +126,21 @@ async function addToCart() {
         <div class="mt-5 flex flex-wrap gap-2">
           <UIBadge
             v-if="product.tubelessReady"
-            label="Tubeless"
+            :label="$t('catalogue.productCard.tubeless')"
             intent="primary"
             size="sm"
             variant="subtle"
           />
           <UIBadge
             v-if="product.eBikeReady"
-            label="E-bike"
+            :label="$t('catalogue.productCard.eBike')"
             intent="success"
             size="sm"
             variant="subtle"
           />
           <UIBadge
             v-if="product.reflectiveStrip"
-            label="Réfléchissant"
+            :label="$t('catalogue.productCard.reflective')"
             intent="secondary"
             size="sm"
             variant="subtle"
@@ -150,12 +165,16 @@ async function addToCart() {
       <div>
         <p class="txt-h5 font-black">{{ formatPrice(product.priceCents, product.currency) }}</p>
         <p class="txt-caption text-neutral-text-subtle">
-          {{ product.stock > 0 ? `${product.stock} en stock` : 'Rupture' }}
+          {{
+            product.stock > 0
+              ? $t('catalogue.stock.inStock', { count: product.stock })
+              : $t('catalogue.stock.outOfStock')
+          }}
         </p>
       </div>
       <UIButton
         type="button"
-        text="Ajouter"
+        :text="$t('catalogue.productCard.add')"
         intent="primary"
         size="sm"
         leading-icon="tabler:shopping-cart-plus"

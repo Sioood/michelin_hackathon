@@ -6,6 +6,7 @@ import { categoryLabels, categoryOrder } from '~/utils/catalogue'
 
 const route = useRoute()
 const api = useApi()
+const { t } = useI18n()
 
 const query = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const mode = ref('ai')
@@ -20,20 +21,20 @@ const manualTubeless = ref(false)
 const manualEbike = ref(false)
 
 const modeOptions = [
-  { label: 'IA', value: 'ai' },
-  { label: 'Filtres', value: 'manual' },
+  { label: t('search.mode.ai'), value: 'ai' },
+  { label: t('search.mode.manual'), value: 'manual' },
 ]
 const categoryOptions = categoryOrder.map((category) => ({
-  label: categoryLabels[category],
+  label: t(categoryLabels[category]),
   value: category,
 }))
 const terrainOptions: Array<{ label: string; value: SearchTerrain | 'all' }> = [
-  { label: 'Tous terrains', value: 'all' },
-  { label: 'Route', value: 'ROAD' },
-  { label: 'Gravel', value: 'GRAVEL' },
-  { label: 'VTT', value: 'MTB' },
-  { label: 'Ville', value: 'CITY' },
-  { label: 'Mixte', value: 'MIXED' },
+  { label: t('search.terrain.all'), value: 'all' },
+  { label: t('search.terrain.road'), value: 'ROAD' },
+  { label: t('search.terrain.gravel'), value: 'GRAVEL' },
+  { label: t('search.terrain.mtb'), value: 'MTB' },
+  { label: t('search.terrain.city'), value: 'CITY' },
+  { label: t('search.terrain.mixed'), value: 'MIXED' },
 ]
 
 const resultProducts = computed(() => response.value?.results ?? [])
@@ -107,10 +108,10 @@ onMounted(() => {
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div class="min-w-0">
-          <UIBadge label="Recherche intelligente" intent="primary" size="sm" />
-          <h1 class="txt-h1 mt-4 font-black">Trouver une référence Michelin</h1>
+          <UIBadge :label="$t('search.page.badge')" intent="primary" size="sm" />
+          <h1 class="txt-h1 mt-4 font-black">{{ $t('search.page.title') }}</h1>
           <p class="txt-lg mt-3 max-w-3xl text-neutral-text-subtle">
-            Décrivez votre vélo, votre terrain ou vos contraintes, puis ajustez avec les filtres.
+            {{ $t('search.page.description') }}
           </p>
         </div>
         <UISegmentGroup
@@ -140,26 +141,26 @@ onMounted(() => {
             <div class="flex flex-col gap-4">
               <UIFormSelect
                 v-model="manualCategory"
-                label="Catégorie"
+                :label="$t('search.page.category')"
                 :items="categoryOptions"
                 :show-clear="false"
               />
               <UIFormSelect
                 v-model="manualTerrain"
-                label="Terrain"
+                :label="$t('search.page.terrain')"
                 :items="terrainOptions"
                 :show-clear="false"
               />
               <UIFormInput
                 v-model="manualDiameter"
-                label="Diamètre"
+                :label="$t('search.page.diameter')"
                 placeholder="700, 29, 27.5..."
               />
-              <UISwitch v-model="manualTubeless" label="Tubeless ready" />
-              <UISwitch v-model="manualEbike" label="Compatible e-bike" />
+              <UISwitch v-model="manualTubeless" :label="$t('search.page.tubeless')" />
+              <UISwitch v-model="manualEbike" :label="$t('search.page.eBike')" />
               <UIButton
                 type="button"
-                text="Appliquer les filtres"
+                :text="$t('search.page.apply')"
                 intent="primary"
                 leading-icon="tabler:adjustments-horizontal"
                 :state="pending && mode === 'manual' ? 'loading' : 'default'"
@@ -174,28 +175,32 @@ onMounted(() => {
           <UIAlert
             v-if="errorMessage"
             intent="error"
-            title="Recherche impossible"
+            :title="$t('search.page.errorTitle')"
             :description="errorMessage"
           />
-          <UIProgress v-else-if="pending" intent="primary" label="Recherche en cours..." />
+          <UIProgress v-else-if="pending" intent="primary" :label="$t('search.page.loading')" />
 
           <div v-else-if="response === null" class="py-16 text-center">
             <Icon name="tabler:sparkles" class="mx-auto size-10 text-neutral-text-subtle" />
-            <h2 class="txt-h4 mt-4 font-black">Lancez une recherche</h2>
+            <h2 class="txt-h4 mt-4 font-black">{{ $t('search.page.launchTitle') }}</h2>
             <p class="txt-base mt-2 text-neutral-text-subtle">
-              Exemple : pneu gravel tubeless pour vélo électrique en 700.
+              {{ $t('search.page.launchExample') }}
             </p>
           </div>
 
           <div v-else class="min-w-0">
             <div class="flex flex-wrap items-end justify-between gap-3">
               <div class="min-w-0">
-                <p class="txt-brand text-primary-text-default">Résultats</p>
-                <h2 class="txt-h2 mt-2 font-black">{{ resultProducts.length }} références</h2>
+                <p class="txt-brand text-primary-text-default">
+                  {{ $t('search.page.resultEyebrow') }}
+                </p>
+                <h2 class="txt-h2 mt-2 font-black">
+                  {{ $t('search.page.resultCount', { count: resultProducts.length }) }}
+                </h2>
               </div>
               <UIBadge
                 v-if="suggestionCount > 0"
-                :label="`${suggestionCount} suggestion${suggestionCount > 1 ? 's' : ''} IA`"
+                :label="$t('search.page.suggestions', { count: suggestionCount })"
                 intent="info"
                 size="sm"
                 variant="subtle"

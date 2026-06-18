@@ -8,6 +8,7 @@ import { buildDiameterSelectItems } from '~/utils/questionnaire-options'
 
 const config = useRuntimeConfig()
 const api = useApi()
+const { t } = useI18n()
 
 const { data: productsData } = await useFetch<Product[]>('/products', {
   baseURL: config.public.apiBaseUrl,
@@ -45,28 +46,32 @@ watch(
   { immediate: true },
 )
 
-const steps = ['Pratique', 'Montage', 'Priorité']
+const steps = computed(() => [
+  t('search.assistant.steps.practice'),
+  t('search.assistant.steps.setup'),
+  t('search.assistant.steps.priority'),
+])
 const categoryOptions: Array<{ label: string; value: ProductCategory }> = [
-  { label: categoryLabels.road, value: 'road' },
-  { label: categoryLabels.gravel, value: 'gravel' },
-  { label: categoryLabels.mtb, value: 'mtb' },
-  { label: categoryLabels['e-bike'], value: 'e-bike' },
-  { label: categoryLabels['commuting-tour'], value: 'commuting-tour' },
+  { label: t(categoryLabels.road), value: 'road' },
+  { label: t(categoryLabels.gravel), value: 'gravel' },
+  { label: t(categoryLabels.mtb), value: 'mtb' },
+  { label: t(categoryLabels['e-bike']), value: 'e-bike' },
+  { label: t(categoryLabels['commuting-tour']), value: 'commuting-tour' },
 ]
 const terrainOptions: Array<{ label: string; value: SearchTerrain }> = [
-  { label: 'Route', value: 'ROAD' },
-  { label: 'Gravel', value: 'GRAVEL' },
-  { label: 'VTT', value: 'MTB' },
-  { label: 'Ville', value: 'CITY' },
-  { label: 'Mixte', value: 'MIXED' },
+  { label: t('search.terrain.road'), value: 'ROAD' },
+  { label: t('search.terrain.gravel'), value: 'GRAVEL' },
+  { label: t('search.terrain.mtb'), value: 'MTB' },
+  { label: t('search.terrain.city'), value: 'CITY' },
+  { label: t('search.terrain.mixed'), value: 'MIXED' },
 ]
 const priorityOptions: Array<{
   label: string
   value: NonNullable<QuestionnaireAnswers['priority']>
 }> = [
-  { label: 'Performance', value: 'performance' },
-  { label: 'Confort', value: 'comfort' },
-  { label: 'Durabilité', value: 'durability' },
+  { label: t('search.assistant.goals.performance'), value: 'performance' },
+  { label: t('search.assistant.goals.comfort'), value: 'comfort' },
+  { label: t('search.assistant.goals.durability'), value: 'durability' },
 ]
 
 async function submit() {
@@ -99,10 +104,10 @@ async function submit() {
 
     <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div class="max-w-3xl">
-        <UIBadge label="Assistant pneu" intent="secondary" size="sm" />
-        <h1 class="txt-h1 mt-4 font-black">Trouver mon pneu</h1>
+        <UIBadge :label="$t('search.assistant.badge')" intent="secondary" size="sm" />
+        <h1 class="txt-h1 mt-4 font-black">{{ $t('search.assistant.title') }}</h1>
         <p class="txt-lg mt-3 text-neutral-text-subtle">
-          Répondez à trois questions et obtenez une sélection compatible avec le catalogue.
+          {{ $t('search.assistant.description') }}
         </p>
       </div>
 
@@ -129,13 +134,13 @@ async function submit() {
               <div class="mt-6 flex flex-col gap-5">
                 <UIFormSelect
                   v-model="category"
-                  label="Pratique principale"
+                  :label="$t('search.assistant.mainPractice')"
                   :items="categoryOptions"
                   :show-clear="false"
                 />
                 <UIFormSelect
                   v-model="terrain"
-                  label="Terrain dominant"
+                  :label="$t('search.assistant.dominantTerrain')"
                   :items="terrainOptions"
                   :show-clear="false"
                 />
@@ -146,13 +151,13 @@ async function submit() {
               <div class="mt-6 flex flex-col gap-5">
                 <UIFormSelect
                   v-model="diameter"
-                  label="Diamètre"
+                  :label="$t('search.assistant.diameter')"
                   :items="diameterSelectItems"
                   :show-clear="false"
                   :disabled="diameterSelectItems.length === 0"
                 />
-                <UISwitch v-model="tubelessReady" label="Je veux du tubeless ready" />
-                <UISwitch v-model="eBikeReady" label="Mon vélo est électrique" />
+                <UISwitch v-model="tubelessReady" :label="$t('search.assistant.tubeless')" />
+                <UISwitch v-model="eBikeReady" :label="$t('search.assistant.eBike')" />
               </div>
             </UIStepsContent>
 
@@ -168,7 +173,7 @@ async function submit() {
                 />
                 <UIButton
                   type="button"
-                  text="Voir mes recommandations"
+                  :text="$t('search.assistant.submit')"
                   intent="primary"
                   size="lg"
                   leading-icon="tabler:sparkles"
@@ -182,7 +187,7 @@ async function submit() {
           <div class="mt-6 flex justify-between gap-3">
             <UIButton
               type="button"
-              text="Retour"
+              :text="$t('common.back')"
               intent="neutral"
               variant="subtle"
               :disabled="step === 0"
@@ -191,7 +196,7 @@ async function submit() {
             <UIButton
               v-if="step < steps.length - 1"
               type="button"
-              text="Continuer"
+              :text="$t('common.continue')"
               intent="primary"
               @click="step = Math.min(steps.length - 1, step + 1)"
             />
@@ -202,24 +207,24 @@ async function submit() {
           <UIAlert
             v-if="errorMessage"
             intent="error"
-            title="Assistant indisponible"
+            :title="$t('search.assistant.errorTitle')"
             :description="errorMessage"
           />
           <UIProgress
             v-else-if="pending"
             intent="primary"
-            label="Préparation des recommandations..."
+            :label="$t('search.assistant.loading')"
           />
 
           <div v-else-if="response === null" class="py-16 text-center">
             <Icon name="tabler:clipboard-list" class="mx-auto size-10 text-neutral-text-subtle" />
-            <h2 class="txt-h4 mt-4 font-black">Vos recommandations apparaîtront ici</h2>
+            <h2 class="txt-h4 mt-4 font-black">{{ $t('search.assistant.emptyTitle') }}</h2>
           </div>
 
           <div v-else>
             <UIAlert
               intent="info"
-              title="Pourquoi ces pneus ?"
+              :title="$t('search.assistant.whyTitle')"
               :description="response.explanation"
             />
 
@@ -228,10 +233,9 @@ async function submit() {
               class="mt-6 rounded-md border border-neutral-border-subtle bg-neutral-surface-subtle p-8 text-center"
             >
               <Icon name="tabler:search-off" class="mx-auto size-10 text-neutral-text-subtle" />
-              <h2 class="txt-h4 mt-4 font-black">Aucune référence exacte</h2>
+              <h2 class="txt-h4 mt-4 font-black">{{ $t('search.assistant.noExactTitle') }}</h2>
               <p class="txt-base mt-2 text-neutral-text-subtle">
-                Essayez d’élargir le diamètre ou de désactiver le tubeless pour voir plus de
-                résultats.
+                {{ $t('search.assistant.noExactDescription') }}
               </p>
             </div>
 

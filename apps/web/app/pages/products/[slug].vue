@@ -6,6 +6,7 @@ import { categoryLabels, getCategoryIntent } from '~/utils/catalogue'
 const route = useRoute()
 const config = useRuntimeConfig()
 const cart = useCartStore()
+const { t } = useI18n()
 
 const slug = computed(() => String(route.params.slug))
 const {
@@ -23,15 +24,18 @@ const specRows = computed(() => {
   }
 
   return [
-    { label: 'Dimension', value: getProductDimension(product.value) },
+    { label: t('product.details.dimension'), value: getProductDimension(product.value) },
     {
-      label: 'ETRTO',
+      label: t('product.details.etrto'),
       value: [product.value.widthEtrto, product.value.diameterEtrto].filter(Boolean).join('-'),
     },
-    { label: 'Tringle', value: product.value.bead },
-    { label: 'Montage', value: product.value.fitting },
-    { label: 'Carcasse', value: product.value.tpi },
-    { label: 'Poids', value: product.value.weightG ? `${product.value.weightG} g` : null },
+    { label: t('product.details.bead'), value: product.value.bead },
+    { label: t('product.details.fitting'), value: product.value.fitting },
+    { label: t('product.details.casing'), value: product.value.tpi },
+    {
+      label: t('product.details.weight'),
+      value: product.value.weightG ? `${product.value.weightG} g` : null,
+    },
     { label: 'CAI', value: product.value.cai },
     { label: 'EAN', value: product.value.eanCode },
   ].filter((row) => row.value !== null && row.value !== '')
@@ -39,7 +43,7 @@ const specRows = computed(() => {
 
 const pressureLabel = computed(() => {
   if (product.value?.minPressureBar === null || product.value?.maxPressureBar === null) {
-    return 'Pression non communiquee'
+    return t('product.details.pressureUnavailable')
   }
 
   return `${product.value?.minPressureBar} - ${product.value?.maxPressureBar} bar`
@@ -74,9 +78,9 @@ const productStats = computed(() => {
   }
 
   return [
-    { label: 'Victoires pro', value: product.value.proStats.victories },
-    { label: 'Podiums', value: product.value.proStats.podiums },
-    { label: 'Stock', value: product.value.stock },
+    { label: t('product.details.proVictories'), value: product.value.proStats.victories },
+    { label: t('product.details.podiums'), value: product.value.proStats.podiums },
+    { label: t('compare.specs.stock'), value: product.value.stock },
   ]
 })
 
@@ -96,7 +100,7 @@ async function addToCart() {
     <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <UIButton
         to="/#catalogue"
-        text="Retour au catalogue"
+        :text="$t('common.backToCatalogue')"
         intent="neutral"
         variant="ghost"
         leading-icon="tabler:arrow-left"
@@ -107,15 +111,15 @@ async function addToCart() {
         class="mt-10"
         intent="primary"
         size="sm"
-        label="Chargement de la fiche produit..."
+        :label="$t('product.details.loading')"
       />
 
       <UIAlert
         v-else-if="error || !product"
         class="mt-10"
         intent="error"
-        title="Produit introuvable"
-        description="La reference demandee n'existe pas dans le catalogue."
+        :title="$t('product.details.notFoundTitle')"
+        :description="$t('product.details.notFoundDescription')"
       />
 
       <div v-else class="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px]">
@@ -128,28 +132,28 @@ async function addToCart() {
 
           <div class="mt-8 flex flex-wrap gap-2">
             <UIBadge
-              :label="categoryLabels[product.category]"
+              :label="$t(categoryLabels[product.category])"
               :intent="getCategoryIntent(product.category)"
               size="sm"
               variant="subtle"
             />
             <UIBadge
               v-if="product.tubelessReady"
-              label="Tubeless Ready"
+              :label="$t('product.details.tubelessReady')"
               intent="primary"
               size="sm"
               variant="subtle"
             />
             <UIBadge
               v-if="product.eBikeReady"
-              label="E-bike Ready"
+              :label="$t('product.details.eBikeReady')"
               intent="success"
               size="sm"
               variant="subtle"
             />
             <UIBadge
               v-if="product.reflectiveStrip"
-              label="Bande réfléchissante"
+              :label="$t('product.details.reflectiveStrip')"
               intent="secondary"
               size="sm"
               variant="subtle"
@@ -173,7 +177,7 @@ async function addToCart() {
           </div>
 
           <section class="mt-10">
-            <h2 class="txt-h3 font-black">Technologies</h2>
+            <h2 class="txt-h3 font-black">{{ $t('product.details.technologies') }}</h2>
             <div class="mt-4 flex flex-wrap gap-2">
               <UIBadge
                 v-for="technology in allTechnologies"
@@ -184,7 +188,7 @@ async function addToCart() {
                 variant="subtle"
               />
               <p v-if="allTechnologies.length === 0" class="txt-base text-neutral-text-subtle">
-                Aucune technologie renseignée pour cette référence.
+                {{ $t('product.details.noTechnologies') }}
               </p>
             </div>
           </section>
@@ -196,7 +200,7 @@ async function addToCart() {
             v-if="product.id !== undefined"
             class="mt-10"
             :product-id="product.id"
-            title="Pensez aussi à"
+            :title="$t('product.details.crossSellTitle')"
           />
         </div>
 
@@ -209,12 +213,16 @@ async function addToCart() {
               {{ formatPrice(product.priceCents, product.currency) }}
             </p>
             <p class="txt-base mt-2 text-neutral-text-subtle">
-              {{ product.stock > 0 ? `${product.stock} unites disponibles` : 'Rupture de stock' }}
+              {{
+                product.stock > 0
+                  ? $t('catalogue.stock.inStock', { count: product.stock })
+                  : $t('catalogue.stock.outOfStock')
+              }}
             </p>
 
             <UIButton
               class="mt-6 w-full"
-              text="Ajouter au panier"
+              :text="$t('product.details.addToCart')"
               intent="primary"
               size="lg"
               leading-icon="tabler:shopping-cart-plus"
@@ -223,7 +231,7 @@ async function addToCart() {
             />
 
             <div class="mt-6 border-t border-neutral-border-subtle pt-6">
-              <h2 class="txt-h5 font-black">Pression recommandée</h2>
+              <h2 class="txt-h5 font-black">{{ $t('product.details.pressureTitle') }}</h2>
               <p class="txt-h4 mt-2 font-black text-primary-text-default">{{ pressureLabel }}</p>
               <p v-if="psiLabel" class="txt-caption mt-1 text-neutral-text-subtle">
                 {{ psiLabel }}

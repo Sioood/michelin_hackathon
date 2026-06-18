@@ -3,6 +3,7 @@ import type { Bike, GarageReminder } from '~/types/garage'
 
 const auth = useAuthStore()
 const garage = useGarage()
+const { t } = useI18n()
 const canAsk = ref(false)
 const dismissed = ref(false)
 
@@ -19,8 +20,8 @@ const storageKey = computed(
 
 function getNotificationTitle(bike: Bike, reminder: GarageReminder): string {
   return reminder.severity === 'due'
-    ? `Remplacement pneu recommandé · ${bike.name}`
-    : `Pneu à surveiller · ${bike.name}`
+    ? t('garage.notificationDue', { bike: bike.name })
+    : t('garage.notificationSoon', { bike: bike.name })
 }
 
 function notifyDueReminders() {
@@ -85,15 +86,14 @@ onMounted(async () => {
     <div class="flex items-start gap-3">
       <Icon name="tabler:bell-ringing" class="mt-1 size-5 shrink-0 text-primary-text-default" />
       <div class="min-w-0">
-        <p class="txt-label font-black">Rappels pneus</p>
+        <p class="txt-label font-black">{{ $t('garage.reminderTitle') }}</p>
         <p class="txt-sm mt-1 text-neutral-text-subtle">
-          {{ dueReminders.length }} rappel{{ dueReminders.length > 1 ? 's' : '' }} à suivre dans
-          votre garage.
+          {{ $t('garage.reminderCount', { count: dueReminders.length }) }}
         </p>
         <div class="mt-3 flex flex-wrap gap-2">
           <UIButton
             type="button"
-            text="Activer"
+            :text="$t('garage.enableNotifications')"
             intent="primary"
             size="sm"
             @click="enableNotifications"
@@ -101,7 +101,7 @@ onMounted(async () => {
           <UIButton
             type="button"
             icon="tabler:x"
-            aria-label="Fermer"
+            :aria-label="$t('garage.close')"
             intent="neutral"
             variant="ghost"
             size="sm"

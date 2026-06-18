@@ -5,11 +5,13 @@ import type { SchemaFieldsMap, SchemaFormLayout } from '~ui/app/utils/Components
 
 import UIFormInput from '~ui/app/components/Form/Input.vue'
 
+const { t } = useI18n()
+
 const schema = z.object({
-  email: z.email('Adresse e-mail invalide'),
+  email: z.email(t('auth.validation.invalidEmail')),
   firstName: z.string(),
   lastName: z.string(),
-  password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+  password: z.string().min(8, t('auth.validation.passwordMin')),
 })
 
 type RegisterValues = z.infer<typeof schema>
@@ -18,30 +20,30 @@ const fields: SchemaFieldsMap<RegisterValues> = {
   email: {
     as: UIFormInput,
     props: {
-      label: 'Adresse e-mail',
-      placeholder: 'marie.dupont@example.com',
+      label: t('auth.fields.email'),
+      placeholder: t('auth.fields.emailPlaceholder'),
       type: 'email',
     },
   },
   firstName: {
     as: UIFormInput,
     props: {
-      label: 'Prénom',
-      placeholder: 'Marie',
+      label: t('auth.fields.firstName'),
+      placeholder: t('auth.fields.firstNamePlaceholder'),
     },
   },
   lastName: {
     as: UIFormInput,
     props: {
-      label: 'Nom',
-      placeholder: 'Dupont',
+      label: t('auth.fields.lastName'),
+      placeholder: t('auth.fields.lastNamePlaceholder'),
     },
   },
   password: {
     as: UIFormInput,
     props: {
-      label: 'Mot de passe',
-      placeholder: '8 caractères minimum',
+      label: t('auth.fields.password'),
+      placeholder: t('auth.fields.passwordPlaceholder'),
       type: 'password',
     },
   },
@@ -75,24 +77,21 @@ const loginLink = computed(() => `/login?redirect=${encodeURIComponent(redirectT
 const registerCopy = computed(() => {
   if (redirectTo.value.startsWith('/garage')) {
     return {
-      description:
-        'Créez votre espace pour conserver vos vélos, vos pneus montés et vos rappels de remplacement.',
-      title: 'Créez votre compte pour ouvrir votre garage.',
+      description: t('auth.register.garageDescription'),
+      title: t('auth.register.garageTitle'),
     }
   }
 
   if (redirectTo.value.startsWith('/checkout')) {
     return {
-      description:
-        'Paiement plus rapide, historique de commandes et panier sauvegardé pour vos prochains pneus.',
-      title: 'Créez votre compte et finalisez votre commande.',
+      description: t('auth.register.checkoutDescription'),
+      title: t('auth.register.checkoutTitle'),
     }
   }
 
   return {
-    description:
-      'Paiement plus rapide, historique de commandes, panier sauvegardé et garage vélo au même endroit.',
-    title: 'Créez votre compte et gardez le contrôle.',
+    description: t('auth.register.defaultDescription'),
+    title: t('auth.register.defaultTitle'),
   }
 })
 
@@ -121,7 +120,7 @@ async function submit(values: RegisterValues) {
 
     <section class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_460px]">
       <div class="flex flex-col justify-center">
-        <UIBadge label="Nouveau client" intent="secondary" size="sm" />
+        <UIBadge :label="$t('auth.register.badge')" intent="secondary" size="sm" />
         <h1 class="txt-h1 mt-4 max-w-3xl font-black">{{ registerCopy.title }}</h1>
         <p class="txt-lg mt-4 max-w-2xl text-neutral-text-subtle">
           {{ registerCopy.description }}
@@ -129,8 +128,10 @@ async function submit(values: RegisterValues) {
       </div>
 
       <UICard intent="neutral" variant="default" :card-base-ui="{ body: 'rounded-md p-6' }">
-        <h2 class="txt-h4 font-black">Inscription</h2>
-        <p class="txt-base mt-2 text-neutral-text-subtle">Quelques informations suffisent.</p>
+        <h2 class="txt-h4 font-black">{{ $t('auth.register.formTitle') }}</h2>
+        <p class="txt-base mt-2 text-neutral-text-subtle">
+          {{ $t('auth.register.formDescription') }}
+        </p>
 
         <UIAlert
           v-if="referralCode"
@@ -144,7 +145,7 @@ async function submit(values: RegisterValues) {
           v-if="errorMessage"
           class="mt-5"
           intent="error"
-          title="Inscription impossible"
+          :title="$t('auth.register.errorTitle')"
           :description="errorMessage"
         />
 
@@ -161,7 +162,7 @@ async function submit(values: RegisterValues) {
             <UIButton
               type="submit"
               class="w-full"
-              text="Créer mon compte"
+              :text="$t('auth.register.submit')"
               intent="primary"
               size="lg"
               :disabled="!canSubmit || isSubmitting"
@@ -171,8 +172,10 @@ async function submit(values: RegisterValues) {
         </UIForm>
 
         <p class="txt-base mt-5 text-neutral-text-subtle">
-          Déjà inscrit ?
-          <UILink :to="loginLink" intent="primary" variant="ghost">Se connecter</UILink>
+          {{ $t('auth.register.alreadyRegistered') }}
+          <UILink :to="loginLink" intent="primary" variant="ghost">
+            {{ $t('common.signIn') }}
+          </UILink>
         </p>
       </UICard>
     </section>

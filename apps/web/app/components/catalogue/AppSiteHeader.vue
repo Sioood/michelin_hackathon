@@ -245,7 +245,7 @@ watch(
           <template #trigger>
             <UIButton
               icon="tabler:menu-2"
-              aria-label="Menu navigation"
+              :aria-label="$t('catalogue.header.menu')"
               intent="secondary"
               variant="subtle"
               size="sm"
@@ -258,7 +258,7 @@ watch(
           <UIButton
             type="button"
             icon="tabler:shopping-cart"
-            aria-label="Ouvrir le panier"
+            :aria-label="$t('catalogue.header.cart')"
             intent="secondary"
             variant="subtle"
             size="sm"
@@ -276,7 +276,7 @@ watch(
     </div>
 
     <nav
-      aria-label="Outils pneus"
+      :aria-label="$t('catalogue.tools.aria')"
       class="border-b border-neutral-border-subtle bg-neutral-bg-default shadow-sm"
     >
       <div class="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2.5 sm:px-6">
