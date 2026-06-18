@@ -120,7 +120,7 @@ async function addToCart() {
 
       <div v-else class="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px]">
         <div>
-          <CatalogueProductTireVisual :category="product.category" />
+          <ProductTireViewer3D :category="product.category" :range-name="product.rangeName" />
 
           <div class="mt-8 flex flex-wrap gap-2">
             <UIBadge
