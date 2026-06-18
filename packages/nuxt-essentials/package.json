@@ -1,6 +1,6 @@
 {
   "name": "@michelin_hackaton/nuxt-essentials",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "bin": {
     "michelin_hackaton-i18n-coverage": "./michelin_hackaton-i18n-coverage.mjs"
