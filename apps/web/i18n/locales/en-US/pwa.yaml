@@ -1,0 +1,12 @@
+offlineReady:
+  title: 'Offline ready'
+  description: 'The app is ready to work offline.'
+updateAvailable:
+  title: 'Update available'
+  description: 'New content is available. Reload to update.'
+  reloadLabel: 'Reload'
+installPrompt:
+  title: 'Install Michelin Bicycle'
+  description: 'Add the app to your home screen for quick access.'
+  installLabel: 'Install'
+  dismissLabel: 'Not now'

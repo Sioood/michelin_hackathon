@@ -8,6 +8,9 @@ catalogue:
     subtitle: 'Bicycle catalogue 2026'
     findTyre: 'Choisir le bon pneu'
     login: 'Connexion'
+    language: 'Langue'
+    languageFr: 'Français'
+    languageEn: 'English'
   nav:
     tyres: 'Pneus vélo'
     catalogue: 'Catalogue'

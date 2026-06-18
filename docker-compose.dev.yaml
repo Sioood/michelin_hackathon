@@ -1,10 +1,12 @@
 services:
   database:
     image: postgres:17-alpine
+    restart: unless-stopped
     ports:
       - '${POSTGRES_PORT:-5432}:5432'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # Host bind mount — avoids filling Docker Desktop's virtual disk.
+      - ./.data/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-michelin_hackathon}
       POSTGRES_USER: ${POSTGRES_USER:-michelin}
@@ -14,6 +16,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+      start_period: 15s
+    shm_size: 128mb
 
   web:
     build:
@@ -67,7 +71,6 @@ services:
     command: ['pnpm', '--filter', '@michelin_hackaton/api', 'start:dev']
 
 volumes:
-  postgres_data: {}
   web_node_modules: {}
   api_node_modules: {}
   pnpm-store: {}
