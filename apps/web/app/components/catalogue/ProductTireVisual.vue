@@ -3,7 +3,6 @@ import type { ProductCategory } from '~/utils/catalogue'
 
 import { getTirePreviewImage } from '~/utils/tire-preview'
 
-
 const props = withDefaults(
   defineProps<{
     category: ProductCategory
