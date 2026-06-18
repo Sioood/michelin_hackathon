@@ -7,6 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { rawBody: true })
   app.useGlobalPipes(createValidationPipe())
   app.enableCors({
+    allowedHeaders: ['Authorization', 'Content-Type', 'x-guest-cart-id'],
     origin: process.env.CORS_ORIGIN?.split(',') ?? ['http://localhost:3000'],
   })
   await app.listen(process.env.PORT ?? 3001)

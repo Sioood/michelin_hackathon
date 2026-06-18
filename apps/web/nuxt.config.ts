@@ -1,8 +1,21 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { createResolver } from '@nuxt/kit'
+
 const { resolve } = createResolver(import.meta.url)
 
 const isDockerDev = process.env.DOCKER === '1'
+
+function resolveApiOrigin(url: string): string | null {
+  try {
+    return new URL(url).origin
+  } catch {
+    return null
+  }
+}
+
+const apiOrigin =
+  resolveApiOrigin(process.env.NUXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3001') ??
+  'http://localhost:3001'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -41,11 +54,22 @@ export default defineNuxtConfig({
       start_url: '/',
       theme_color: '#111827',
     },
+    workbox: {
+      // SSR apps do not precache `/`; Workbox would throw non-precached-url otherwise.
+      navigateFallback: null,
+    },
   },
   runtimeConfig: {
     public: {
       apiBaseUrl: 'http://localhost:3001',
       siteUrl: 'https://web.com',
+    },
+  },
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        'connect-src': ["'self'", apiOrigin],
+      },
     },
   },
   vite: isDockerDev
