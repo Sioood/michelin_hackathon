@@ -59,6 +59,12 @@ export class ProductsService implements OnModuleInit {
     return product.toJSON<ProductDto>()
   }
 
+  async findBySlugs(slugs: string[]): Promise<ProductDto[]> {
+    const products = await this.productModel.findAll({ where: { slug: slugs } })
+
+    return products.map((product) => product.toJSON<ProductDto>())
+  }
+
   async findModelById(id: number): Promise<Product> {
     const product = await this.productModel.findByPk(id)
 

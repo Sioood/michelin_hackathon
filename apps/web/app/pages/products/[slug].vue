@@ -158,6 +158,10 @@ async function addToCart() {
               />
             </div>
           </section>
+
+          <ProductProStats :stats="product.proStats" />
+
+          <ProductReviews v-if="product.id !== undefined" :product-id="product.id" />
         </div>
 
         <aside class="h-fit lg:sticky lg:top-24">

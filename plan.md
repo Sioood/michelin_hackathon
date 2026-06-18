@@ -16,7 +16,7 @@
 | P2    | Recherche IA + questionnaire       | ~43    | ✅     |
 | P3    | Garage virtuel                     | ~43    | ✅     |
 | P4    | Fidélité, cross-sell, gamification | ~58    | ⬜     |
-| P5    | Contenu produit enrichi            | ~32    | ⬜     |
+| P5    | Contenu produit enrichi            | ~32    | ✅     |
 | P6    | Michelin Riders Club               | ~52    | ⬜     |
 | P7    | Polish & innovation (stretch)      | ~40    | ⬜     |
 | DOC   | Documentation sans code            | ~9     | ⬜     |
@@ -616,30 +616,30 @@ sequenceDiagram
 
 ### API
 
-- [ ] **P5-01** · API · 5 pts — Modèle `Review` + CRUD `/products/:id/reviews`
+- [x] **P5-01** · API · 5 pts — Modèle `Review` + CRUD `/products/:id/reviews`
   - Fichiers : `apps/api/src/reviews/`
 
-- [ ] **P5-02** · API · 3 pts — `GET /products/compare?slugs=a,b` — données comparatives
+- [x] **P5-02** · API · 3 pts — `GET /products/compare?slugs=a,b` — données comparatives
   - Fichiers : `apps/api/src/products/compare.controller.ts`
 
 ### Web
 
-- [ ] **P5-03** · WEB · 5 pts — Section avis sur PDP + `UIFormRating`
-  - Fichiers : `apps/web/app/components/product/ProductReviews.vue`
+- [x] **P5-03** · WEB · 5 pts — Section avis sur PDP + `UIFormRating`
+  - Fichiers : `apps/web/app/components/product/Reviews.vue`
 
-- [ ] **P5-04** · WEB · 8 pts — Page `/comparer` — sélection 2 pneus, tableau stats
+- [x] **P5-04** · WEB · 8 pts — Page `/comparer` — sélection 2 pneus, tableau stats
   - Fichiers : `apps/web/app/pages/comparer.vue`
 
-- [ ] **P5-05** · WEB · 3 pts — Bloc « Performances pros » sur PDP (`proStats`)
+- [x] **P5-05** · WEB · 3 pts — Bloc « Performances pros » sur PDP (`proStats`)
   - Fichiers : `apps/web/app/components/product/ProStats.vue`
 
-- [ ] **P5-06** · WEB · 3 pts — Calculateur pression (logique pure, sans API)
+- [x] **P5-06** · WEB · 3 pts — Calculateur pression (logique pure, sans API)
   - Fichiers : `apps/web/app/utils/pressure-calculator.ts`
 
-- [ ] **P5-07** · WEB · 5 pts — Page `/calculateur-pression` — formulaire poids + vélo
+- [x] **P5-07** · WEB · 5 pts — Page `/calculateur-pression` — formulaire poids + vélo
   - Fichiers : `apps/web/app/pages/calculateur-pression.vue`
 
-**Phase 5 complète** : [ ]
+**Phase 5 complète** : [x]
 
 ---
 

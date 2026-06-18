@@ -9,6 +9,7 @@ import { GarageModule } from './garage/garage.module'
 import { OrdersModule } from './orders/orders.module'
 import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
+import { ReviewsModule } from './reviews/reviews.module'
 import { SearchModule } from './search/search.module'
 import { UsersModule } from './users/users.module'
 
@@ -35,6 +36,7 @@ import { UsersModule } from './users/users.module'
     PaymentsModule,
     SearchModule,
     GarageModule,
+    ReviewsModule,
   ],
   providers: [AppService],
 })
