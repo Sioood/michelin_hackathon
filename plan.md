@@ -30,7 +30,7 @@
 Application e-commerce B2C innovante pour vendre les pneus vélo Michelin avec :
 
 - Parcours d'achat complet (login, panier, checkout Stripe)
-- Recherche intelligente par IA (OpenAI-compatible) + questionnaire
+- Recherche intelligente par IA (Mistral) + questionnaire
 - Garage virtuel (inventaire vélos/pneus, rappels, réachat)
 - Programme de fidélité (-20% 1ère commande, points, roulette, parrainage)
 - Ventes croisées, avis, comparateur, stats pros, calculateur de pression
@@ -72,7 +72,7 @@ flowchart TB
   subgraph external [Services externes]
     PG[(PostgreSQL)]
     Stripe[Stripe Checkout]
-    LLM[OpenAI-compatible API]
+    LLM[Mistral API]
   end
 
   web -->|"HTTP REST + JWT Bearer"| api
@@ -123,18 +123,18 @@ flowchart TB
 - Access token 24h (refresh token optionnel)
 - Pas d'OAuth pour le hackathon
 
-### Recherche IA : API OpenAI-compatible
+### Recherche IA : API Mistral
 
 ```bash
 # apps/api/.env
-OPENAI_API_KEY=...
-OPENAI_BASE_URL=https://api.openai.com/v1   # ou Ollama, Groq, etc.
-OPENAI_MODEL=gpt-4o-mini
+MISTRAL_API_KEY=...
+MISTRAL_BASE_URL=https://api.mistral.ai/v1
+MISTRAL_MODEL=ministral-3b-2512
 ```
 
 - LLM → `{ filters, explanation, suggestedSlugs? }`
 - Backend exécute requête Sequelize sur les 441 produits
-- Abstraction `LlmProvider` pour changer de modèle
+- Abstraction `LlmProvider` avec fallback heuristique local
 
 ### Extension modèle Product
 
@@ -184,7 +184,7 @@ apps/api/src/
 └── admin/
 ```
 
-**Dépendances à ajouter** : `@nestjs/jwt`, `@nestjs/passport`, `passport-jwt`, `bcrypt`, `class-validator`, `class-transformer`, `stripe`, `openai`
+**Dépendances à ajouter** : `@nestjs/jwt`, `@nestjs/passport`, `passport-jwt`, `bcrypt`, `class-validator`, `class-transformer`, `stripe`
 
 **Variables d'environnement** (`apps/api/.env`) :
 
@@ -193,7 +193,7 @@ DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 JWT_SECRET, JWT_EXPIRES_IN=24h
 CORS_ORIGIN=http://localhost:3000
 STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
-OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_MODEL
+MISTRAL_API_KEY, MISTRAL_BASE_URL, MISTRAL_MODEL
 ```
 
 **Lancer** : `pnpm --filter @michelin_hackaton/api dev`
@@ -464,7 +464,7 @@ gantt
 
 ## Phase 2 — Recherche intelligente (priorité haute · ~43 pts)
 
-> Objectif : questionnaire + recherche IA OpenAI-compatible.
+> Objectif : questionnaire + recherche IA Mistral avec fallback local.
 > Apps : `apps/api` + `apps/web` (parallélisable après P0-06).
 
 ### API
@@ -472,7 +472,7 @@ gantt
 - [x] **P2-01** · API · 8 pts — Module `Search` : `POST /search/ai` avec prompt structuré
   - Fichiers : `apps/api/src/search/`
 
-- [x] **P2-02** · API · 5 pts — Abstraction `LlmProvider` (interface + impl OpenAI-compatible)
+- [x] **P2-02** · API · 5 pts — Abstraction `LlmProvider` (interface + impl Mistral)
   - Fichiers : `apps/api/src/search/llm.provider.ts`
 
 - [x] **P2-03** · API · 3 pts — Prompt system : contraintes catalogue + JSON schema output

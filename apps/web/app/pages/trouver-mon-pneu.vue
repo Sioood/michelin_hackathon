@@ -20,6 +20,9 @@ const step = ref(0)
 const pending = ref(false)
 const errorMessage = ref('')
 const response = ref<AiSearchResponse | null>(null)
+const sourcePresentation = computed(() =>
+  response.value === null ? null : getSearchSourcePresentation(response.value.source),
+)
 
 const category = ref<ProductCategory[]>(['gravel'])
 const terrain = ref<SearchTerrain[]>(['GRAVEL'])
@@ -217,10 +220,20 @@ async function submit() {
           </div>
 
           <div v-else>
+            <UIBadge
+              v-if="sourcePresentation"
+              :label="sourcePresentation.label"
+              :intent="sourcePresentation.intent"
+              :leading-icon="sourcePresentation.icon"
+              size="sm"
+              variant="subtle"
+              class="mb-4"
+            />
             <UIAlert
-              intent="info"
-              title="Pourquoi ces pneus ?"
+              :intent="sourcePresentation?.intent ?? 'neutral'"
+              :title="sourcePresentation?.title ?? 'Pourquoi ces pneus ?'"
               :description="response.explanation"
+              :icon="sourcePresentation?.icon"
             />
 
             <div

@@ -23,6 +23,9 @@ const emit = defineEmits<{
 }>()
 
 const query = defineModel<string>({ default: '' })
+const sourcePresentation = computed(() =>
+  props.response === null ? null : getSearchSourcePresentation(props.response.source),
+)
 
 function submit() {
   const value = query.value.trim()
@@ -72,11 +75,11 @@ function submit() {
     </div>
 
     <UIAlert
-      v-if="response?.explanation && !compact"
-      intent="info"
-      title="Suggestion IA"
+      v-if="response?.explanation && sourcePresentation && !compact"
+      :intent="sourcePresentation.intent"
+      :title="sourcePresentation.title"
       :description="response.explanation"
-      icon="tabler:sparkles"
+      :icon="sourcePresentation.icon"
     />
   </form>
 </template>

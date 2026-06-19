@@ -37,7 +37,9 @@ const terrainOptions: Array<{ label: string; value: SearchTerrain | 'all' }> = [
 ]
 
 const resultProducts = computed(() => response.value?.results ?? [])
-const suggestionCount = computed(() => response.value?.suggestedSlugs.length ?? 0)
+const sourcePresentation = computed(() =>
+  response.value === null ? null : getSearchSourcePresentation(response.value.source),
+)
 
 async function searchAi(value = query.value) {
   const normalized = value.trim()
@@ -194,9 +196,10 @@ onMounted(() => {
                 <h2 class="txt-h2 mt-2 font-black">{{ resultProducts.length }} références</h2>
               </div>
               <UIBadge
-                v-if="suggestionCount > 0"
-                :label="`${suggestionCount} suggestion${suggestionCount > 1 ? 's' : ''} IA`"
-                intent="info"
+                v-if="sourcePresentation"
+                :label="sourcePresentation.label"
+                :intent="sourcePresentation.intent"
+                :leading-icon="sourcePresentation.icon"
                 size="sm"
                 variant="subtle"
                 class="shrink-0"

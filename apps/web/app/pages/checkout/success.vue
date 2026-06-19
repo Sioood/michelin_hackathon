@@ -35,8 +35,12 @@ onMounted(() => {
           v-model:open="garageDialogOpen"
           title="Ajouter au garage"
           description="Associez cette commande à un vélo pour activer les rappels de remplacement."
-          intent="success"
+          intent="neutral"
           hide-trigger
+          :ui="{
+            content:
+              'border border-neutral-border-default bg-neutral-surface-default text-neutral-text-default',
+          }"
         >
           <p class="txt-base text-neutral-text-default">
             Le garage virtuel garde l'historique de vos montages, surveille l'âge et la distance

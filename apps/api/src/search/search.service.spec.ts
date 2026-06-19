@@ -44,6 +44,7 @@ describe('SearchService', () => {
           terrain: 'GRAVEL',
           tubelessReady: true,
         },
+        source: 'mistral',
         suggestedSlugs: [],
       }),
     }
@@ -58,6 +59,7 @@ describe('SearchService', () => {
       terrain: 'GRAVEL',
     })
     expect(response.results).toHaveLength(1)
+    expect(response.source).toBe('mistral')
     expect(response.results[0]?.product.slug).toBe('power-gravel')
     expect(response.suggestedSlugs).toEqual(['power-gravel'])
   })
@@ -137,5 +139,6 @@ describe('SearchService', () => {
     })
     expect(response.results).toHaveLength(1)
     expect(response.results[0]?.product.slug).toBe('power-gravel-700')
+    expect(response.source).toBe('questionnaire')
   })
 })

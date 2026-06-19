@@ -39,6 +39,12 @@ const challengeItems = computed<SelectItem[]>(() =>
 )
 const selectedType = computed(() => (typeSelection.value[0] ?? 'opinion') as CommunityPostType)
 const loginTarget = computed(() => `/login?redirect=${encodeURIComponent(route.fullPath)}`)
+const canSubmit = computed(
+  () =>
+    title.value.trim().length >= 3 &&
+    body.value.trim().length >= 3 &&
+    (selectedType.value !== 'challenge' || challengeSelection.value[0] !== undefined),
+)
 
 function onFileChange(event: Event) {
   const input = event.target
@@ -53,6 +59,14 @@ function resetForm() {
 }
 
 async function submitPost() {
+  if (!canSubmit.value) {
+    errorMessage.value =
+      selectedType.value === 'challenge' && challengeSelection.value[0] === undefined
+        ? 'Choisissez un challenge avant de publier.'
+        : 'Le titre et le message doivent contenir au moins 3 caractères.'
+    return
+  }
+
   submitting.value = true
   errorMessage.value = ''
   successMessage.value = ''
@@ -161,7 +175,7 @@ async function submitPost() {
             text="Publier"
             intent="primary"
             leading-icon="tabler:send"
-            :disabled="submitting"
+            :disabled="submitting || !canSubmit"
             :state="submitting ? 'loading' : 'default'"
           />
           <UIButton

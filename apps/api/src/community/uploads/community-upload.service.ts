@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { createReadStream } from 'node:fs'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { access, mkdir, writeFile } from 'node:fs/promises'
 import { extname, join } from 'node:path'
 
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
@@ -45,12 +45,20 @@ export class CommunityUploadService {
     return { mediaUrl: `/community/uploads/${filename}` }
   }
 
-  getReadStream(filename: string): NodeJS.ReadableStream {
+  async getReadStream(filename: string): Promise<NodeJS.ReadableStream> {
     if (!/^[a-zA-Z0-9._-]+$/.test(filename)) {
       throw new NotFoundException('Upload not found')
     }
 
-    return createReadStream(join(this.uploadDir, filename))
+    const path = join(this.uploadDir, filename)
+
+    try {
+      await access(path)
+    } catch {
+      throw new NotFoundException('Upload not found')
+    }
+
+    return createReadStream(path)
   }
 
   private getExtension(file: UploadedCommunityFile): string {
