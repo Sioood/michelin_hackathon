@@ -50,6 +50,9 @@ services:
       DB_USER: ${POSTGRES_USER:-michelin}
       DB_PASSWORD: ${POSTGRES_PASSWORD:-michelin}
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY:-}
+      MISTRAL_MODEL: ${MISTRAL_MODEL:-ministral-3b-2512}
+      MISTRAL_BASE_URL: ${MISTRAL_BASE_URL:-https://api.mistral.ai/v1}
     env_file:
       - path: apps/api/.env
         required: false
